@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>সমাজ কল্যাণ যুব সংগঠন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#061a06;--g2:#0d2e0d;--g3:#1b6b1b;--g4:#2e8b2e;--g5:#43a843;
+  --gold:#f0b429;--sgold:#ffd966;--dgold:#c8940a;
+  --glass:rgba(255,255,255,0.07);
+  --glass2:rgba(255,255,255,0.12);
+  --glass3:rgba(255,255,255,0.18);
+  --b1:rgba(255,255,255,0.15);
+  --b2:rgba(240,180,41,0.35);
+  --blur:blur(18px);
+  --text:#e8f5e8;--text2:#a5d6a7;--text3:#ffd966;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Hind Siliguri',sans-serif;
+  background:var(--g1);color:var(--text);
+  overflow-x:hidden;min-height:100vh;
+}
+
+/* BG */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 20%,rgba(46,139,46,.28) 0%,transparent 65%),
+    radial-gradient(ellipse 55% 70% at 85% 75%,rgba(27,107,27,.22) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(10,50,10,.7) 0%,transparent 100%);
+}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;}
+.o1{width:420px;height:420px;top:-120px;right:-120px;
+  background:radial-gradient(circle,rgba(240,180,41,.1),transparent 70%);
+  animation:ofl 22s ease-in-out infinite;}
+.o2{width:320px;height:320px;bottom:-100px;left:-100px;
+  background:radial-gradient(circle,rgba(46,139,46,.18),transparent 70%);
+  animation:ofl 28s ease-in-out infinite reverse;}
+.o3{width:180px;height:180px;top:45%;right:12%;
+  background:radial-gradient(circle,rgba(255,215,102,.08),transparent 70%);
+  animation:ofl 16s ease-in-out infinite;animation-delay:-6s;}
+@keyframes ofl{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-30px) scale(1.06)}70%{transform:translateY(15px) scale(.96)}}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--g1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .5s;}
+.ld-ring{width:64px;height:64px;border-radius:50%;
+  border:3px solid rgba(255,215,102,.15);border-top:3px solid var(--sgold);
+  animation:spin .85s linear infinite;box-shadow:0 0 25px rgba(240,180,41,.25);}
+.ld-txt{color:var(--sgold);margin-top:14px;font-size:13px;opacity:.65;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAVBAR */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(6,26,6,.75);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-bottom:1px solid var(--b2);box-shadow:0 4px 30px rgba(0,0,0,.35);}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;
+  justify-content:space-between;height:64px;padding:0 24px;}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.brand-ico{width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--sgold));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:18px;color:var(--g1);
+  box-shadow:0 0 18px rgba(240,180,41,.35);}
+.brand-txt{color:var(--sgold);font-size:14px;font-weight:700;line-height:1.3;}
+.brand-txt span{display:block;color:var(--text2);font-size:11px;font-weight:400;}
+.nav-links{display:flex;gap:3px;list-style:none;}
+.nav-links a{color:rgba(255,255,255,.65);text-decoration:none;
+  padding:8px 15px;border-radius:8px;font-size:14px;transition:all .22s;cursor:pointer;
+  border:1px solid transparent;}
+.nav-links a:hover{background:var(--glass2);color:#fff;border-color:var(--b1);}
+.nav-links a.act{background:rgba(240,180,41,.15);color:var(--sgold);
+  border-color:var(--b2);font-weight:600;}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px;}
+.ham span{width:24px;height:2px;background:var(--sgold);border-radius:2px;transition:.3s;}
+
+/* MOB MENU */
+.mob{display:none;position:fixed;top:64px;left:0;right:0;z-index:999;
+  background:rgba(6,26,6,.97);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-bottom:1px solid var(--b2);padding:10px;animation:sld .2s ease;}
+.mob.open{display:block;}
+.mob a{display:block;color:rgba(255,255,255,.8);padding:12px 16px;
+  border-radius:10px;font-size:15px;transition:.2s;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);}
+.mob a:hover,.mob a.act{background:rgba(240,180,41,.14);color:var(--sgold);}
+@keyframes sld{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* PAGES */
+.page{display:none;padding-top:64px;min-height:100vh;position:relative;z-index:1;}
+.page.act{display:block;}
+
+/* GLASS UTILITIES */
+.g1{background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--b1);border-radius:16px;}
+.g2{background:var(--glass2);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--b1);border-radius:16px;}
+.gg{background:linear-gradient(135deg,rgba(240,180,41,.12),rgba(240,180,41,.05));
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid rgba(240,180,41,.28);border-radius:16px;}
+
+/* ═══ HOME ═══ */
+.hero{min-height:calc(100vh - 64px);display:flex;align-items:center;
+  justify-content:center;padding:40px 20px;text-align:center;}
+.hero-c{max-width:820px;}
+.bism{display:inline-block;padding:6px 22px;border-radius:20px;
+  background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.3);
+  color:var(--sgold);font-size:13px;margin-bottom:22px;
+  animation:fu .8s ease both;}
+.h-title{font-size:clamp(2.2rem,6vw,4rem);font-weight:700;color:var(--sgold);
+  text-shadow:0 0 40px rgba(240,180,41,.25);margin-bottom:8px;
+  animation:fu .8s .2s ease both;}
+.h-en{color:var(--text2);font-size:clamp(1rem,2vw,1.15rem);font-style:italic;
+  margin-bottom:18px;animation:fu .8s .3s ease both;}
+.h-bar{width:80px;height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--sgold));
+  border-radius:2px;margin:18px auto;
+  box-shadow:0 0 12px rgba(240,180,41,.45);
+  animation:exp .8s .4s ease both;}
+@keyframes exp{from{width:0}to{width:80px}}
+.h-slog{margin:16px 0 28px;animation:fu .8s .5s ease both;}
+.h-slog p{color:var(--text);font-size:clamp(.95rem,2vw,1.1rem);margin-bottom:8px;}
+.h-slog p:last-child{color:var(--sgold);}
+.h-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  animation:fu .8s .7s ease both;}
+.btn{padding:13px 30px;border-radius:12px;font-size:15px;font-weight:600;
+  cursor:pointer;border:none;font-family:inherit;transition:all .3s;}
+.btn-g{background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);
+  box-shadow:0 4px 20px rgba(240,180,41,.38);}
+.btn-g:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(240,180,41,.5);}
+.btn-gl{background:var(--glass2);color:var(--sgold);
+  border:1px solid var(--b2);backdrop-filter:var(--blur);}
+.btn-gl:hover{background:rgba(240,180,41,.18);transform:translateY(-3px);}
+
+/* STATS */
+.stats{padding:20px 20px 10px;}
+.stats-in{max-width:900px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.sc{padding:24px 16px;text-align:center;transition:transform .3s;}
+.sc:hover{transform:translateY(-6px);}
+.sn{font-size:2.8rem;font-weight:700;color:var(--sgold);display:block;line-height:1;
+  text-shadow:0 0 20px rgba(240,180,41,.25);}
+.sl{color:var(--text2);font-size:13px;margin-top:6px;}
+
+/* SECTIONS */
+.sec{padding:55px 20px;}
+.sec-in{max-width:1100px;margin:0 auto;}
+.sec-t{text-align:center;font-size:clamp(1.5rem,3vw,2.1rem);
+  font-weight:700;color:var(--sgold);margin-bottom:8px;}
+.sec-s{text-align:center;color:var(--text2);margin-bottom:10px;font-size:15px;}
+.sec-b{width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--sgold));
+  margin:0 auto 38px;border-radius:2px;box-shadow:0 0 10px rgba(240,180,41,.35);}
+
+/* ABOUT GRID */
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+.ab-txt p{color:rgba(255,255,255,.8);line-height:1.9;margin-bottom:12px;font-size:15px;}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fc{padding:20px 16px;text-align:center;transition:transform .3s;}
+.fc:hover{transform:translateY(-5px);}
+.fi2{font-size:1.8rem;margin-bottom:8px;}
+.fc h4{color:var(--sgold);font-size:.9rem;margin-bottom:5px;}
+.fc p{color:var(--text2);font-size:.8rem;}
+
+/* LEADERS */
+.ldr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;}
+.ldr{overflow:hidden;transition:transform .3s;}
+.ldr:hover{transform:translateY(-8px);}
+.ldr-top{background:linear-gradient(135deg,rgba(46,139,46,.3),rgba(6,26,6,.5));
+  padding:28px 20px 18px;text-align:center;border-bottom:1px solid var(--b1);}
+.ldr-av{width:88px;height:88px;border-radius:50%;border:3px solid var(--gold);
+  margin:0 auto 12px;
+  background:linear-gradient(135deg,var(--g3),var(--g5));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;font-weight:700;color:#fff;overflow:hidden;position:relative;
+  box-shadow:0 0 20px rgba(240,180,41,.25);}
+/*
+  ════════════════════════════════════════════
+  📸 নেতাদের ছবি যোগ করতে .ldr-av এর ভেতরে:
+  <img src="photos/shimul.jpg"
+    style="width:100%;height:100%;object-fit:cover;
+           border-radius:50%;position:absolute;inset:0">
+  ════════════════════════════════════════════
+*/
+.ldr-name{color:var(--sgold);font-size:1.05rem;font-weight:700;}
+.ldr-bot{padding:15px 20px;}
+.rbadge{display:inline-block;
+  background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);
+  color:var(--sgold);padding:3px 14px;border-radius:20px;
+  font-size:12px;font-weight:600;margin-bottom:10px;}
+.ldr-info{color:rgba(255,255,255,.65);font-size:13px;line-height:1.9;}
+
+/* ═══ MEMBERS ═══ */
+.ph{background:linear-gradient(135deg,rgba(6,26,6,.8),rgba(27,107,27,.45));
+  backdrop-filter:var(--blur);border-bottom:1px solid var(--b2);
+  padding:38px 20px 28px;text-align:center;}
+.ph h1{color:var(--sgold);font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;}
+.ph p{color:var(--text2);margin-top:8px;font-size:15px;}
+.srch-wrap{position:sticky;top:64px;z-index:100;
+  background:rgba(6,26,6,.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border-bottom:1px solid var(--b1);padding:15px 20px;}
+.srch-inp{width:100%;max-width:500px;display:block;margin:0 auto;
+  padding:12px 20px;background:var(--glass2);border:1px solid var(--b1);
+  border-radius:30px;color:#fff;font-size:15px;font-family:inherit;
+  outline:none;transition:border .2s;backdrop-filter:var(--blur);}
+.srch-inp::placeholder{color:rgba(255,255,255,.35);}
+.srch-inp:focus{border-color:var(--b2);}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
+  gap:16px;padding:22px 20px;max-width:1200px;margin:0 auto;}
+.mc{border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;
+  background:var(--glass);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--b1);}
+.mc:hover{transform:translateY(-7px);border-color:rgba(240,180,41,.4);
+  box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 20px rgba(240,180,41,.1);}
+.mc-top{background:linear-gradient(160deg,rgba(27,107,27,.38),rgba(6,26,6,.6));
+  padding:22px 14px 14px;text-align:center;border-bottom:1px solid var(--b1);}
+.mc-av{width:78px;height:78px;border-radius:50%;border:2.5px solid var(--gold);
+  margin:0 auto 10px;
+  background:linear-gradient(135deg,var(--g3),var(--g5));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.7rem;font-weight:700;color:#fff;overflow:hidden;position:relative;
+  box-shadow:0 0 15px rgba(240,180,41,.18);}
+/*
+  ════════════════════════════════════════════
+  📸 সদস্যের ছবি যোগ করতে .mc-av এর ভেতরে:
+  <img src="photos/member_[নম্বর].jpg" alt="নাম"
+    style="width:100%;height:100%;object-fit:cover;
+           border-radius:50%;position:absolute;inset:0">
+  উদাহরণ:
+  সদস্য ১ → photos/member_1.jpg
+  সদস্য ২ → photos/member_2.jpg ... ইত্যাদি
+  ════════════════════════════════════════════
+*/
+.mc-num{position:absolute;bottom:0;right:0;width:20px;height:20px;
+  border-radius:50%;background:var(--gold);color:var(--g1);
+  font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;}
+.mc-name{color:var(--sgold);font-size:.88rem;font-weight:700;line-height:1.3;}
+.mc-bot{padding:11px 14px;}
+.mc-area{color:var(--text2);font-size:12px;margin-bottom:5px;}
+.mc-ph{color:var(--text);font-size:12px;font-weight:600;}
+.mc-badge{display:inline-block;margin-top:7px;
+  background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.22);
+  color:var(--sgold);padding:2px 10px;border-radius:10px;font-size:10px;}
+.no-ph{color:rgba(255,255,255,.3);font-style:italic;}
+
+/* ═══ ACTIVITIES ═══ */
+.act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:20px;padding:38px 20px;max-width:1100px;margin:0 auto;}
+.acard{overflow:hidden;transition:transform .3s;}
+.acard:hover{transform:translateY(-5px);}
+.a-img{height:168px;
+  background:linear-gradient(135deg,rgba(27,107,27,.45),rgba(6,26,6,.7));
+  display:flex;align-items:center;justify-content:center;font-size:3.5rem;
+  position:relative;overflow:hidden;}
+/*
+  ════════════════════════════════════════════
+  📸 কার্যক্রমের ছবি যোগ করতে .a-img এ:
+  style="background-image:url('activities/photo1.jpg');
+         background-size:cover;background-position:center"
+  ════════════════════════════════════════════
+*/
+.a-body{padding:18px;}
+.a-date{color:var(--gold);font-size:12px;font-weight:600;margin-bottom:6px;}
+.a-title{color:var(--sgold);font-size:1rem;font-weight:700;margin-bottom:8px;}
+.a-desc{color:rgba(255,255,255,.7);font-size:13px;line-height:1.7;}
+.a-tag{display:inline-block;margin-top:12px;
+  background:rgba(46,139,46,.2);border:1px solid rgba(46,139,46,.38);
+  color:var(--text2);padding:3px 12px;border-radius:10px;font-size:11px;}
+.gal-sec{padding:10px 20px 48px;max-width:1100px;margin:0 auto;}
+.gal-head{color:var(--sgold);font-size:1.2rem;font-weight:700;margin-bottom:14px;}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;}
+.gi{aspect-ratio:1;border-radius:12px;overflow:hidden;
+  background:var(--glass);border:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;cursor:pointer;transition:transform .3s;}
+.gi:hover{transform:scale(1.07);}
+/*
+  ════════════════════════════════════════════
+  📸 গ্যালারির ছবি যোগ করতে .gi এর ভেতরে:
+  <img src="gallery/photo_[নম্বর].jpg"
+    style="width:100%;height:100%;object-fit:cover">
+  ════════════════════════════════════════════
+*/
+
+/* ═══ ABOUT ═══ */
+.ab-page{padding:45px 20px;max-width:820px;margin:0 auto;}
+.ab-banner{text-align:center;padding:35px 28px;margin-bottom:26px;}
+.ab-banner h2{color:var(--sgold);font-size:1.55rem;margin-bottom:12px;}
+.ab-banner p{color:rgba(255,255,255,.8);line-height:1.9;font-size:15px;}
+.ab2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
+.ab-it{padding:22px 18px;transition:transform .3s;}
+.ab-it:hover{transform:translateY(-4px);}
+.ab-ic{font-size:1.6rem;margin-bottom:8px;}
+.ab-it h4{color:var(--sgold);font-size:.95rem;margin-bottom:6px;}
+.ab-it p{color:rgba(255,255,255,.65);font-size:.85rem;line-height:1.7;}
+.slog-box{text-align:center;padding:28px;
+  background:linear-gradient(135deg,rgba(46,139,46,.18),rgba(6,26,6,.4));
+  border:1px solid rgba(240,180,41,.28);border-radius:20px;}
+.slog-box p{font-size:1.1rem;font-weight:700;color:var(--sgold);margin-bottom:8px;}
+.slog-box p:last-child{color:var(--text2);font-size:1rem;}
+
+/* ═══ CONTACT ═══ */
+.ct-wrap{padding:45px 20px;max-width:940px;margin:0 auto;}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start;}
+.ct-info h3{color:var(--sgold);font-size:1.2rem;margin-bottom:18px;}
+.ci{display:flex;align-items:flex-start;gap:13px;padding:15px;margin-bottom:12px;
+  background:var(--glass);border:1px solid var(--b1);border-radius:12px;
+  border-left:3px solid var(--gold);}
+.ci-ico{font-size:1.2rem;margin-top:2px;}
+.ci-txt{font-size:14px;color:rgba(255,255,255,.8);line-height:1.7;}
+.ci-txt strong{color:var(--sgold);display:block;margin-bottom:3px;}
+.ct-form h3{color:var(--sgold);font-size:1.2rem;margin-bottom:6px;}
+.ct-form p{color:rgba(255,255,255,.45);font-size:13px;margin-bottom:18px;}
+.fg{margin-bottom:15px;}
+.fg label{display:block;margin-bottom:6px;color:rgba(255,255,255,.8);
+  font-size:14px;font-weight:500;}
+.fg input,.fg textarea{width:100%;padding:12px 16px;
+  background:var(--glass2);border:1px solid var(--b1);border-radius:10px;
+  color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border .2s;
+  backdrop-filter:var(--blur);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.28);}
+.fg input:focus,.fg textarea:focus{border-color:var(--b2);}
+.fg textarea{height:118px;resize:vertical;}
+.sub-btn{width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--gold),var(--sgold));
+  color:var(--g1);border:none;border-radius:12px;
+  font-size:16px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:all .3s;
+  box-shadow:0 4px 20px rgba(240,180,41,.3);}
+.sub-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,180,41,.42);}
+.sub-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.succ{display:none;text-align:center;padding:34px 20px;
+  background:rgba(46,139,46,.14);border:1px solid rgba(46,139,46,.38);
+  border-radius:16px;margin-top:20px;}
+.succ .ck{font-size:3rem;margin-bottom:10px;}
+.succ h4{color:var(--text2);font-size:1.1rem;}
+.succ p{color:rgba(255,255,255,.5);font-size:13px;margin-top:5px;}
+
+/* FOOTER */
+footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);
+  border-top:1px solid var(--b2);padding:38px 20px 18px;
+  text-align:center;position:relative;z-index:1;}
+.ft-n{color:var(--sgold);font-size:1.4rem;font-weight:700;margin-bottom:6px;}
+.ft-s{color:var(--text2);font-size:13px;font-style:italic;margin-bottom:18px;}
+.ft-soc{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.sb{width:42px;height:42px;border-radius:50%;
+  background:var(--glass2);border:1px solid var(--b1);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sgold);font-size:.9rem;font-weight:700;
+  text-decoration:none;transition:all .3s;cursor:pointer;}
+.sb:hover{background:linear-gradient(135deg,var(--gold),var(--sgold));
+  color:var(--g1);transform:scale(1.1);}
+/*
+  ════════════════════════════════════════════
+  🔗 সোশ্যাল লিঙ্ক যোগ করতে .sb এর href:
+  Facebook: href="https://facebook.com/আপনার-পেজ"
+  WhatsApp: href="https://wa.me/8801817984524"
+  ════════════════════════════════════════════
+*/
+.ft-c{color:rgba(255,255,255,.28);font-size:13px;
+  border-top:1px solid var(--b1);padding-top:15px;}
+
+/* FADE ANIM */
+@keyframes fu{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.fi{opacity:0;transform:translateY(24px);transition:opacity .55s,transform .55s;}
+.fi.vis{opacity:1;transform:translateY(0);}
+.fi:nth-child(2){transition-delay:.1s}
+.fi:nth-child(3){transition-delay:.2s}
+.fi:nth-child(4){transition-delay:.3s}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none;}.ham{display:flex;}
+  .ab-grid,.ct-grid,.stats-in{grid-template-columns:1fr;}
+  .ab2{grid-template-columns:1fr 1fr;}
+  .m-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));}
+}
+@media(max-width:480px){
+  .m-grid{grid-template-columns:repeat(2,1fr);gap:11px;padding:14px;}
+  .stats-in{grid-template-columns:repeat(2,1fr);}
+  .ab2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<!-- LOADER -->
+<div id="loader"><div class="ld-ring"></div><div class="ld-txt">লোড হচ্ছে...</div></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <div class="brand" onclick="go('home')">
+      <div class="brand-ico">স</div>
+      <div class="brand-txt">সমাজ কল্যাণ যুব সংগঠন<span>Somaj Kalyan Jubo Sangathan</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a id="nl-home" class="act" onclick="go('home')">হোম</a></li>
+      <li><a id="nl-members" onclick="go('members')">সদস্য</a></li>
+      <li><a id="nl-activities" onclick="go('activities')">কার্যক্রম</a></li>
+      <li><a id="nl-about" onclick="go('about')">আমাদের সম্পর্কে</a></li>
+      <li><a id="nl-contact" onclick="go('contact')">যোগাযোগ</a></li>
+    </ul>
+    <div class="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mob" id="mobMenu">
+  <a onclick="go('home');toggleMob()">🏠 হোম</a>
+  <a onclick="go('members');toggleMob()">👥 সদস্য</a>
+  <a onclick="go('activities');toggleMob()">📋 কার্যক্রম</a>
+  <a onclick="go('about');toggleMob()">ℹ️ আমাদের সম্পর্কে</a>
+  <a onclick="go('contact');toggleMob()">📞 যোগাযোগ</a>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div class="page act" id="p-home">
+  <section class="hero">
+    <div class="hero-c">
+      <div class="bism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <h1 class="h-title">সমাজ কল্যাণ যুব সংগঠন</h1>
+      <p class="h-en">Somaj Kalyan Jubo Sangathan</p>
+      <div class="h-bar"></div>
+      <div class="h-slog">
+        <p>❝ সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ ❞</p>
+        <p>❝ যুবশক্তিই পরিবর্তনের হাতিয়ার ❞</p>
+      </div>
+      <div class="h-btns">
+        <button class="btn btn-g" onclick="go('members')">👥 সদস্য দেখুন</button>
+        <button class="btn btn-gl" onclick="go('contact')">📞 যোগাযোগ করুন</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stats-in">
+      <div class="sc g1 fi"><span class="sn">২৫+</span><div class="sl">সক্রিয় সদস্য</div></div>
+      <div class="sc g1 fi"><span class="sn">৬টি</span><div class="sl">গ্রামের শাখা</div></div>
+      <div class="sc g1 fi"><span class="sn">৫০+</span><div class="sl">সমাজ কার্যক্রম</div></div>
+      <div class="sc g1 fi"><span class="sn">৩+</span><div class="sl">বছরের অভিজ্ঞতা</div></div>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-in">
+      <h2 class="sec-t fi">আমাদের সম্পর্কে</h2>
+      <div class="sec-b"></div>
+      <div class="ab-grid">
+        <div class="g1 fi" style="padding:26px">
+          <div class="ab-txt">
+            <p>সমাজ কল্যাণ যুব সংগঠন একটি অলাভজনক সামাজিক সংগঠন যা তরুণদের নিয়ে গঠিত। আমরা সমাজের উন্নয়নে নিরলসভাবে কাজ করছি।</p>
+            <p>বিভিন্ন গ্রামের ২৫ জনেরও বেশি সক্রিয় সদস্য একটি শক্তিশালী দল হিসেবে সমাজের প্রতিটি স্তরে ইতিবাচক পরিবর্তন আনতে কাজ করছেন।</p>
+            <button class="btn btn-gl" onclick="go('about')" style="margin-top:16px">আরও জানুন →</button>
+          </div>
+        </div>
+        <div class="feat-grid fi">
+          <div class="fc g1"><div class="fi2">🤝</div><h4>সেবা</h4><p>মানুষের পাশে থেকে সেবা</p></div>
+          <div class="fc g1"><div class="fi2">📚</div><h4>শিক্ষা</h4><p>শিক্ষার প্রসার ও সহায়তা</p></div>
+          <div class="fc g1"><div class="fi2">🌱</div><h4>উন্নয়ন</h4><p>সামাজিক উন্নয়ন</p></div>
+          <div class="fc g1"><div class="fi2">💪</div><h4>যুবশক্তি</h4><p>তরুণদের অংশগ্রহণ</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="sec-in">
+      <h2 class="sec-t fi">নেতৃবৃন্দ</h2>
+      <div class="sec-b"></div>
+      <div class="ldr-grid">
+        <div class="ldr g1 fi">
+          <div class="ldr-top">
+            <div class="ldr-av">শ
+              <!-- 📸 সভাপতির ছবি: <img src="photos/shimul.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0"> -->
+            </div>
+            <div class="ldr-name">মোঃ শিমুল হোসেন</div>
+          </div>
+          <div class="ldr-bot"><span class="rbadge">⭐ সভাপতি</span><div class="ldr-info">📞 01817-984524<br>📍 কান্দিরপাড়া</div></div>
+        </div>
+        <div class="ldr g1 fi">
+          <div class="ldr-top">
+            <div class="ldr-av">জ
+              <!-- 📸 জাকিরের ছবি: <img src="photos/jakir.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0"> -->
+            </div>
+            <div class="ldr-name">মোঃ জাকির হোসেন</div>
+          </div>
+          <div class="ldr-bot"><span class="rbadge">⭐ সাধারণ সম্পাদক</span><div class="ldr-info">📞 01313-602214<br>📍 ইনসাফ নগর</div></div>
+        </div>
+        <div class="ldr g1 fi">
+          <div class="ldr-top">
+            <div class="ldr-av">শু
+              <!-- 📸 শুভর ছবি: <img src="photos/shubho.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0"> -->
+            </div>
+            <div class="ldr-name">মোঃ শুভ আলী</div>
+          </div>
+          <div class="ldr-bot"><span class="rbadge">⭐ সাধারণ সম্পাদক</span><div class="ldr-info">📞 01761-295388<br>📍 চাইডুবা</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════ MEMBERS ═══════════ -->
+<div class="page" id="p-members">
+  <div class="ph">
+    <h1>👥 সদস্য তালিকা</h1>
+    <p>সমাজ কল্যাণ যুব সংগঠনের সকল সদস্য — মোট ২৫ জন</p>
+  </div>
+  <div class="srch-wrap">
+    <input class="srch-inp" id="srch" type="text"
+      placeholder="🔍 নাম, এলাকা বা মোবাইল নম্বর দিয়ে খুঁজুন..."
+      oninput="filterM()">
+  </div>
+  <div class="m-grid" id="mGrid"></div>
+</div>
+
+<!-- ═══════════ ACTIVITIES ═══════════ -->
+<div class="page" id="p-activities">
+  <div class="ph"><h1>📋 কার্যক্রম</h1><p>আমাদের সামাজিক কার্যক্রম ও উদ্যোগসমূহ</p></div>
+  <div class="act-grid">
+    <div class="acard g1 fi"><div class="a-img">🌊</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ১</div><div class="a-title">বন্যার্ত মানুষদের সহায়তা</div><div class="a-desc">বন্যায় ক্ষতিগ্রস্ত পরিবারদের মাঝে ত্রাণ সামগ্রী বিতরণ ও পুনর্বাসনে সহায়তা।</div><span class="a-tag">ত্রাণ কার্যক্রম</span></div></div>
+    <div class="acard g1 fi"><div class="a-img">📚</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ২</div><div class="a-title">শিক্ষা সহায়তা কর্মসূচি</div><div class="a-desc">অসচ্ছল মেধাবী শিক্ষার্থীদের বই, স্টেশনারি ও আর্থিক সহায়তা প্রদান।</div><span class="a-tag">শিক্ষা</span></div></div>
+    <div class="acard g1 fi"><div class="a-img">🩸</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ৩</div><div class="a-title">স্বেচ্ছায় রক্তদান কর্মসূচি</div><div class="a-desc">জরুরি রোগীদের জন্য রক্তদানে স্বেচ্ছাসেবী সদস্যদের সক্রিয় অংশগ্রহণ।</div><span class="a-tag">স্বাস্থ্যসেবা</span></div></div>
+    <div class="acard g1 fi"><div class="a-img">🌳</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ৪</div><div class="a-title">বৃক্ষরোপণ অভিযান</div><div class="a-desc">পরিবেশ রক্ষায় বিভিন্ন এলাকায় গাছ লাগানো ও সবুজায়ন কর্মসূচি।</div><span class="a-tag">পরিবেশ</span></div></div>
+    <div class="acard g1 fi"><div class="a-img">🕌</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ৫</div><div class="a-title">মসজিদ ও মাদ্রাসা সংস্কার</div><div class="a-desc">এলাকার মসজিদ ও মাদ্রাসা পরিষ্কার, রং করা ও সংস্কারে সহায়তা।</div><span class="a-tag">ধর্মীয়</span></div></div>
+    <div class="acard g1 fi"><div class="a-img">🤲</div><div class="a-body"><div class="a-date">📅 কার্যক্রম - ৬</div><div class="a-title">দরিদ্র পরিবারে সহায়তা</div><div class="a-desc">ঈদ ও উৎসবে অসহায় পরিবারদের মাঝে খাদ্যসামগ্রী ও পোশাক বিতরণ।</div><span class="a-tag">সমাজসেবা</span></div></div>
+  </div>
+  <div class="gal-sec">
+    <h3 class="gal-head">📷 ছবির গ্যালারি</h3>
+    <div class="gal-grid" id="galGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<div class="page" id="p-about">
+  <div class="ph"><h1>ℹ️ আমাদের সম্পর্কে</h1><p>সমাজ কল্যাণ যুব সংগঠনের পরিচিতি</p></div>
+  <div class="ab-page">
+    <div class="ab-banner g1 fi">
+      <h2>🏢 সংগঠনের পরিচয়</h2>
+      <p>সমাজ কল্যাণ যুব সংগঠন একটি অলাভজনক সামাজিক সংগঠন। এটি তরুণ যুবকদের নিয়ে গঠিত যারা সমাজের কল্যাণে নিরলসভাবে কাজ করে যাচ্ছেন। বিভিন্ন গ্রামের ২৫ জনেরও বেশি সক্রিয় সদস্য একটি উন্নত সমাজ গড়ে তোলার স্বপ্ন নিয়ে কাজ করছেন।</p>
+    </div>
+    <div class="ab2">
+      <div class="ab-it g1 fi"><div class="ab-ic">🎯</div><h4>আমাদের লক্ষ্য</h4><p>সমাজের সুবিধাবঞ্চিত মানুষদের সেবায় নিয়োজিত থাকা এবং একটি উন্নত সমাজ গড়ে তোলা।</p></div>
+      <div class="ab-it g1 fi"><div class="ab-ic">🌟</div><h4>আমাদের দৃষ্টিভঙ্গি</h4><p>একটি ন্যায়সংগত ও সমৃদ্ধ সমাজ প্রতিষ্ঠায় যুবশক্তির সর্বোচ্চ ব্যবহার।</p></div>
+      <div class="ab-it g1 fi"><div class="ab-ic">💎</div><h4>আমাদের মূল্যবোধ</h4><p>সততা, নিষ্ঠা ও সেবাপরায়ণতার মাধ্যমে সমাজ পরিবর্তনে অঙ্গীকারবদ্ধ।</p></div>
+      <div class="ab-it g1 fi"><div class="ab-ic">🤲</div><h4>আমাদের প্রতিশ্রুতি</h4><p>মানুষের দোরগোড়ায় সেবা পৌঁছে দেওয়া এবং সমাজের উন্নয়নে সদা প্রস্তুত।</p></div>
+    </div>
+    <div class="slog-box fi">
+      <p>❝ সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ ❞</p>
+      <p>❝ যুবশক্তিই পরিবর্তনের হাতিয়ার ❞</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CONTACT ═══════════ -->
+<div class="page" id="p-contact">
+  <div class="ph"><h1>📞 যোগাযোগ করুন</h1><p>মেসেজ দিলে সরাসরি আমাদের Gmail-এ পৌঁছাবে</p></div>
+  <div class="ct-wrap">
+    <div class="ct-grid">
+      <div class="ct-info fi">
+        <h3>📌 যোগাযোগের তথ্য</h3>
+        <div class="ci"><span class="ci-ico">👤</span><div class="ci-txt"><strong>সভাপতি</strong>মোঃ শিমুল হোসেন</div></div>
+        <div class="ci"><span class="ci-ico">📞</span><div class="ci-txt"><strong>ফোন (সভাপতি)</strong>01817-984524</div></div>
+        <div class="ci"><span class="ci-ico">👥</span><div class="ci-txt"><strong>সাধারণ সম্পাদক</strong>মোঃ জাকির — 01313-602214<br>মোঃ শুভ — 01761-295388</div></div>
+        <div class="ci"><span class="ci-ico">📘</span><div class="ci-txt"><strong>ফেসবুক পেজ</strong>
+          <!-- 🔗 href="https://facebook.com/আপনার-পেজ" -->
+          <a href="#" style="color:var(--sgold)">Facebook লিঙ্ক এখানে যোগ করুন</a>
+        </div></div>
+        <div class="ci"><span class="ci-ico">📍</span><div class="ci-txt"><strong>ঠিকানা</strong>
+          <!-- 📍 এখানে আপনার ঠিকানা লিখুন -->
+          ঠিকানা এখানে যোগ করুন
+        </div></div>
+      </div>
+      <div class="ct-form fi">
+        <h3>✉️ মেসেজ পাঠান</h3>
+        <p>বার্তা সরাসরি issaidur999@gmail.com এ যাবে।</p>
+        <!--
+          ════════════════════════════════════════════
+          📧 Web3Forms:
+          Access Key: d917dde8-b945-44bb-a5bd-d464abfcb4a4
+          Gmail: issaidur999@gmail.com
+          Dashboard: https://app.web3forms.com
+          ════════════════════════════════════════════
+        -->
+        <form id="cForm" onsubmit="sendMsg(event)">
+          <input type="hidden" name="access_key" value="d917dde8-b945-44bb-a5bd-d464abfcb4a4">
+          <input type="hidden" name="subject" value="সমাজ কল্যাণ যুব সংগঠন — নতুন বার্তা">
+          <input type="hidden" name="from_name" value="সমাজ কল্যাণ যুব সংগঠন Website">
+          <div class="fg"><label>👤 আপনার নাম *</label><input type="text" name="name" placeholder="পুরো নাম লিখুন" required></div>
+          <div class="fg"><label>📞 মোবাইল নম্বর *</label><input type="tel" name="phone" placeholder="01XXXXXXXXX" required></div>
+          <div class="fg"><label>📧 ইমেইল (ঐচ্ছিক)</label><input type="email" name="email" placeholder="your@email.com"></div>
+          <div class="fg"><label>💬 আপনার বার্তা *</label><textarea name="message" placeholder="এখানে লিখুন..." required></textarea></div>
+          <button type="submit" class="sub-btn" id="sBtn">📤 মেসেজ পাঠান</button>
+        </form>
+        <div class="succ" id="sBox"><div class="ck">✅</div><h4>মেসেজ পাঠানো সফল!</h4><p>আমরা শীঘ্রই যোগাযোগ করব।</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-n">সমাজ কল্যাণ যুব সংগঠন</div>
+  <div class="ft-s">❝ সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ ❞</div>
+  <div class="ft-soc">
+    <a class="sb" href="#" title="Facebook">f</a><!-- 🔗 href="https://facebook.com/পেজ" -->
+    <a class="sb" href="#" title="WhatsApp">W</a><!-- 🔗 href="https://wa.me/8801817984524" -->
+    <a class="sb" href="tel:01817984524" title="Phone">☎</a>
+  </div>
+  <div class="ft-c">© ২০২৫ সমাজ কল্যাণ যুব সংগঠন। সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script>
+const mData=[
+  {n:1, name:"মোঃ শিমুল হোসেন",  area:"কান্দিরপাড়া", ph:"01817-984524", role:"সভাপতি"},
+  {n:2, name:"মোঃ জাকির হোসেন",  area:"ইনসাফ নগর",   ph:"01313-602214", role:"সাধারণ সম্পাদক"},
+  {n:3, name:"মোঃ শুভ আলী",      area:"চাইডুবা",      ph:"01761-295388", role:"সাধারণ সম্পাদক"},
+  {n:4, name:"মোঃ বোরহান",        area:"ইনসাফ নগর",   ph:"01733-469060", role:"সদস্য"},
+  {n:5, name:"মোঃ বিজয়",         area:"ইনসাফ নগর",   ph:"01322-590225", role:"সদস্য"},
+  {n:6, name:"মোঃ বিজয় আলী",    area:"হলদার পাড়া",  ph:"01337-179250", role:"সদস্য"},
+  {n:7, name:"মোঃ আলামিন হোসেন", area:"চরপাড়া",      ph:"01622-945619", role:"সদস্য"},
+  {n:8, name:"মোঃ রাজন আলী",     area:"মোহাম্মদপুর", ph:"01310-563655", role:"সদস্য"},
+  {n:9, name:"মোঃ প্রত্যয় আলী", area:"ইনসাফ নগর",   ph:"01704-783332", role:"সদস্য"},
+  {n:10,name:"মোঃ শিশির আলী",    area:"হলদার পাড়া",  ph:"01741-943239", role:"সদস্য"},
+  {n:11,name:"মোঃ রাসেল আলী",    area:"হলদার পাড়া",  ph:"01312-971421", role:"সদস্য"},
+  {n:12,name:"মোঃ জয় আলী",      area:"ইনসাফ নগর",   ph:"01307-856593", role:"সদস্য"},
+  {n:13,name:"মোঃ মেহেদী হাসান", area:"ইনসাফ নগর",   ph:"01332-921751", role:"সদস্য"},
+  {n:14,name:"মোঃ রফীকুল আলি",  area:"ইনসাফ নগর",   ph:null,           role:"সদস্য"},
+  {n:15,name:"মোঃ সিয়াম",        area:"চরপাড়া",      ph:"01767-252203", role:"সদস্য"},
+  {n:16,name:"মোঃ সিয়াম",        area:"হলদার পাড়া",  ph:"01752-498227", role:"সদস্য"},
+  {n:17,name:"মোঃ সিয়াম আলী",   area:"ইনসাফ নগর",   ph:"01302-864946", role:"সদস্য"},
+  {n:18,name:"মোঃ সিয়াম আলী",   area:"মোহাম্মদপুর", ph:null,           role:"সদস্য"},
+  {n:19,name:"মোঃ হিরাজ আলী",    area:"—",            ph:"01704-046395", role:"সদস্য"},
+  {n:20,name:"মোঃ মিজান আলী",    area:"—",            ph:"01331-831861", role:"সদস্য"},
+  {n:21,name:"মোঃ লিখন আলী",     area:"—",            ph:"01625-937879", role:"সদস্য"},
+  {n:22,name:"মোঃ ইয়াসিন আলী",  area:"সোনাতলা",     ph:null,           role:"সদস্য"},
+  {n:23,name:"মোঃ ইয়াছিন আলী", area:"চরপাড়া",      ph:null,           role:"সদস্য"},
+  {n:24,name:"মোঃ পারভেজ আলী",  area:"চরপাড়া",      ph:null,           role:"সদস্য"},
+  {n:25,name:"মোঃ সাইদুর রহমান",area:"—",            ph:"01770-157540", role:"সদস্য"},
+];
+
+function ini(nm){return nm.replace('মোঃ ','').trim()[0];}
+
+function renderM(list){
+  document.getElementById('mGrid').innerHTML=list.map(m=>`
+    <div class="mc" onclick="${m.ph?`window.location='tel:${m.ph.replace(/-/g,'')}'`:''}"
+      title="${m.ph?'ক্লিক করুন — ফোন করুন':'নম্বর নেই'}">
+      <div class="mc-top">
+        <div class="mc-av">
+          ${ini(m.name)}
+          <!--
+            📸 সদস্য ${m.n} (${m.name}):
+            <img src="photos/member_${m.n}.jpg" alt="${m.name}"
+              style="width:100%;height:100%;object-fit:cover;
+                     border-radius:50%;position:absolute;inset:0">
+          -->
+          <span class="mc-num">${m.n}</span>
+        </div>
+        <div class="mc-name">${m.name}</div>
+      </div>
+      <div class="mc-bot">
+        ${m.area!=='—'?`<div class="mc-area">📍 ${m.area}</div>`:''}
+        <div class="mc-ph">${m.ph?`📞 ${m.ph}`:'<span class="no-ph">নম্বর নেই</span>'}</div>
+        <span class="mc-badge">${m.role!=='সদস্য'?'⭐ '+m.role:'সদস্য'}</span>
+      </div>
+    </div>`).join('');
+}
+
+function filterM(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  renderM(mData.filter(m=>
+    m.name.toLowerCase().includes(q)||
+    m.area.toLowerCase().includes(q)||
+    (m.ph&&m.ph.includes(q))
+  ));
+}
+
+// Gallery
+const gals=['🌿','🤝','📚','🌸','💪','🙏','🌊','⭐','🎯','🌳','🩸','🏡','🌺','✨','🎉','🌙'];
+function renderGal(){
+  document.getElementById('galGrid').innerHTML=gals.map((e,i)=>`
+    <div class="gi" style="background:linear-gradient(135deg,
+      hsl(${118+i*11},52%,${22+i}%),hsl(${98+i*9},42%,${13+i}%))">
+      ${e}
+      <!-- 📸 gallery/photo_${i+1}.jpg -->
+    </div>`).join('');
+}
+
+// NAVIGATION
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.nav-links a,.mob a').forEach(a=>a.classList.remove('act'));
+  document.getElementById('p-'+id).classList.add('act');
+  const nl=document.getElementById('nl-'+id);
+  if(nl) nl.classList.add('act');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(checkFI,120);
+}
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobMenu');
+  if(!m.contains(e.target)&&!document.querySelector('.ham').contains(e.target))
+    m.classList.remove('open');
+});
+
+// FORM
+async function sendMsg(e){
+  e.preventDefault();
+  const btn=document.getElementById('sBtn');
+  btn.disabled=true;btn.textContent='⏳ পাঠানো হচ্ছে...';
+  try{
+    const res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(Object.fromEntries(new FormData(e.target)))
+    });
+    if((await res.json()).success){
+      e.target.style.display='none';
+      document.getElementById('sBox').style.display='block';
+    } else {btn.disabled=false;btn.textContent='📤 মেসেজ পাঠান';alert('সমস্যা হয়েছে।');}
+  }catch{btn.disabled=false;btn.textContent='📤 মেসেজ পাঠান';alert('ইন্টারনেট পরীক্ষা করুন।');}
+}
+
+// FADE IN
+function checkFI(){
+  document.querySelectorAll('.fi').forEach(el=>{
+    if(el.getBoundingClientRect().top<window.innerHeight-50) el.classList.add('vis');
+  });
+}
+window.addEventListener('scroll',checkFI);
+
+// INIT
+window.addEventListener('load',()=>{
+  const ld=document.getElementById('loader');
+  ld.style.opacity='0';setTimeout(()=>ld.style.display='none',550);
+  renderM(mData);renderGal();setTimeout(checkFI,200);
+});
+</script>
+</body>
+</html>
