@@ -186,6 +186,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
     <div class="nav-section">সদস্য ব্যবস্থাপনা</div>
     <div class="nav-item" onclick="goSection('pending')"><span class="ico">⏳</span> পেন্ডিং আবেদন <span class="badge" id="pendingBadge">0</span></div>
     <div class="nav-item" onclick="goSection('members')"><span class="ico">👥</span> সকল সদস্য</div>
+    <div class="nav-item" onclick="goSection('addmember')"><span class="ico">➕</span> সদস্য যোগ করুন</div>
     <div class="nav-item" onclick="goSection('admins')" id="nav-admins"><span class="ico">🔑</span> Admin ব্যবস্থাপনা</div>
 
     <div class="nav-section">কন্টেন্ট</div>
@@ -267,6 +268,98 @@ tr:hover td{background:rgba(255,255,255,.03);}
           </tr></thead>
           <tbody id="memberTableBody"></tbody>
         </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ ADD MEMBER (ADMIN) ══ -->
+    <div id="s-addmember" style="display:none">
+      <div class="flash flash-ok" id="amFlash"></div>
+      <div class="form-panel">
+        <h4>➕ নতুন সদস্য যোগ করুন</h4>
+        <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px;">এখানে সরাসরি সদস্য যোগ করা হবে — Firebase account ছাড়াই approved হিসেবে।</p>
+
+        <!-- ছবি আপলোড -->
+        <div class="fg">
+          <label>📸 সদস্যের ছবি <span style="color:var(--gold)">*</span></label>
+          <div id="amPhotoBox" onclick="document.getElementById('amPhotoFile').click()" style="border:2px dashed rgba(240,180,41,.35);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(240,180,41,.35)'">
+            <input type="file" id="amPhotoFile" accept="image/*" style="display:none" onchange="amPreviewPhoto(this)">
+            <div id="amPhotoPlaceholder">
+              <div style="font-size:2.5rem;margin-bottom:8px">📷</div>
+              <p style="color:rgba(255,255,255,.5);font-size:13px"><strong style="color:var(--sgold)">ক্লিক করে ছবি বেছে নিন</strong></p>
+              <p style="color:rgba(255,255,255,.3);font-size:12px">JPG, PNG — সর্বোচ্চ 5MB</p>
+            </div>
+            <img id="amPhotoPreview" src="" style="display:none;width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid var(--gold);margin:0 auto;">
+          </div>
+          <div class="upload-progress" id="amUploadProgress" style="display:none;margin-top:8px">
+            <div style="background:rgba(255,255,255,.1);border-radius:4px;height:6px;overflow:hidden;">
+              <div id="amUploadBar" style="height:100%;background:linear-gradient(90deg,var(--gold),var(--sgold));border-radius:4px;width:0%;transition:width .3s;"></div>
+            </div>
+            <span id="amUploadTxt" style="color:var(--text2);font-size:12px;margin-top:4px;display:block"></span>
+          </div>
+        </div>
+
+        <!-- মূল তথ্য -->
+        <div class="grid2">
+          <div class="fg"><label>👤 পুরো নাম <span style="color:var(--gold)">*</span></label><input type="text" id="am-name" placeholder="যেমন: মোঃ রহিম"></div>
+          <div class="fg"><label>📞 মোবাইল নম্বর</label><input type="tel" id="am-phone" placeholder="01XXXXXXXXX"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>📍 গ্রাম/এলাকা <span style="color:var(--gold)">*</span></label>
+            <select id="am-area">
+              <option value="">-- গ্রাম বেছে নিন --</option>
+              <option>কান্দিরপাড়া</option>
+              <option>ইনসাফ নগর</option>
+              <option>হলদার পাড়া</option>
+              <option>চরপাড়া</option>
+              <option>চাইডুবা</option>
+              <option>মোহাম্মদপুর</option>
+              <option>নিচপাড়া</option>
+              <option>সোনাতলা</option>
+              <option>অন্যান্য</option>
+            </select>
+          </div>
+          <div class="fg"><label>⭐ পদবি</label>
+            <select id="am-position">
+              <option value="সদস্য">সদস্য</option>
+              <option value="সভাপতি">সভাপতি</option>
+              <option value="সাধারণ সম্পাদক">সাধারণ সম্পাদক</option>
+              <option value="সহ-সভাপতি">সহ-সভাপতি</option>
+              <option value="কোষাধ্যক্ষ">কোষাধ্যক্ষ</option>
+              <option value="কার্যনির্বাহী সদস্য">কার্যনির্বাহী সদস্য</option>
+              <option value="স্বেচ্ছাসেবী">স্বেচ্ছাসেবী</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>🩸 রক্তের গ্রুপ</label>
+            <select id="am-blood">
+              <option value="">-- রক্তের গ্রুপ --</option>
+              <option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option>
+              <option>O+</option><option>O-</option>
+            </select>
+          </div>
+          <div class="fg"><label>⚤ লিঙ্গ</label>
+            <select id="am-gender">
+              <option value="">-- লিঙ্গ --</option>
+              <option value="পুরুষ">পুরুষ</option>
+              <option value="মহিলা">মহিলা</option>
+              <option value="অন্যান্য">অন্যান্য</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>🎂 জন্ম তারিখ</label><input type="date" id="am-dob"></div>
+          <div class="fg"><label>📧 ইমেইল</label><input type="email" id="am-email" placeholder="ঐচ্ছিক"></div>
+        </div>
+        <div class="fg"><label>🏠 সম্পূর্ণ ঠিকানা</label><input type="text" id="am-address" placeholder="গ্রাম, উপজেলা, জেলা"></div>
+
+        <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+          <button class="btn btn-g btn-lg" id="amSaveBtn" onclick="saveAdminMember()">💾 সদস্য সংরক্ষণ করুন</button>
+          <button class="btn btn-b btn-lg" onclick="resetAmForm()">🔄 ফর্ম পরিষ্কার করুন</button>
         </div>
       </div>
     </div>
@@ -836,6 +929,7 @@ window.saveStats = async function() {
   flash('stFlash','✅ পরিসংখ্যান আপডেট হয়েছে।');
 };
 
+
 // ── Logout
 window.doLogout = function() { signOut(auth).then(()=>window.location.href='login.html'); };
 
@@ -851,10 +945,11 @@ function flash(id, msg, type='ok') {
 
 <script>
 // ── SECTION NAVIGATION
-const sections = ['dashboard','pending','members','admins','notices','gallery','stats'];
+const sections = ['dashboard','pending','members','addmember','admins','notices','gallery','stats'];
 const sectionTitles = {
   dashboard:'📊 ড্যাশবোর্ড', pending:'⏳ পেন্ডিং আবেদন', members:'👥 সকল সদস্য',
-  admins:'🔑 Admin ব্যবস্থাপনা', notices:'📢 নোটিশ', gallery:'📷 গ্যালারি', stats:'📈 পরিসংখ্যান'
+  addmember:'➕ সদস্য যোগ করুন', admins:'🔑 Admin ব্যবস্থাপনা',
+  notices:'📢 নোটিশ', gallery:'📷 গ্যালারি', stats:'📈 পরিসংখ্যান'
 };
 
 function goSection(id) {
@@ -899,5 +994,154 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 </script>
+
+<script>
+// ══ ADD MEMBER BY ADMIN — normal script (module এর বাইরে) ══
+const AM_CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dasurbavl/image/upload';
+const AM_UPLOAD_PRESET = 'somaj-kallyan-upload';
+const AM_FIREBASE_URL = 'https://firestore.googleapis.com/v1/projects/somaj-kallyan/databases/(default)/documents/users';
+const AM_API_KEY = 'AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I';
+
+function amPreviewPhoto(input) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  if (file.size > 5 * 1024 * 1024) { alert('ছবি 5MB এর বেশি হবে না।'); input.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('amPhotoPreview').src = e.target.result;
+    document.getElementById('amPhotoPreview').style.display = 'block';
+    document.getElementById('amPhotoPlaceholder').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function amUploadPhoto(file) {
+  return new Promise((resolve, reject) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', AM_UPLOAD_PRESET);
+    fd.append('folder', 'somaj-kallyan/members');
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', AM_CLOUDINARY_URL);
+    const bar = document.getElementById('amUploadBar');
+    const txt = document.getElementById('amUploadTxt');
+    document.getElementById('amUploadProgress').style.display = 'block';
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable) {
+        const pct = Math.round(e.loaded / e.total * 100);
+        bar.style.width = pct + '%';
+        txt.textContent = 'আপলোড হচ্ছে... ' + pct + '%';
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        txt.textContent = '✅ ছবি আপলোড সফল!';
+        resolve(JSON.parse(xhr.responseText).secure_url);
+      } else { document.getElementById('amUploadProgress').style.display='none'; reject(new Error('আপলোড ব্যর্থ')); }
+    };
+    xhr.onerror = () => { document.getElementById('amUploadProgress').style.display='none'; reject(new Error('নেটওয়ার্ক সমস্যা')); };
+    xhr.send(fd);
+  });
+}
+
+async function saveAdminMember() {
+  const name     = document.getElementById('am-name').value.trim();
+  const phone    = document.getElementById('am-phone').value.trim();
+  const area     = document.getElementById('am-area').value;
+  const position = document.getElementById('am-position').value;
+  const blood    = document.getElementById('am-blood').value;
+  const gender   = document.getElementById('am-gender').value;
+  const dob      = document.getElementById('am-dob').value;
+  const email    = document.getElementById('am-email').value.trim();
+  const address  = document.getElementById('am-address').value.trim();
+  const photoFile = document.getElementById('amPhotoFile').files[0];
+
+  if (!name) { amFlash('⚠️ নাম দিন।', 'err'); return; }
+  if (!area) { amFlash('⚠️ গ্রাম/এলাকা বেছে নিন।', 'err'); return; }
+  if (!photoFile) { amFlash('⚠️ সদস্যের ছবি আপলোড করুন।', 'err'); return; }
+
+  const btn = document.getElementById('amSaveBtn');
+  btn.disabled = true; btn.textContent = '⏳ সংরক্ষণ হচ্ছে...';
+
+  try {
+    // ১. Cloudinary তে ছবি আপলোড
+    btn.textContent = '📸 ছবি আপলোড হচ্ছে...';
+    const photoUrl = await amUploadPhoto(photoFile);
+
+    // ২. Firestore REST API দিয়ে approved member হিসেবে save
+    btn.textContent = '💾 Firebase এ সংরক্ষণ...';
+    const now = new Date().toISOString();
+    const year = new Date().getFullYear();
+    // Random serial
+    const serial = String(Math.floor(Math.random() * 900) + 100);
+    const memberId = year + '-' + serial;
+
+    const docData = {
+      fields: {
+        name:        { stringValue: name },
+        phone:       { stringValue: phone || '' },
+        area:        { stringValue: area },
+        position:    { stringValue: position },
+        bloodGroup:  { stringValue: blood || '' },
+        gender:      { stringValue: gender || '' },
+        dob:         { stringValue: dob || '' },
+        email:       { stringValue: email || '' },
+        address:     { stringValue: address || '' },
+        photoUrl:    { stringValue: photoUrl },
+        memberId:    { stringValue: memberId },
+        role:        { stringValue: 'member' },
+        status:      { stringValue: 'approved' },
+        addedByAdmin:{ booleanValue: true },
+      }
+    };
+
+    const res = await fetch(
+      `https://firestore.googleapis.com/v1/projects/somaj-kallyan/databases/(default)/documents/users?key=${AM_API_KEY}`,
+      { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(docData) }
+    );
+
+    if (!res.ok) throw new Error('Firebase save failed: ' + res.status);
+
+    amFlash('✅ সদস্য সফলভাবে যোগ হয়েছে! ID: ' + memberId, 'ok');
+    resetAmForm();
+    // Main Firebase functions reload করো (যদি থাকে)
+    if (typeof loadDashboard === 'function') loadDashboard();
+    if (typeof loadMembers === 'function') loadMembers();
+
+  } catch(e) {
+    amFlash('❌ সমস্যা হয়েছে: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 সদস্য সংরক্ষণ করুন';
+  }
+}
+
+function resetAmForm() {
+  ['am-name','am-phone','am-email','am-address','am-dob'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  ['am-area','am-position','am-blood','am-gender'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.selectedIndex=0;
+  });
+  const f = document.getElementById('amPhotoFile'); if(f) f.value='';
+  const prev = document.getElementById('amPhotoPreview');
+  if(prev){ prev.style.display='none'; prev.src=''; }
+  const ph = document.getElementById('amPhotoPlaceholder');
+  if(ph) ph.style.display='block';
+  const prog = document.getElementById('amUploadProgress');
+  if(prog) prog.style.display='none';
+  const bar = document.getElementById('amUploadBar');
+  if(bar) bar.style.width='0%';
+}
+
+function amFlash(msg, type='ok') {
+  const el = document.getElementById('amFlash');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'flash show flash-' + type;
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+</script>
+
 </body>
 </html>
