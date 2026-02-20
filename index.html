@@ -537,16 +537,16 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
     <div class="hero-c">
       <div class="bism">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
       <h1 class="h-title"><span id="tw"></span><span class="typewriter" id="twc">|</span></h1>
-      <p class="h-en">Ramkrisnopur, Doulatpur, Kusthtia.  </p>
+      <p class="h-en">Ramkrisnopur, Doulatpur, Kushtia.</p>
       <div class="h-bar"></div>
       <div class="h-slog">
         <p>❝ সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ ❞</p>
         <p>❝ যুবশক্তিই পরিবর্তনের হাতিয়ার ❞</p>
-		 <p>আরো অপশন 3 লাইন এ ট্যাপ করুন </p>
       </div>
       <div class="h-btns">
         <button class="btn btn-g" onclick="go('members')">👥 সদস্য দেখুন</button>
         <button class="btn btn-gl" onclick="go('notice')">📢 নোটিশ বোর্ড</button>
+		<button class="btn btn-gl"id="loginNavBtn" onclick="window.location.href='login.html'">🔐 লগইন/যোগ দিন ➕</button>
         <button class="btn btn-gl" onclick="go('help')">❤️ সাহায্য করুন</button>
         <button class="btn btn-gl" onclick="go('contact')">📞 যোগাযোগ</button>
       </div>
@@ -569,27 +569,10 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
     <div class="sec-in">
       <h2 class="sec-t fi">📢 সর্বশেষ নোটিশ</h2>
       <div class="sec-b"></div>
-      <div class="notice-list" style="padding:0">
-        <div class="notice-card urgent fi">
-          <div class="notice-ico">🚨</div>
-          <div class="notice-body">
-            <span class="notice-tag tag-urgent">জরুরি</span>
-            <h4>মাসিক সভা — ফেব্রুয়ারি ২০২৬</h4>
-            <p>আগামী শুক্রবার বিকাল ৪টায় কান্দিরপাড়া জামে মসজিদ সংলগ্ন মাঠে সকল সদস্যের উপস্থিতি বাধ্যতামূলক। নতুন কার্যক্রমের পরিকল্পনা ও বার্ষিক রিপোর্ট উপস্থাপন করা হবে।</p>
-            <div class="notice-date">📅 প্রকাশিত: ১৮ ফেব্রুয়ারি, ২০২৬</div>
-          </div>
-        </div>
-        <div class="notice-tag tag-urgent">
-          <div class="notice-ico">🚨</div>
-          <div class="notice-body">
-            <span class="notice-tag tag-urgent">ইফতার</span>
-            <h4>ইফতারির জন্য জরুরি নোটিস </h4>
-            <p>📢📢সংগঠনের সকল সদস্যদের অবগতির জন্য জানানো যাচ্ছে যে, <br>তোমরা এই মাসের 100 টাকা এবং ইফতারের একটা আয়োজন করা হয়েছে সংগঠনের পক্ষ থেকে তার জন্য ১০০ টাকা মোট ২০০ টাকা বিকাশে বা নগদে দিতে পারো অথবা <br> চাইলে তোমরা নিজে এসে দিতে পারো ধন্যবাদ! <br> ✅ 01733460760,বিকাশ নগর দুইটাই খোলা,।</p>
-            <div class="notice-date">📅 ২০ ফেব্রুয়ারি, ২০২৬</div>
-          </div>
-        </div>
+      <div class="notice-list" id="homeNoticeList" style="padding:0">
+        <div style="text-align:center;padding:30px;color:var(--text2)">⏳ লোড হচ্ছে...</div>
       </div>
-      <div style="text-align:center;margin-top:16px">
+            <div style="text-align:center;margin-top:16px">
         <button class="btn btn-gl" onclick="go('notice')">সব নোটিশ দেখুন →</button>
       </div>
     </div>
@@ -785,11 +768,11 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
       <div class="sec-b"></div>
       <div class="tl-wrap">
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 মার্চ ২০২৫</div><div class="tl-title">🌳 প্রতিষ্ঠা ও প্রথম বৃক্ষরোপণ</div><div class="tl-desc">সংগঠন আনুষ্ঠানিকভাবে প্রতিষ্ঠা। কান্দিরপাড়া ও ইনসাফ নগরে অনেক টি ফলজ গাছ রোপণ।</div><span class="tl-tag">🌱 সূচনা</span></div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 মে ২০২৫</div><div class="tl-title">📚 শিক্ষা সহায়তা কর্মসূচি</div><div class="tl-desc">১৫ জন মেধাবী কিন্তু অসচ্ছল শিক্ষার্থীকে বই, খাতা ও শিক্ষা উপকরণ বিতরণ এর চেস্ট ।</div><span class="tl-tag">📖 শিক্ষা</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 মে ২০২৫</div><div class="tl-title">📚 শিক্ষা সহায়তা কর্মসূচি</div><div class="tl-desc">১৫ জন মেধাবী কিন্তু অসচ্ছল শিক্ষার্থীকে বই, খাতা ও শিক্ষা উপকরণ বিতরণ করা হয়েছে।</div><span class="tl-tag">📖 শিক্ষা</span></div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 জুলাই ২০২৫</div><div class="tl-title">🌳 দ্বিতীয় বৃক্ষরোপণ — বর্ষা</div><div class="tl-desc">বর্ষা মৌসুমে হলদার পাড়া ও চরপাড়ায় অনেক টি গাছ লাগানো হয়।</div><span class="tl-tag">🌱 পরিবেশ</span></div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 সেপ্টেম্বর ২০২৫</div><div class="tl-title">🩸 স্বেচ্ছায় রক্তদান ক্যাম্প</div><div class="tl-desc">প্রথম রক্তদান ক্যাম্প আয়োজন। ২০+ ইউনিট রক্ত সংগ্রহ ও জরুরি রোগীদের সহায়তা।</div><span class="tl-tag">🏥 স্বাস্থ্য</span></div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 অক্টোবর ২০২৫</div><div class="tl-title">📚 SSC শিক্ষার্থী বিশেষ সহায়তা</div><div class="tl-desc">SSC পরীক্ষার্থীদের নোট বই, প্রাইভেট ফি সহায়তা ও মনোবল বৃদ্ধিমূলক আলোচনা।</div><span class="tl-tag">📖 শিক্ষা</span></div></div>
-        <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 ডিসেম্বর ২০২৫</div><div class="tl-title">🤲 শীতবস্ত্র বিতরণ</div><div class="tl-desc">শীতকালীন দরিদ্র পরিবারের মাঝে কম্বল ও শীতবস্ত্র বিতরণ এর চেস্টা </div><span class="tl-tag">❤️ সেবা</span></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 ডিসেম্বর ২০২৫</div><div class="tl-title">🤲 শীতবস্ত্র বিতরণ</div><div class="tl-desc">শীতকালীন দরিদ্র পরিবারের মাঝে কম্বল ও শীতবস্ত্র বিতরণ করা হয়েছে।</div><span class="tl-tag">❤️ সেবা</span></div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-card fi"><div class="tl-date">📅 ২০২৬ — পরিকল্পনা</div><div class="tl-title">🚀 ভবিষ্যৎ পরিকল্পনা</div><div class="tl-desc">আরো বড় পরিসরে বৃক্ষরোপণ, শিক্ষা বৃত্তি, স্বাস্থ্য সেবা ও দক্ষতা উন্নয়ন কার্যক্রম।</div><span class="tl-tag">✨ পরিকল্পনা</span></div></div>
       </div>
     </div>
@@ -980,7 +963,7 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
         <div class="ev-item">
           <div class="ev-date">📅 রমজান ২০২৬</div>
           <div class="ev-title">রমজান সহায়তা কার্যক্রম</div>
-          <div class="ev-desc">দরিদ্র পরিবারে ইফতার ও খাদ্য সামগ্রী বিতরণ চেস্টা </div>
+          <div class="ev-desc">দরিদ্র পরিবারে ইফতার ও খাদ্য সামগ্রী বিতরণ করা হবে।</div>
           <span class="ev-badge" style="display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;background:rgba(46,139,46,.2);border:1px solid rgba(46,139,46,.38);color:var(--text2);">ধর্মীয়</span>
         </div>
       </div>
@@ -1201,33 +1184,13 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ══ MEMBER DATA ══ */
-const mData=[
-  {n:1, name:"মোঃ শিমুল হোসেন",  area:"কান্দিরপাড়া", ph:"01817-984524", role:"সভাপতি",      photo:"https://i.ibb.co.com/qFdbZ0nV/1771544660497.jpg"},
-  {n:2, name:"মোঃ জাকির হোসেন",  area:"ইনসাফ নগর",   ph:"01313-602214", role:"সাধারণ সম্পাদক",photo:"https://i.ibb.co.com/TDmz6DmP/1771544608157.jpg"},
-  {n:3, name:"মোঃ শুভ আলী",      area:"চাইডুবা",      ph:"01761-295388", role:"সাধারণ সম্পাদক",photo:"https://i.ibb.co.com/MyFzLcr4/1771544598913.jpg"},
-  {n:4, name:"মোঃ বোরহান",        area:"ইনসাফ নগর",   ph:"01733-469060", role:"সদস্য",         photo:"https://i.ibb.co.com/sdmZfdPd/1771544603178.jpg"},
-  {n:5, name:"মোঃ বিজয়",         area:"ইনসাফ নগর",   ph:"01322-590225", role:"সদস্য",         photo:"photos/member_5.jpg"},
-  {n:6, name:"মোঃ বিজয় আলী",    area:"হলদার পাড়া",  ph:"01337-179250", role:"সদস্য",         photo:"photos/member_6.jpg"},
-  {n:7, name:"মোঃ আলামিন হোসেন", area:"চরপাড়া",      ph:"01622-945619", role:"সদস্য",         photo:"photos/member_7.jpg"},
-  {n:8, name:"মোঃ রাজন আলী",     area:"মোহাম্মদপুর", ph:"01310-563655", role:"সদস্য",         photo:"photos/member_8.jpg"},
-  {n:9, name:"মোঃ প্রত্যয় আলী", area:"ইনসাফ নগর",   ph:"01704-783332", role:"সদস্য",         photo:"photos/member_9.jpg"},
-  {n:10,name:"মোঃ শিশির আলী",    area:"হলদার পাড়া",  ph:"01741-943239", role:"সদস্য",         photo:"photos/member_10.jpg"},
-  {n:11,name:"মোঃ রাসেল আলী",    area:"হলদার পাড়া",  ph:"01312-971421", role:"সদস্য",         photo:"photos/member_11.jpg"},
-  {n:12,name:"মোঃ জয় আলী",      area:"ইনসাফ নগর",   ph:"01307-856593", role:"সদস্য",         photo:"photos/member_12.jpg"},
-  {n:13,name:"মোঃ মেহেদী হাসান", area:"ইনসাফ নগর",   ph:"01332-921751", role:"সদস্য",         photo:"photos/member_13.jpg"},
-  {n:14,name:"মোঃ রফীকুল আলি",  area:"ইনসাফ নগর",   ph:null,           role:"সদস্য",         photo:"photos/member_14.jpg"},
-  {n:15,name:"মোঃ সিয়াম",        area:"চরপাড়া",      ph:"01767-252203", role:"সদস্য",         photo:"photos/member_15.jpg"},
-  {n:16,name:"মোঃ সিয়াম",        area:"হলদার পাড়া",  ph:"01752-498227", role:"সদস্য",         photo:"photos/member_16.jpg"},
-  {n:17,name:"মোঃ সিয়াম আলী",   area:"ইনসাফ নগর",   ph:"01302-864946", role:"সদস্য",         photo:"photos/member_17.jpg"},
-  {n:18,name:"মোঃ সিয়াম আলী",   area:"মোহাম্মদপুর", ph:null,           role:"সদস্য",         photo:"photos/member_18.jpg"},
-  {n:19,name:"মোঃ হিরাজ আলী",    area:"চরপাড়া",            ph:"01704-046395", role:"সদস্য",         photo:"photos/member_19.jpg"},
-  {n:20,name:"মোঃ মিজান আলী",    area:"নিচপাড়া",            ph:"01331-831861", role:"সদস্য",         photo:"photos/member_20.jpg"},
-  {n:21,name:"মোঃ লিখন আলী",     area:"নিচপাড়া",            ph:"01625-937879", role:"সদস্য",         photo:"photos/member_21.jpg"},
-  {n:22,name:"মোঃ ইয়াসিন আলী",  area:"সোনাতলা",     ph:"01822-520266", role:"সদস্য",         photo:"photos/member_22.jpg"},
-  {n:23,name:"মোঃ ইয়াছিন আলী", area:"চরপাড়া",      ph:null,           role:"সদস্য",         photo:"photos/member_23.jpg"},
-  {n:24,name:"মোঃ পারভেজ আলী",  area:"চরপাড়া",      ph:null,           role:"সদস্য",         photo:"photos/member_24.jpg"},
-  {n:25,name:"মোঃ সাইদুর রহমান",area:"চরপাড়া",      ph:"01770-157540", role:"সদস্য",         photo:"https://i.ibb.co.com/mF5xCg3m/file-0000000061c471fa99868cdd03cdf9d1.png"},
+/* ══ STATIC MEMBER DATA — শুধু ৪ জন নেতৃবৃন্দ ══
+   বাকি সদস্যরা Firebase account থেকে স্বয়ংক্রিয়ভাবে যোগ হবে */
+let mData=[
+  {n:1, name:"মোঃ শিমুল হোসেন",  area:"কান্দিরপাড়া", ph:"01817-984524", role:"সভাপতি",        photo:"https://i.ibb.co.com/qFdbZ0nV/1771544660497.jpg"},
+  {n:2, name:"মোঃ জাকির হোসেন",  area:"ইনসাফ নগর",   ph:"01313-602214", role:"সাধারণ সম্পাদক", photo:"https://i.ibb.co.com/TDmz6DmP/1771544608157.jpg"},
+  {n:3, name:"মোঃ শুভ আলী",      area:"চাইডুবা",      ph:"01761-295388", role:"সাধারণ সম্পাদক", photo:"https://i.ibb.co.com/MyFzLcr4/1771544598913.jpg"},
+  {n:25,name:"মোঃ সাইদুর রহমান", area:"চরপাড়া",      ph:"01770-157540", role:"সদস্য",           photo:"https://i.ibb.co.com/mF5xCg3m/file-0000000061c471fa99868cdd03cdf9d1.png"},
 ];
 
 /* ══ PHOTO HELPER ══ */
@@ -1976,27 +1939,33 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ── LOAD MEMBERS from Firebase
+// ── LOAD MEMBERS from Firebase — static ৪ জন + Firebase approved members merge
 async function loadFirebaseMembers() {
   try {
-    const snap = await getDocs(query(collection(db,'users'), where('status','==','approved'), orderBy('memberId','asc')));
-    if (snap.empty) return; // Fall back to static data
-    const members = snap.docs.map(d => ({...d.data(), uid: d.id}));
-    // Override global mData
-    window.mData = members.map((m, i) => ({
-      n: parseInt(m.memberId?.split('-')[1]) || i+1,
-      name: m.name || '-',
-      area: m.area || '-',
-      ph: m.ph || m.phone || null,
-      role: m.position || m.role || 'সদস্য',
-      photo: m.photoUrl || '',
-      uid: m.uid,
-      memberId: m.memberId,
-      bloodGroup: m.bloodGroup,
-      dob: m.dob,
-      gender: m.gender,
-      email: m.email,
-    }));
+    const snap = await getDocs(query(collection(db,'users'), where('status','==','approved'), orderBy('createdAt','asc')));
+    if (!snap.empty) {
+      const fbMembers = snap.docs.map(d => ({...d.data(), uid: d.id}));
+      // Static ৪ জনের uid বা name দিয়ে duplicate বাদ দিয়ে merge করো
+      const staticNames = mData.map(m => m.name);
+      const newMembers = fbMembers
+        .filter(m => !staticNames.includes(m.name))
+        .map((m, i) => ({
+          n: parseInt(m.memberId?.split('-')[1]) || (100 + i),
+          name: m.name || '-',
+          area: m.area || '-',
+          ph: m.phone || null,
+          role: m.position || 'সদস্য',
+          photo: m.photoUrl || '',
+          uid: m.uid,
+          memberId: m.memberId,
+          bloodGroup: m.bloodGroup,
+          dob: m.dob,
+          gender: m.gender,
+          email: m.email,
+        }));
+      // Merge: static 4 জন আগে, তারপর Firebase members
+      window.mData = [...mData, ...newMembers];
+    }
     if (typeof filterM === 'function') filterM();
   } catch(e) { console.log('Using static member data', e); }
 }
@@ -2024,18 +1993,23 @@ async function loadFirebaseNotices() {
     // Update notice page
     const noticePage = document.querySelector('#p-notice .notice-list');
     if (noticePage) noticePage.innerHTML = noticeHtml;
-    // Update home notice preview
-    const homeNotice = document.querySelector('#p-home .notice-list');
-    if (homeNotice && notices.length > 0) {
-      homeNotice.innerHTML = notices.slice(0,2).map(n => `
-        <div class="notice-card ${n.type||'default'}">
-          <div class="notice-ico">${icoMap[n.type]||'📢'}</div>
-          <div class="notice-body">
-            <span class="notice-tag ${typeMap[n.type]||'tag-gold'}">${n.type==='urgent'?'জরুরি':'নোটিশ'}</span>
-            <h4>${n.title||'-'}</h4><p>${(n.body||'').substring(0,120)}...</p>
-            <div class="notice-date">📅 ${n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'}</div>
-          </div>
-        </div>`).join('');
+    // Update home notice preview (dynamic — Firebase থেকে)
+    const homeNotice = document.getElementById('homeNoticeList');
+    if (homeNotice) {
+      if (notices.length === 0) {
+        homeNotice.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2)">কোনো নোটিশ নেই।</div>';
+      } else {
+        homeNotice.innerHTML = notices.slice(0,3).map(n => `
+          <div class="notice-card ${n.type||'default'} fi">
+            <div class="notice-ico">${icoMap[n.type]||'📢'}</div>
+            <div class="notice-body">
+              <span class="notice-tag ${typeMap[n.type]||'tag-gold'}">${n.type==='urgent'?'জরুরি':n.type==='info'?'তথ্য':n.type==='success'?'সফলতা':'নোটিশ'}</span>
+              <h4>${n.title||'-'}</h4>
+              <p>${(n.body||'').substring(0,150)}${(n.body||'').length>150?'...':''}</p>
+              <div class="notice-date">📅 ${n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'} · ${n.postedBy||'Admin'}</div>
+            </div>
+          </div>`).join('');
+      }
     }
   } catch(e) { console.log('Notice load error', e); }
 }
