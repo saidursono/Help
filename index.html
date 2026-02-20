@@ -483,7 +483,7 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
 <nav>
   <div class="nav-in">
     <div class="brand" onclick="go('home')">
-      <div class="brand-ico">🌿</div>
+      <div class="brand-ico" style="position:relative;overflow:hidden;padding:0;"><img src="https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg" alt="লোগো" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0"></div>
       <div class="brand-txt">সমাজ কল্যাণ যুব সংগঠন<span>Somaj Kalyan Jubo Sangathan</span></div>
     </div>
     <ul class="nav-links">
@@ -727,18 +727,20 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
     </div>
   </section>
 
-  <!-- CHATBOT -->
+  <!-- TAWK.TO LIVE CHAT -->
+
+  <!-- AI CHATBOT -->
   <section class="chat-sec">
     <div class="chat-in">
       <h2 class="sec-t fi">🤖 AI সহায়তা কেন্দ্র</h2>
-      <p class="sec-s fi">সংগঠন সম্পর্কে যেকোনো প্রশ্ন করুন বাংলা বা ইংরেজিতে</p>
+      <p class="sec-s fi">সংগঠন সম্পর্কে যেকোনো প্রশ্ন করুন বাংলায়</p>
       <div class="sec-b"></div>
       <div class="chat-box fi">
         <div class="chat-head">
           <div class="chat-head-ico">🌿</div>
           <div class="chat-head-txt">
             <h4>সমাজ কল্যাণ AI সহায়তা</h4>
-            <p>Powered by AI</p>
+            <p>সর্বদা সক্রিয়</p>
           </div>
           <div class="chat-dot"></div>
         </div>
@@ -747,20 +749,19 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
         </div>
         <div class="chat-qs">
           <span class="cq" onclick="askQ('সদস্য তালিকা দেখান')">👥 সদস্য তালিকা</span>
-          <span class="cq" onclick="askQ('সংগঠনের কার্যক্রম কী কী?')">📋 কার্যক্রম</span>
-          <span class="cq" onclick="askQ('সভাপতির সাথে কীভাবে যোগাযোগ করব?')">📞 যোগাযোগ</span>
-          <span class="cq" onclick="askQ('কীভাবে স্বেচ্ছাসেবী হতে পারি?')">🙋 স্বেচ্ছাসেবী</span>
-          <span class="cq" onclick="askQ('কীভাবে সাহায্য করতে পারি?')">❤️ সাহায্য</span>
+          <span class="cq" onclick="askQ('সংগঠনের কার্যক্রম')">📋 কার্যক্রম</span>
+          <span class="cq" onclick="askQ('যোগাযোগ')">📞 যোগাযোগ</span>
+          <span class="cq" onclick="askQ('স্বেচ্ছাসেবী হতে চাই')">🙋 স্বেচ্ছাসেবী</span>
+          <span class="cq" onclick="askQ('সাহায্য করতে চাই')">❤️ সাহায্য</span>
+          <span class="cq" onclick="askQ('সভাপতি কে')">👑 সভাপতি</span>
         </div>
         <div class="chat-inp-row">
-          <input class="chat-inp" id="chatInput" placeholder="এখানে প্রশ্ন লিখুন... (বাংলা/English)" onkeydown="if(event.key==='Enter')sendChat()">
+          <input class="chat-inp" id="chatInput" placeholder="এখানে প্রশ্ন লিখুন..." onkeydown="if(event.key==='Enter')sendChat()">
           <button class="chat-send" id="chatSend" onclick="sendChat()">➤</button>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- TIMELINE -->
   <section class="sec">
     <div class="sec-in">
       <h2 class="sec-t fi">📅 কার্যক্রমের ইতিহাস</h2>
@@ -1053,7 +1054,7 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
           <a class="hc-btn hc-wa" href="https://wa.me/8801817984524" target="_blank"><span>💬</span> WhatsApp — সভাপতি (01817-984524)</a>
           <a class="hc-btn hc-wa" href="https://wa.me/8801770157540" target="_blank"><span>💬</span> WhatsApp — সাইদুর (01770-157540)</a>
           <a class="hc-btn hc-imo" href="tel:01817984524"><span>📱</span> IMO — সভাপতি</a>
-          <a class="hc-btn hc-mail" href="mailto:issaidur999@gmail.com"><span>✉️</span>
+          <a class="hc-btn hc-mail" href="/cdn-cgi/l/email-protection#c4adb7b7a5ada0b1b6fdfdfd84a3a9a5ada8eaa7aba9" target="_blank"><span>✉️</span> Gmail — <span class="__cf_email__" data-cfemail="39504a4a58505d4c4b000000795e54585055175a5654">[email&#160;protected]</span></a>
         </div>
         <div class="hform-wrap">
           <h4>📝 সাহায্যের আবেদন করুন</h4>
@@ -1089,13 +1090,13 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
         <div class="ci"><span class="ci-ico">📞</span><div class="ci-txt"><strong>ফোন (সভাপতি)</strong>01817-984524</div></div>
         <div class="ci"><span class="ci-ico">👥</span><div class="ci-txt"><strong>সাধারণ সম্পাদকদ্বয়</strong>মোঃ জাকির — 01313-602214<br>মোঃ শুভ আলী — 01761-295388</div></div>
         <div class="ci"><span class="ci-ico">💬</span><div class="ci-txt"><strong>WhatsApp</strong>01817-984524 (সভাপতি)<br>01770-157540 (Saidur)</div></div>
-        <div class="ci"><span class="ci-ico">📧</span><div class="ci-txt"><strong>Gmail</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f564c4c5e565b4a4d0606067f58525e5653115c5052">[email&#160;protected]</a></div></div>
+        <div class="ci"><span class="ci-ico">📧</span><div class="ci-txt"><strong>Gmail</strong><a href="/cdn-cgi/l/email-protection#375e4444565e5342450e0e0e77505a565e5b1954585a" style="color:var(--sgold)"><span class="__cf_email__" data-cfemail="7c150f0f1d1518090e4545453c1b111d1510521f1311">[email&#160;protected]</span></a></div></div>
         <div class="ci"><span class="ci-ico">📍</span><div class="ci-txt"><strong>কার্যক্ষেত্র</strong>কান্দিরপাড়া, ইনসাফ নগর, চাইডুবা, হলদার পাড়া, চরপাড়া, মোহাম্মদপুর</div></div>
         <div class="ci"><span class="ci-ico">📘</span><div class="ci-txt"><strong>ফেসবুক পেজ</strong><a href="#" style="color:var(--sgold)">শীঘ্রই আসছে...</a></div></div>
       </div>
       <div class="ct-form fi">
         <h3>✉️ মেসেজ পাঠান</h3>
-        <p>বার্তা সরাসরি <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a3cad0d0c2cac7d6d19a9a9ae3c4cec2cacf8dc0ccce">[email&#160;protected]</a> এ যাবে।</p>
+        <p>বার্তা সরাসরি <a href="/cdn-cgi/l/email-protection#1d746e6e7c7479686f2424245d7a707c7471337e7270" style="color:var(--sgold)"><span class="__cf_email__" data-cfemail="98f1ebebf9f1fcedeaa1a1a1d8fff5f9f1f4b6fbf7f5">[email&#160;protected]</span></a> এ যাবে।</p>
         <form id="cForm" onsubmit="sendMsg(event)">
           <input type="hidden" name="access_key" value="d917dde8-b945-44bb-a5bd-d464abfcb4a4">
           <input type="hidden" name="subject" value="সমাজ কল্যাণ যুব সংগঠন — নতুন বার্তা">
@@ -1141,7 +1142,7 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
   <div class="ft-c">© ২০২৫–২০২৬ সমাজ কল্যাণ যুব সংগঠন। সর্বস্বত্ব সংরক্ষিত।</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══ MEMBER DATA ══ */
 const mData=[
   {n:1, name:"মোঃ শিমুল হোসেন",  area:"কান্দিরপাড়া", ph:"01817-984524", role:"সভাপতি",      photo:"https://i.ibb.co.com/qFdbZ0nV/1771544660497.jpg"},
@@ -1614,67 +1615,92 @@ function changeMonth(dir){
 }
 
 /* ══ CHATBOT ══ */
-const orgInfo = {
-  name:"সমাজ কল্যাণ যুব সংগঠন",
-  president:"মোঃ শিমুল হোসেন",presidentPhone:"01817-984524",
-  whatsapp1:"01817-984524",whatsapp2:"01770-157540",
-  gmail:"issaidur999@gmail.com",
-  members:mData,activities:["বৃক্ষরোপণ","শিক্ষা সহায়তা","রক্তদান","ত্রাণ বিতরণ","মসজিদ সংস্কার","শীতবস্ত্র বিতরণ"],
-  totalMembers:25,
-  villages:"কান্দিরপাড়া, ইনসাফ নগর, চাইডুবা, হলদার পাড়া, চরপাড়া, মোহাম্মদপুর"
-};
-const chatHistory=[];
-
-async function sendChat(){
+function sendChat(){
   const inp=document.getElementById('chatInput');
   const msg=inp.value.trim();
   if(!msg) return;
   inp.value='';
   addMsg(msg,'user');
-  const btn=document.getElementById('chatSend');
-  btn.disabled=true;
-  const typingId='typing_'+Date.now();
-  document.getElementById('chatMsgs').insertAdjacentHTML('beforeend',
-    `<div class="msg msg-bot msg-typing" id="${typingId}"><span></span><span></span><span></span></div>`);
-  scrollChat();
-  chatHistory.push({role:'user',content:msg});
-  try{
-    const sysPrompt=`তুমি সমাজ কল্যাণ যুব সংগঠনের AI সহায়তা। বাংলা ও ইংরেজি উভয়ে কথা বলতে পারো। ব্যবহারকারী যে ভাষায় কথা বলে সে ভাষায় উত্তর দাও।
-সংগঠনের তথ্য:
-- নাম: ${orgInfo.name}
-- সভাপতি: ${orgInfo.president} (${orgInfo.presidentPhone})
-- WhatsApp: ${orgInfo.whatsapp1}, ${orgInfo.whatsapp2}
-- Gmail: ${orgInfo.gmail}
-- মোট সদস্য: ${orgInfo.totalMembers} জন
-- কার্যক্রম: ${orgInfo.activities.join(', ')}
-- এলাকা: ${orgInfo.villages}
-- সদস্য তালিকা: ${orgInfo.members.map(m=>m.name+' ('+m.area+', '+m.role+')').join(', ')}
-সংক্ষিপ্ত ও সহায়ক উত্তর দাও।`;
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sysPrompt,messages:chatHistory.slice(-8)})
-    });
-    const data=await res.json();
-    const reply=data.content?.[0]?.text||'দুঃখিত, উত্তর দিতে পারছি না সাইদুরকে বলো ।';
-    chatHistory.push({role:'assistant',content:reply});
-    document.getElementById(typingId)?.remove();
+  setTimeout(()=>{
+    const reply=getBotReply(msg.toLowerCase());
     addMsg(reply,'bot');
-  }catch(e){
-    document.getElementById(typingId)?.remove();
-    addMsg('দুঃখিত, সংযোগে সমস্যা হয়েছে। সরাসরি যোগাযোগ করুন:01770157540','bot');
-  }
-  btn.disabled=false;
+  },400);
+}
+
+function getBotReply(msg){
+  // সভাপতি
+  if(msg.includes('সভাপতি')||msg.includes('president')||msg.includes('shimul')||msg.includes('শিমুল'))
+    return '👑 সভাপতি: মোঃ শিমুল হোসেন\n📞 ফোন: 01817-984524\n📍 কান্দিরপাড়া';
+
+  // সাধারণ সম্পাদক
+  if(msg.includes('সম্পাদক')||msg.includes('জাকির')||msg.includes('শুভ'))
+    return '📋 সাধারণ সম্পাদকদ্বয়:\n• মোঃ জাকির হোসেন — 01313-602214\n• মোঃ শুভ আলী — 01761-295388';
+
+  // সদস্য তালিকা
+  if(msg.includes('সদস্য')||msg.includes('member')||msg.includes('তালিকা'))
+    return '👥 সদস্য পেজে গিয়ে সকল সদস্য দেখুন। মোট ২৫+ সক্রিয় সদস্য আছেন। নিচে "সদস্য" বাটনে ক্লিক করুন বা নেভবারে "👥 সদস্য" তে যান।';
+
+  // যোগাযোগ
+  if(msg.includes('যোগাযোগ')||msg.includes('contact')||msg.includes('ফোন')||msg.includes('নম্বর')||msg.includes('phone'))
+    return '📞 যোগাযোগ:\n👑 সভাপতি: 01817-984524\n💬 WhatsApp: 01817-984524\n💬 Developer : 01770-157540\n📧 Gmail: issaidur999@gmail.com';
+
+  // WhatsApp
+  if(msg.includes('whatsapp')||msg.includes('হোয়াটসঅ্যাপ'))
+    return '💬 WhatsApp নম্বর:\n• সভাপতি: 01817-984524\n• Developer: 01770-157540';
+
+  // কার্যক্রম
+  if(msg.includes('কার্যক্রম')||msg.includes('কাজ')||msg.includes('activities'))
+    return '📋 আমাদের কার্যক্রম:\n🌳 বৃক্ষরোপণ\n📚 শিক্ষা সহায়তা\n🩸 রক্তদান ক্যাম্প\n🤲 ত্রাণ বিতরণ\n🕌 মসজিদ সংস্কার\n🧥 শীতবস্ত্র বিতরণ\n🧹 পরিচ্ছন্নতা অভিযান';
+
+  // স্বেচ্ছাসেবী
+  if(msg.includes('স্বেচ্ছাসেবী')||msg.includes('volunteer')||msg.includes('যোগ দিতে')||msg.includes('সদস্য হতে'))
+    return '🙋 স্বেচ্ছাসেবী হতে চাইলে উপরের মেনুতে "🙋 স্বেচ্ছাসেবী" তে ক্লিক করুন এবং ফর্ম পূরণ করুন। অথবা সভাপতিকে কল করুন: 01817-984524';
+
+  // সাহায্য
+  if(msg.includes('সাহায্য')||msg.includes('help')||msg.includes('দান')||msg.includes('অনুদান'))
+    return '❤️ সাহায্য করতে চাইলে উপরের মেনুতে "❤️ সাহায্য" তে ক্লিক করুন। আর্থিক সহায়তা বা স্বেচ্ছাশ্রম — যেকোনো উপায়ে পাশে থাকুন।';
+
+  // সংগঠন পরিচিতি
+  if(msg.includes('সংগঠন')||msg.includes('পরিচয়')||msg.includes('about')||msg.includes('আমরা')||msg.includes('কারা'))
+    return '🏢 সমাজ কল্যাণ যুব সংগঠন ২০২৫ সালে প্রতিষ্ঠিত। কান্দিরপাড়া, ইনসাফ নগর, চাইডুবা, হলদার পাড়া, চরপাড়া ও মোহাম্মদপুর — ৬টি গ্রামের ২৫+ তরুণ নিয়ে গঠিত।';
+
+  // এলাকা
+  if(msg.includes('এলাকা')||msg.includes('গ্রাম')||msg.includes('কোথায়')||msg.includes('কান্দিরপাড়া'))
+    return '📍 আমাদের কার্যক্ষেত্র:\n• কান্দিরপাড়া\n• ইনসাফ নগর\n• চাইডুবা\n• হলদার পাড়া\n• চরপাড়া\n• মোহাম্মদপুর\n(রামকৃষ্ণপুর, দৌলতপুর, কুষ্টিয়া)';
+
+  // নোটিশ
+  if(msg.includes('নোটিশ')||msg.includes('notice')||msg.includes('ঘোষণা'))
+    return '📢 সর্বশেষ নোটিশ দেখতে উপরের মেনুতে "📢 নোটিশ" এ ক্লিক করুন।';
+
+  // ইভেন্ট
+  if(msg.includes('ইভেন্ট')||msg.includes('event')||msg.includes('অনুষ্ঠান')||msg.includes('সভা'))
+    return '📅 আসন্ন ইভেন্ট:\n• ২৮ ফেব্রুয়ারি — মাসিক সাধারণ সভা\n• মার্চ ২০২৬ — রক্তদান ক্যাম্প\n• বর্ষা ২০২৬ — বৃক্ষরোপণ অভিযান\nবিস্তারিত "📅 ইভেন্ট" মেনুতে।';
+
+  // রক্তদান
+  if(msg.includes('রক্ত')||msg.includes('blood'))
+    return '🩸 রক্তদান ক্যাম্প মার্চ ২০২৬ এ আয়োজন করা হবে। বিস্তারিত জানতে: 01817-984524';
+
+  // ধন্যবাদ
+  if(msg.includes('ধন্যবাদ')||msg.includes('thanks')||msg.includes('থ্যাংকস'))
+    return '😊 আপনাকে স্বাগতম! আর কোনো প্রশ্ন থাকলে জিজ্ঞেস করুন।';
+
+  // সালাম
+  if(msg.includes('সালাম')||msg.includes('আসসালামু')||msg.includes('hello')||msg.includes('হ্যালো')||msg.includes('হাই'))
+    return 'ওয়ালাইকুম আস্সালাম! 😊 আমি সমাজ কল্যাণ যুব সংগঠনের AI সহায়তা। কীভাবে সাহায্য করতে পারি?';
+
+  // ডিফল্ট
+  return '🤔 দুঃখিত, এই বিষয়ে আমার কাছে তথ্য নেই। সরাসরি যোগাযোগ করুন:\n📞 01817-984524 (সভাপতি)\n💬 Developer: 01770-157540';
 }
 
 function addMsg(text,type){
   const msgs=document.getElementById('chatMsgs');
   const div=document.createElement('div');
   div.className='msg msg-'+type;
+  div.style.whiteSpace='pre-line';
   div.textContent=text;
   msgs.appendChild(div);
-  scrollChat();
+  msgs.scrollTop=msgs.scrollHeight;
 }
-function scrollChat(){const m=document.getElementById('chatMsgs');m.scrollTop=m.scrollHeight;}
 function askQ(q){document.getElementById('chatInput').value=q;sendChat();}
 
 /* ══ FORMS ══ */
@@ -1727,6 +1753,7 @@ function go(id,addHistory=true){
   window.scrollTo({top:0,behavior:'smooth'});
   setTimeout(checkFI,120);
   if(id==='home') setTimeout(runCounters,400);
+  if(id==='members'){ currentFilter='all'; document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active')); const ab=document.querySelector('.fbtn'); if(ab) ab.classList.add('active'); filterM(); }
 }
 
 window.addEventListener('popstate',()=>{
@@ -1795,21 +1822,32 @@ function checkFI(){
 }
 
 /* ══ INIT ══ */
-window.addEventListener('load',()=>{
-  // লোডার লুকানো
-  const loader = document.getElementById('loader');
+document.addEventListener('DOMContentLoaded',()=>{
+  const loader=document.getElementById('loader');
   if(loader){
-    loader.style.opacity='0';
-    setTimeout(()=>{ loader.style.display='none'; }, 520);
+    setTimeout(()=>{
+      loader.style.opacity='0';
+      setTimeout(()=>{ loader.style.display='none'; },500);
+    },800);
   }
-  // typewriter + counters + calendar + gallery + members
+  try{filterM();}catch(e){}
+  try{renderGal();}catch(e){}
   typeWriter();
   runCounters();
-  renderCal();
-  renderGal();
-  renderM(mData);
   checkFI();
 });
 </script>
-</body>
-</html>;
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6997b46aa5c7cc1c3718a9f2/1jhs9hh0v';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body></html>
