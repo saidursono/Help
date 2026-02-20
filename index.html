@@ -546,7 +546,6 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
       <div class="h-btns">
         <button class="btn btn-g" onclick="go('members')">👥 সদস্য দেখুন</button>
         <button class="btn btn-gl" onclick="go('notice')">📢 নোটিশ বোর্ড</button>
-		<button class="btn btn-gl"id="loginNavBtn" onclick="window.location.href='login.html'">🔐 লগইন/যোগ দিন ➕</button>
         <button class="btn btn-gl" onclick="go('help')">❤️ সাহায্য করুন</button>
         <button class="btn btn-gl" onclick="go('contact')">📞 যোগাযোগ</button>
       </div>
@@ -1894,6 +1893,12 @@ const UPLOAD_PRESET = 'somaj-kallyan-upload';
 let fbUser = null, fbUserData = null;
 
 // ── Auth State
+// পেজ লোড হওয়ার সাথে সাথেই public content load করো — auth এর জন্য অপেক্ষা নয়
+loadFirebaseMembers();
+loadFirebaseNotices();
+loadFirebaseGallery();
+loadFirebaseStats();
+
 onAuthStateChanged(auth, async (user) => {
   fbUser = user;
   const loginBtn = document.getElementById('loginNavBtn');
@@ -1921,34 +1926,28 @@ onAuthStateChanged(auth, async (user) => {
         adminLink.style.display = 'flex';
       }
 
-      // Load dynamic content
+      // Auth হলে আবার reload করো (latest data পেতে)
       await loadFirebaseMembers();
       await loadFirebaseNotices();
-      await loadFirebaseGallery();
-      await loadFirebaseStats();
       setupDashboard();
     }
   } else {
     if (loginBtn) loginBtn.style.display = 'block';
     if (userMenu) userMenu.style.display = 'none';
-    // Load public content anyway
-    await loadFirebaseMembers();
-    await loadFirebaseNotices();
-    await loadFirebaseGallery();
-    await loadFirebaseStats();
   }
 });
 
 // ── LOAD MEMBERS from Firebase — static ৪ জন + Firebase approved members merge
 async function loadFirebaseMembers() {
   try {
-    const snap = await getDocs(query(collection(db,'users'), where('status','==','approved'), orderBy('createdAt','asc')));
+    // orderBy ছাড়া simple query — index সমস্যা এড়াতে
+    const snap = await getDocs(query(collection(db,'users'), where('status','==','approved')));
     if (!snap.empty) {
       const fbMembers = snap.docs.map(d => ({...d.data(), uid: d.id}));
-      // Static ৪ জনের uid বা name দিয়ে duplicate বাদ দিয়ে merge করো
+      // Static ৪ জনের name দিয়ে duplicate বাদ দাও
       const staticNames = mData.map(m => m.name);
       const newMembers = fbMembers
-        .filter(m => !staticNames.includes(m.name))
+        .filter(m => m.name && !staticNames.includes(m.name))
         .map((m, i) => ({
           n: parseInt(m.memberId?.split('-')[1]) || (100 + i),
           name: m.name || '-',
@@ -1963,11 +1962,16 @@ async function loadFirebaseMembers() {
           gender: m.gender,
           email: m.email,
         }));
-      // Merge: static 4 জন আগে, তারপর Firebase members
+      // Merge: static ৪ জন আগে, তারপর Firebase members
       window.mData = [...mData, ...newMembers];
+      console.log('Firebase members loaded:', newMembers.length, 'জন');
     }
     if (typeof filterM === 'function') filterM();
-  } catch(e) { console.log('Using static member data', e); }
+  } catch(e) {
+    // Error হলেও static data দিয়ে render করো
+    console.error('Firebase member load error:', e.message);
+    if (typeof filterM === 'function') filterM();
+  }
 }
 
 // ── LOAD NOTICES from Firebase
