@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — সমাজ কল্যাণ যুব সংগঠন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#061a06;--g2:#0d2e0d;--g3:#1b6b1b;--g4:#2e8b2e;--g5:#43a843;
+  --gold:#f0b429;--sgold:#ffd966;--dgold:#c8940a;
+  --glass:rgba(255,255,255,0.07);--glass2:rgba(255,255,255,0.12);
+  --b1:rgba(255,255,255,0.15);--b2:rgba(240,180,41,0.35);
+  --blur:blur(18px);--text:#e8f5e8;--text2:#a5d6a7;
+  --sidebar:260px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--g1);color:var(--text);min-height:100vh;display:flex;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 20% 30%,rgba(46,139,46,.18),transparent 65%);}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:var(--sidebar);background:rgba(6,26,6,.92);backdrop-filter:var(--blur);border-right:1px solid var(--b2);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .3s;}
+.sidebar-logo{padding:22px 20px 16px;border-bottom:1px solid rgba(240,180,41,.15);display:flex;align-items:center;gap:12px;}
+.sidebar-logo img{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);}
+.sidebar-logo-txt .title{color:var(--sgold);font-size:11px;font-weight:700;line-height:1.3;}
+.sidebar-logo-txt .sub{color:var(--text2);font-size:10px;}
+.sidebar-badge{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);}
+
+.sidebar-nav{flex:1;overflow-y:auto;padding:14px 10px;}
+.nav-section{color:rgba(255,255,255,.25);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;padding:14px 10px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;transition:all .22s;border:1px solid transparent;margin-bottom:2px;}
+.nav-item:hover{background:var(--glass2);color:#fff;}
+.nav-item.active{background:rgba(240,180,41,.15);color:var(--sgold);border-color:var(--b2);}
+.nav-item .ico{font-size:1rem;width:20px;text-align:center;}
+.nav-item .badge{margin-left:auto;background:rgba(244,67,54,.8);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;}
+
+.sidebar-footer{padding:16px;border-top:1px solid rgba(255,255,255,.06);}
+.user-info{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.user-av{width:36px;height:36px;border-radius:50%;background:var(--g3);border:1.5px solid var(--gold);object-fit:cover;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;}
+.user-name{color:var(--sgold);font-size:13px;font-weight:600;}
+.user-role{color:rgba(255,255,255,.4);font-size:11px;}
+.logout-btn{width:100%;padding:8px;border:1px solid rgba(244,67,54,.3);background:rgba(244,67,54,.08);color:#ff6b6b;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s;}
+.logout-btn:hover{background:rgba(244,67,54,.18);}
+
+/* ═══ MAIN ═══ */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+.topbar{padding:16px 28px;background:rgba(6,26,6,.7);backdrop-filter:var(--blur);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar h2{color:var(--sgold);font-size:1.1rem;font-weight:700;}
+.topbar-right{display:flex;gap:10px;align-items:center;}
+.ham-btn{display:none;background:none;border:none;color:var(--sgold);font-size:1.4rem;cursor:pointer;}
+
+.content{padding:24px 28px;flex:1;}
+
+/* ═══ CARDS ═══ */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+.stat-card{padding:22px 20px;border-radius:16px;background:var(--glass);backdrop-filter:var(--blur);border:1px solid var(--b1);position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.12;}
+.stat-card.gold::before{background:var(--gold);}
+.stat-card.green::before{background:var(--g4);}
+.stat-card.red::before{background:#f44336;}
+.stat-card.blue::before{background:#2196f3;}
+.stat-num{font-size:2.2rem;font-weight:700;color:var(--sgold);}
+.stat-label{color:var(--text2);font-size:13px;margin-top:4px;}
+.stat-ico{position:absolute;top:18px;right:18px;font-size:1.8rem;opacity:.6;}
+
+/* ═══ TABLE ═══ */
+.table-wrap{background:var(--glass);backdrop-filter:var(--blur);border:1px solid var(--b1);border-radius:16px;overflow:hidden;}
+.table-head{padding:18px 22px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.table-head h3{color:var(--sgold);font-size:1rem;font-weight:700;}
+.search-inp{padding:9px 16px;background:var(--glass2);border:1px solid var(--b1);border-radius:8px;color:#fff;font-size:13px;font-family:inherit;outline:none;width:220px;}
+.search-inp:focus{border-color:var(--b2);}
+.search-inp::placeholder{color:rgba(255,255,255,.3);}
+
+table{width:100%;border-collapse:collapse;}
+th{padding:13px 16px;text-align:left;color:rgba(255,255,255,.4);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(255,255,255,.06);}
+td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:rgba(255,255,255,.8);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.03);}
+
+.mem-av{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold);object-fit:cover;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;overflow:hidden;flex-shrink:0;}
+.mem-info{display:flex;align-items:center;gap:10px;}
+.mem-name{color:var(--sgold);font-weight:600;}
+.mem-sub{color:rgba(255,255,255,.4);font-size:11px;}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;}
+.b-pending{background:rgba(255,193,7,.15);border:1px solid rgba(255,193,7,.3);color:#ffd54f;}
+.b-approved{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3);color:#81c784;}
+.b-rejected{background:rgba(244,67,54,.15);border:1px solid rgba(244,67,54,.3);color:#ef9a9a;}
+.b-admin{background:rgba(240,180,41,.15);border:1px solid rgba(240,180,41,.3);color:var(--sgold);}
+.b-superadmin{background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,215,0,.08));border:1px solid rgba(255,215,0,.4);color:#ffd700;}
+
+/* BUTTONS */
+.btn{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+.btn-g{background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);}
+.btn-g:hover{transform:translateY(-1px);}
+.btn-r{background:rgba(244,67,54,.15);border:1px solid rgba(244,67,54,.3);color:#ff6b6b;}
+.btn-r:hover{background:rgba(244,67,54,.25);}
+.btn-b{background:rgba(33,150,243,.15);border:1px solid rgba(33,150,243,.3);color:#64b5f6;}
+.btn-b:hover{background:rgba(33,150,243,.25);}
+.btn-lg{padding:10px 20px;font-size:13px;}
+
+/* TABS */
+.page-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+.ptab{padding:8px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;border:1px solid var(--b1);background:var(--glass);color:var(--text2);font-family:inherit;transition:all .2s;}
+.ptab.active,.ptab:hover{background:rgba(240,180,41,.15);border-color:var(--b2);color:var(--sgold);}
+
+/* FORM IN PANEL */
+.form-panel{background:var(--glass);border:1px solid var(--b1);border-radius:16px;padding:24px;margin-bottom:20px;}
+.form-panel h4{color:var(--sgold);font-size:1rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+.fg{margin-bottom:14px;}
+.fg label{display:block;margin-bottom:5px;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 14px;background:var(--glass2);border:1px solid var(--b1);border-radius:8px;color:#fff;font-size:13px;font-family:inherit;outline:none;transition:border .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--b2);}
+.fg select option{background:#0d2e0d;}
+.fg textarea{height:90px;resize:vertical;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+/* ALERT */
+.flash{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+.flash.show{display:block;}
+.flash-ok{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3);color:#81c784;}
+.flash-err{background:rgba(244,67,54,.15);border:1px solid rgba(244,67,54,.3);color:#ff6b6b;}
+
+/* NOTICE CARD */
+.notice-row{display:flex;gap:14px;align-items:flex-start;padding:16px;border-bottom:1px solid rgba(255,255,255,.04);}
+.notice-row:last-child{border-bottom:none;}
+.notice-type-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.notice-content{flex:1;}
+.notice-title{color:var(--sgold);font-weight:600;font-size:.9rem;margin-bottom:4px;}
+.notice-body{color:rgba(255,255,255,.6);font-size:12px;line-height:1.7;}
+.notice-meta{color:rgba(255,255,255,.3);font-size:11px;margin-top:6px;}
+
+/* IMG PREVIEW */
+.img-preview-wrap{margin-top:8px;}
+.img-preview{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--b1);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px;color:rgba(255,255,255,.3);}
+.empty-ico{font-size:3rem;margin-bottom:10px;}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .ham-btn{display:block;}
+  .content{padding:16px;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  table{font-size:12px;}
+  th,td{padding:10px 10px;}
+}
+
+/* OVERLAY for mobile sidebar */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;}
+.sidebar-overlay.open{display:block;}
+
+/* SCROLL */
+.sidebar-nav::-webkit-scrollbar,.content::-webkit-scrollbar{width:4px;}
+.sidebar-nav::-webkit-scrollbar-thumb,.content::-webkit-scrollbar-thumb{background:rgba(240,180,41,.2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg" alt="Logo">
+    <div class="sidebar-logo-txt">
+      <div class="title">সমাজ কল্যাণ যুব সংগঠন</div>
+      <div class="sub">Admin Panel</div>
+      <div class="sidebar-badge" id="adminBadge">⭐ Super Admin</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">প্রধান</div>
+    <div class="nav-item active" onclick="goSection('dashboard')"><span class="ico">📊</span> ড্যাশবোর্ড</div>
+
+    <div class="nav-section">সদস্য ব্যবস্থাপনা</div>
+    <div class="nav-item" onclick="goSection('pending')"><span class="ico">⏳</span> পেন্ডিং আবেদন <span class="badge" id="pendingBadge">0</span></div>
+    <div class="nav-item" onclick="goSection('members')"><span class="ico">👥</span> সকল সদস্য</div>
+    <div class="nav-item" onclick="goSection('admins')" id="nav-admins"><span class="ico">🔑</span> Admin ব্যবস্থাপনা</div>
+
+    <div class="nav-section">কন্টেন্ট</div>
+    <div class="nav-item" onclick="goSection('notices')"><span class="ico">📢</span> নোটিশ</div>
+    <div class="nav-item" onclick="goSection('gallery')"><span class="ico">📷</span> গ্যালারি</div>
+    <div class="nav-item" onclick="goSection('stats')"><span class="ico">📈</span> পরিসংখ্যান</div>
+
+    <div class="nav-section">অন্যান্য</div>
+    <div class="nav-item" onclick="window.open('index.html','_blank')"><span class="ico">🌐</span> মূল সাইট দেখুন</div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-av" id="sidebarAv">S</div>
+      <div>
+        <div class="user-name" id="sidebarName">লোড হচ্ছে...</div>
+        <div class="user-role" id="sidebarRole">Admin</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">🚪 লগআউট</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="ham-btn" onclick="openSidebar()">☰</button>
+      <h2 id="sectionTitle">📊 ড্যাশবোর্ড</h2>
+    </div>
+    <div class="topbar-right">
+      <span style="color:rgba(255,255,255,.4);font-size:12px;" id="currentTime"></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div id="s-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card gold"><div class="stat-ico">👥</div><div class="stat-num" id="d-total">-</div><div class="stat-label">মোট সদস্য</div></div>
+        <div class="stat-card green"><div class="stat-ico">✅</div><div class="stat-num" id="d-approved">-</div><div class="stat-label">অনুমোদিত</div></div>
+        <div class="stat-card red"><div class="stat-ico">⏳</div><div class="stat-num" id="d-pending">-</div><div class="stat-label">পেন্ডিং আবেদন</div></div>
+        <div class="stat-card blue"><div class="stat-ico">📢</div><div class="stat-num" id="d-notices">-</div><div class="stat-label">নোটিশ</div></div>
+      </div>
+
+      <!-- Recent pending -->
+      <div class="table-wrap">
+        <div class="table-head"><h3>⏳ সাম্প্রতিক পেন্ডিং আবেদন</h3>
+          <button class="btn btn-g" onclick="goSection('pending')">সব দেখুন →</button></div>
+        <div id="dashPendingList"><div class="empty"><div class="empty-ico">✅</div>কোনো পেন্ডিং আবেদন নেই</div></div>
+      </div>
+    </div>
+
+    <!-- ══ PENDING REQUESTS ══ -->
+    <div id="s-pending" style="display:none">
+      <div class="flash flash-ok" id="pFlash"></div>
+      <div class="table-wrap">
+        <div class="table-head">
+          <h3>⏳ পেন্ডিং আবেদন সমূহ</h3>
+          <input class="search-inp" placeholder="🔍 নাম বা এলাকা..." oninput="searchPending(this.value)">
+        </div>
+        <div id="pendingList"></div>
+      </div>
+    </div>
+
+    <!-- ══ ALL MEMBERS ══ -->
+    <div id="s-members" style="display:none">
+      <div class="flash flash-ok" id="mFlash"></div>
+      <div class="table-wrap">
+        <div class="table-head">
+          <h3>👥 সকল সদস্য</h3>
+          <input class="search-inp" placeholder="🔍 নাম, এলাকা, ফোন..." oninput="searchMembers(this.value)">
+        </div>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>সদস্য</th><th>ID</th><th>এলাকা</th><th>ফোন</th><th>পদবি</th><th>রক্ত</th><th>অবস্থা</th><th>কার্যক্রম</th>
+          </tr></thead>
+          <tbody id="memberTableBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN MANAGEMENT ══ -->
+    <div id="s-admins" style="display:none">
+      <div class="flash flash-ok" id="aFlash"></div>
+      <div class="form-panel">
+        <h4>🔑 নতুন Admin যোগ করুন</h4>
+        <div class="grid2">
+          <div class="fg"><label>সদস্য নির্বাচন করুন</label>
+            <select id="adminSelectMember"><option value="">-- সদস্য বেছে নিন --</option></select>
+          </div>
+          <div class="fg"><label>Role</label>
+            <select id="adminRole">
+              <option value="admin">Admin</option>
+              <option value="superadmin">Super Admin</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-g btn-lg" onclick="makeAdmin()">🔑 Admin করুন</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head"><h3>🔑 বর্তমান Adminগণ</h3></div>
+        <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>সদস্য</th><th>ইমেইল</th><th>Role</th><th>কার্যক্রম</th></tr></thead>
+          <tbody id="adminTableBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOTICES ══ -->
+    <div id="s-notices" style="display:none">
+      <div class="flash flash-ok" id="nFlash"></div>
+      <div class="page-tabs">
+        <button class="ptab active" onclick="switchNoticeTab('list',this)">📋 নোটিশ তালিকা</button>
+        <button class="ptab" onclick="switchNoticeTab('add',this)">➕ নতুন নোটিশ</button>
+      </div>
+
+      <!-- Notice List -->
+      <div id="noticeListPanel">
+        <div class="table-wrap">
+          <div class="table-head"><h3>📢 সকল নোটিশ</h3></div>
+          <div id="noticeList"></div>
+        </div>
+      </div>
+
+      <!-- Add Notice -->
+      <div id="noticeAddPanel" style="display:none">
+        <div class="form-panel">
+          <h4 id="noticeFormTitle">➕ নতুন নোটিশ যোগ করুন</h4>
+          <input type="hidden" id="editNoticeId">
+          <div class="fg"><label>শিরোনাম *</label><input type="text" id="n-title" placeholder="নোটিশের শিরোনাম"></div>
+          <div class="fg"><label>বিবরণ *</label><textarea id="n-body" placeholder="নোটিশের বিস্তারিত..."></textarea></div>
+          <div class="grid3">
+            <div class="fg"><label>ধরন</label>
+              <select id="n-type">
+                <option value="default">সাধারণ</option>
+                <option value="urgent">জরুরি</option>
+                <option value="info">তথ্য</option>
+                <option value="success">সফলতা</option>
+              </select>
+            </div>
+            <div class="fg"><label>ছবি (ঐচ্ছিক)</label><input type="file" id="n-photo" accept="image/*"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-g btn-lg" onclick="saveNotice()">💾 সংরক্ষণ করুন</button>
+            <button class="btn btn-b btn-lg" onclick="switchNoticeTab('list',document.querySelector('.ptab'))">← ফিরে যান</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ GALLERY ══ -->
+    <div id="s-gallery" style="display:none">
+      <div class="flash flash-ok" id="gFlash"></div>
+      <div class="page-tabs">
+        <button class="ptab active" onclick="switchGalTab('list',this)">📷 গ্যালারি</button>
+        <button class="ptab" onclick="switchGalTab('add',this)">➕ ছবি যোগ করুন</button>
+      </div>
+      <div id="galListPanel">
+        <div id="galAdminGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;"></div>
+      </div>
+      <div id="galAddPanel" style="display:none">
+        <div class="form-panel">
+          <h4>📷 নতুন ছবি যোগ করুন</h4>
+          <div class="fg"><label>ছবি *</label><input type="file" id="g-photo" accept="image/*" onchange="previewGalPhoto(this)"><div id="galPreviewWrap" class="img-preview-wrap"></div></div>
+          <div class="fg"><label>বিবরণ *</label><input type="text" id="g-caption" placeholder="ছবির বিবরণ"></div>
+          <div class="fg"><label>ক্যাটাগরি</label>
+            <select id="g-cat">
+              <option value="event">অনুষ্ঠান</option><option value="tree">বৃক্ষরোপণ</option>
+              <option value="edu">শিক্ষা</option><option value="blood">রক্তদান</option>
+              <option value="relief">সহায়তা</option>
+            </select>
+          </div>
+          <button class="btn btn-g btn-lg" onclick="uploadGalleryPhoto()">📤 আপলোড করুন</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STATS ══ -->
+    <div id="s-stats" style="display:none">
+      <div class="flash flash-ok" id="stFlash"></div>
+      <div class="form-panel">
+        <h4>📈 পরিসংখ্যান আপডেট করুন</h4>
+        <div class="grid2">
+          <div class="fg"><label>সক্রিয় সদস্য</label><input type="number" id="st-members" placeholder="যেমন: 25"></div>
+          <div class="fg"><label>গ্রামের শাখা</label><input type="number" id="st-branches" placeholder="যেমন: 6"></div>
+          <div class="fg"><label>সমাজ কার্যক্রম</label><input type="number" id="st-activities" placeholder="যেমন: 50"></div>
+          <div class="fg"><label>বছরের অভিজ্ঞতা</label><input type="number" id="st-years" placeholder="যেমন: 1"></div>
+          <div class="fg"><label>শিক্ষার্থী সহায়তা</label><input type="number" id="st-students" placeholder="যেমন: 15"></div>
+          <div class="fg"><label>গাছ রোপণ</label><input type="number" id="st-trees" placeholder="যেমন: 120"></div>
+          <div class="fg"><label>রক্তদান ইউনিট</label><input type="number" id="st-blood" placeholder="যেমন: 20"></div>
+          <div class="fg"><label>পরিবার সহায়তা</label><input type="number" id="st-families" placeholder="যেমন: 50"></div>
+        </div>
+        <button class="btn btn-g btn-lg" onclick="saveStats()">💾 আপডেট করুন</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- Member Detail Modal -->
+<div id="memberDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;padding:20px;overflow-y:auto;display:flex;align-items:center;justify-content:center;">
+  <div style="background:rgba(13,46,13,.97);border:1px solid var(--b2);border-radius:20px;max-width:500px;width:100%;padding:28px;position:relative;">
+    <button onclick="document.getElementById('memberDetailModal').style.display='none'" style="position:absolute;top:14px;right:14px;background:var(--glass2);border:1px solid var(--b1);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;">✕</button>
+    <div id="memberDetailContent"></div>
+    <div id="memberDetailActions" style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;"></div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp, addDoc, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I",
+  authDomain: "somaj-kallyan.firebaseapp.com",
+  projectId: "somaj-kallyan",
+  appId: "1:392871962816:web:0f7ebbc36a3d8c784da525"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dasurbavl/image/upload';
+const UPLOAD_PRESET = 'somaj-kallyan-upload';
+const SUPER_ADMIN = 'issaidur999@gmail.com';
+
+let currentUser = null;
+let currentUserData = null;
+let allMembers = [];
+let allPending = [];
+
+// ── Auth Guard
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  const userDoc = await getDoc(doc(db, 'users', user.uid));
+  if (!userDoc.exists()) { window.location.href = 'login.html'; return; }
+  const data = userDoc.data();
+  if (data.status !== 'approved' || (data.role !== 'admin' && data.role !== 'superadmin')) {
+    window.location.href = 'login.html'; return;
+  }
+  currentUser = user;
+  currentUserData = data;
+  initAdmin(data);
+});
+
+function initAdmin(data) {
+  document.getElementById('sidebarName').textContent = data.name || user.email;
+  document.getElementById('sidebarRole').textContent = data.role === 'superadmin' ? 'Super Admin' : 'Admin';
+  document.getElementById('adminBadge').textContent = data.role === 'superadmin' ? '⭐ Super Admin' : '🔑 Admin';
+  if (data.photoUrl) {
+    document.getElementById('sidebarAv').innerHTML = `<img src="${data.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    document.getElementById('sidebarAv').textContent = (data.name||'A').charAt(0);
+  }
+  // Hide admin management for non-superadmin
+  if (data.role !== 'superadmin') document.getElementById('nav-admins').style.display = 'none';
+
+  loadDashboard();
+  loadPending();
+  loadMembers();
+  if (data.role === 'superadmin') loadAdmins();
+  loadNotices();
+  loadGallery();
+  loadStats();
+}
+
+// ── DASHBOARD
+async function loadDashboard() {
+  const usersSnap = await getDocs(collection(db, 'users'));
+  const pendSnap = await getDocs(query(collection(db, 'users'), where('status','==','pending')));
+  const approvedSnap = await getDocs(query(collection(db, 'users'), where('status','==','approved')));
+  const noticesSnap = await getDocs(collection(db, 'notices'));
+
+  document.getElementById('d-total').textContent = usersSnap.size;
+  document.getElementById('d-approved').textContent = approvedSnap.size;
+  document.getElementById('d-pending').textContent = pendSnap.size;
+  document.getElementById('d-notices').textContent = noticesSnap.size;
+  document.getElementById('pendingBadge').textContent = pendSnap.size;
+
+  // Recent pending list
+  const pend = pendSnap.docs.slice(0,5).map(d => d.data());
+  const dashPendingList = document.getElementById('dashPendingList');
+  if (pend.length === 0) {
+    dashPendingList.innerHTML = '<div class="empty"><div class="empty-ico">✅</div>কোনো পেন্ডিং আবেদন নেই</div>';
+    return;
+  }
+  dashPendingList.innerHTML = `<div style="overflow-x:auto"><table>
+    <thead><tr><th>সদস্য</th><th>এলাকা</th><th>ফোন</th><th>কার্যক্রম</th></tr></thead>
+    <tbody>${pend.map(m=>`<tr>
+      <td><div class="mem-info">
+        <div class="mem-av">${m.photoUrl?`<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:m.name.charAt(0)}</div>
+        <div><div class="mem-name">${m.name}</div><div class="mem-sub">${m.email||''}</div></div>
+      </div></td>
+      <td>${m.area||'-'}</td>
+      <td>${m.phone||'-'}</td>
+      <td><button class="btn btn-g" onclick="approveUser('${m.uid}')">✅ অনুমোদন</button>
+      <button class="btn btn-r" style="margin-left:6px" onclick="rejectUser('${m.uid}')">❌ প্রত্যাখ্যান</button></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// ── PENDING REQUESTS
+async function loadPending() {
+  const snap = await getDocs(query(collection(db, 'users'), where('status','==','pending')));
+  allPending = snap.docs.map(d => ({...d.data(), uid: d.id}));
+  renderPending(allPending);
+}
+
+function renderPending(list) {
+  const el = document.getElementById('pendingList');
+  if (list.length === 0) { el.innerHTML = '<div class="empty"><div class="empty-ico">✅</div>কোনো পেন্ডিং আবেদন নেই</div>'; return; }
+  el.innerHTML = `<div style="overflow-x:auto"><table>
+    <thead><tr><th>সদস্য</th><th>এলাকা</th><th>ফোন</th><th>রক্ত</th><th>তারিখ</th><th>কার্যক্রম</th></tr></thead>
+    <tbody>${list.map(m=>`<tr>
+      <td><div class="mem-info">
+        <div class="mem-av">${m.photoUrl?`<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:m.name.charAt(0)}</div>
+        <div><div class="mem-name">${m.name}</div><div class="mem-sub">${m.email||''}</div></div>
+      </div></td>
+      <td>${m.area||'-'}</td><td>${m.phone||'-'}</td><td>${m.bloodGroup||'-'}</td>
+      <td>${m.createdAt?.seconds?new Date(m.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-g" onclick="approveUser('${m.uid}')">✅ অনুমোদন</button>
+        <button class="btn btn-r" onclick="rejectUser('${m.uid}')">❌ প্রত্যাখ্যান</button>
+        <button class="btn btn-b" onclick="viewMember('${m.uid}')">👁 দেখুন</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+window.searchPending = function(q) {
+  const f = allPending.filter(m => m.name?.toLowerCase().includes(q.toLowerCase()) || m.area?.toLowerCase().includes(q.toLowerCase()));
+  renderPending(f);
+};
+
+// ── MEMBERS
+async function loadMembers() {
+  const snap = await getDocs(query(collection(db, 'users'), where('status','==','approved')));
+  allMembers = snap.docs.map(d => ({...d.data(), uid: d.id}));
+  renderMembers(allMembers);
+  // Also populate admin select
+  const sel = document.getElementById('adminSelectMember');
+  if (sel) {
+    sel.innerHTML = '<option value="">-- সদস্য বেছে নিন --</option>';
+    allMembers.filter(m=>m.role==='member').forEach(m => {
+      sel.innerHTML += `<option value="${m.uid}">${m.name} — ${m.area||''}</option>`;
+    });
+  }
+}
+
+function renderMembers(list) {
+  const tbody = document.getElementById('memberTableBody');
+  if (!tbody) return;
+  if (list.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:rgba(255,255,255,.3)">কোনো সদস্য নেই</td></tr>'; return; }
+  tbody.innerHTML = list.map(m=>`<tr>
+    <td><div class="mem-info">
+      <div class="mem-av">${m.photoUrl?`<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:m.name?.charAt(0)||'?'}</div>
+      <div><div class="mem-name">${m.name||'-'}</div><div class="mem-sub">${m.email||''}</div></div>
+    </div></td>
+    <td>${m.memberId||'—'}</td>
+    <td>${m.area||'-'}</td>
+    <td>${m.phone||'-'}</td>
+    <td><select onchange="updatePosition('${m.uid}',this.value)" style="background:var(--glass2);border:1px solid var(--b1);color:#fff;padding:4px 8px;border-radius:6px;font-size:12px;font-family:inherit;outline:none;">
+      ${['সদস্য','সভাপতি','সাধারণ সম্পাদক','সহ-সভাপতি','কোষাধ্যক্ষ','কার্যনির্বাহী সদস্য'].map(p=>`<option value="${p}"${m.position===p?' selected':''}>${p}</option>`).join('')}
+    </select></td>
+    <td>${m.bloodGroup||'-'}</td>
+    <td><span class="badge ${m.role==='superadmin'?'b-superadmin':m.role==='admin'?'b-admin':'b-approved'}">${m.role==='superadmin'?'Super Admin':m.role==='admin'?'Admin':'সদস্য'}</span></td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button class="btn btn-b" onclick="viewMember('${m.uid}')">👁</button>
+      <button class="btn btn-r" onclick="removeMember('${m.uid}')">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+window.searchMembers = function(q) {
+  const f = allMembers.filter(m =>
+    m.name?.toLowerCase().includes(q.toLowerCase()) ||
+    m.area?.toLowerCase().includes(q.toLowerCase()) ||
+    m.phone?.includes(q) ||
+    m.memberId?.includes(q)
+  );
+  renderMembers(f);
+};
+
+// ── APPROVE / REJECT
+window.approveUser = async function(uid) {
+  if (!confirm('এই সদস্যকে অনুমোদন করবেন?')) return;
+  // Generate member ID: year-serial
+  const year = new Date().getFullYear();
+  const approvedSnap = await getDocs(query(collection(db,'users'),where('status','==','approved')));
+  const serial = String(approvedSnap.size + 1).padStart(3, '0');
+  const memberId = `${year}-${serial}`;
+
+  await updateDoc(doc(db,'users',uid), {
+    status: 'approved', memberId, approvedAt: serverTimestamp(), updatedAt: serverTimestamp()
+  });
+  // Remove from pending requests
+  try { await deleteDoc(doc(db,'pendingRequests',uid)); } catch(e){}
+
+  flash('pFlash', `✅ সদস্য অনুমোদিত হয়েছে। ID: ${memberId}`);
+  flash('mFlash', `✅ সদস্য অনুমোদিত। ID: ${memberId}`);
+  loadPending(); loadMembers(); loadDashboard();
+};
+
+window.rejectUser = async function(uid) {
+  if (!confirm('এই আবেদন প্রত্যাখ্যান করবেন?')) return;
+  await updateDoc(doc(db,'users',uid), {status:'rejected', updatedAt: serverTimestamp()});
+  try { await deleteDoc(doc(db,'pendingRequests',uid)); } catch(e){}
+  flash('pFlash','❌ আবেদন প্রত্যাখ্যান করা হয়েছে।');
+  loadPending(); loadDashboard();
+};
+
+window.updatePosition = async function(uid, pos) {
+  await updateDoc(doc(db,'users',uid), {position: pos, updatedAt: serverTimestamp()});
+};
+
+window.removeMember = async function(uid) {
+  if (!confirm('এই সদস্যকে মুছে ফেলবেন? এটি পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+  await updateDoc(doc(db,'users',uid), {status:'removed', updatedAt: serverTimestamp()});
+  flash('mFlash','🗑 সদস্য মুছে ফেলা হয়েছে।');
+  loadMembers();
+};
+
+// ── VIEW MEMBER DETAIL
+window.viewMember = async function(uid) {
+  const snap = await getDoc(doc(db,'users',uid));
+  if (!snap.exists()) return;
+  const m = snap.data();
+  const modal = document.getElementById('memberDetailModal');
+  modal.style.display = 'flex';
+  document.getElementById('memberDetailContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="width:90px;height:90px;border-radius:50%;border:3px solid var(--gold);margin:0 auto 10px;overflow:hidden;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;">
+        ${m.photoUrl?`<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover">`:m.name?.charAt(0)||'?'}
+      </div>
+      <div style="color:var(--sgold);font-size:1.2rem;font-weight:700;">${m.name||'-'}</div>
+      <span class="badge ${m.status==='approved'?'b-approved':'b-pending'}" style="margin-top:6px;display:inline-block">${m.status==='approved'?'✅ অনুমোদিত':'⏳ পেন্ডিং'}</span>
+      ${m.memberId?`<div style="color:var(--text2);font-size:12px;margin-top:4px">ID: ${m.memberId}</div>`:''}
+    </div>
+    <div style="display:grid;gap:8px">
+      ${[['📧 ইমেইল',m.email],['📞 ফোন',m.phone],['📍 এলাকা',m.area],['🩸 রক্ত',m.bloodGroup],['⚤ লিঙ্গ',m.gender],['🎂 জন্ম',m.dob],['🏠 ঠিকানা',m.address]].map(([k,v])=>
+        v?`<div style="display:flex;gap:8px;padding:8px 12px;background:var(--glass);border:1px solid var(--b1);border-radius:8px;font-size:13px"><span>${k}</span><span style="margin-left:auto;color:var(--sgold)">${v}</span></div>`:''
+      ).join('')}
+    </div>
+  `;
+  document.getElementById('memberDetailActions').innerHTML = `
+    ${m.phone?`<a class="btn btn-g" href="tel:${m.phone}" style="text-decoration:none">📞 কল করুন</a>`:''}
+    ${m.phone?`<a class="btn btn-b" href="https://wa.me/880${m.phone.replace(/^0/,'').replace(/-/g,'')}" target="_blank" style="text-decoration:none">💬 WhatsApp</a>`:''}
+    ${m.status==='pending'?`<button class="btn btn-g" onclick="approveUser('${uid}');document.getElementById('memberDetailModal').style.display='none'">✅ অনুমোদন</button>`:''}
+    ${m.status==='pending'?`<button class="btn btn-r" onclick="rejectUser('${uid}');document.getElementById('memberDetailModal').style.display='none'">❌ প্রত্যাখ্যান</button>`:''}
+  `;
+};
+
+// ── ADMIN MANAGEMENT
+async function loadAdmins() {
+  const snap = await getDocs(query(collection(db,'users'), where('role','in',['admin','superadmin'])));
+  const list = snap.docs.map(d=>d.data());
+  const tbody = document.getElementById('adminTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = list.map(m=>`<tr>
+    <td><div class="mem-info">
+      <div class="mem-av">${m.photoUrl?`<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:m.name?.charAt(0)||'?'}</div>
+      <div><div class="mem-name">${m.name||'-'}</div></div>
+    </div></td>
+    <td>${m.email||'-'}</td>
+    <td><span class="badge ${m.role==='superadmin'?'b-superadmin':'b-admin'}">${m.role==='superadmin'?'⭐ Super Admin':'🔑 Admin'}</span></td>
+    <td>${m.role==='superadmin'?'<span style="color:rgba(255,255,255,.3);font-size:12px">পরিবর্তন করা যাবে না</span>':
+      `<button class="btn btn-r" onclick="removeAdmin('${m.uid}')">Admin সরান</button>`}</td>
+  </tr>`).join('');
+}
+
+window.makeAdmin = async function() {
+  const uid = document.getElementById('adminSelectMember').value;
+  const role = document.getElementById('adminRole').value;
+  if (!uid) { flash('aFlash','⚠️ সদস্য নির্বাচন করুন।','err'); return; }
+  if (currentUserData?.role !== 'superadmin') { flash('aFlash','❌ শুধু Super Admin এই কাজ করতে পারবেন।','err'); return; }
+  await updateDoc(doc(db,'users',uid), {role, updatedAt: serverTimestamp()});
+  flash('aFlash','✅ Admin নিযুক্ত করা হয়েছে।');
+  loadAdmins(); loadMembers();
+};
+
+window.removeAdmin = async function(uid) {
+  if (!confirm('Admin থেকে সরিয়ে সাধারণ সদস্য করবেন?')) return;
+  await updateDoc(doc(db,'users',uid), {role:'member', updatedAt: serverTimestamp()});
+  flash('aFlash','✅ Admin সরানো হয়েছে।');
+  loadAdmins(); loadMembers();
+};
+
+// ── NOTICES
+async function loadNotices() {
+  const snap = await getDocs(query(collection(db,'notices'), orderBy('createdAt','desc')));
+  const list = snap.docs.map(d=>({...d.data(), id:d.id}));
+  const el = document.getElementById('noticeList');
+  if (!el) return;
+  if (list.length===0) { el.innerHTML='<div class="empty"><div class="empty-ico">📢</div>কোনো নোটিশ নেই</div>'; return; }
+  const typeColors={urgent:'#f44336',info:'#2196f3',success:'#4caf50',default:'var(--gold)'};
+  el.innerHTML = list.map(n=>`<div class="notice-row">
+    <div class="notice-type-dot" style="background:${typeColors[n.type]||typeColors.default}"></div>
+    <div class="notice-content">
+      <div class="notice-title">${n.title||'-'}</div>
+      <div class="notice-body">${n.body||''}</div>
+      <div class="notice-meta">📅 ${n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'} · ${n.postedBy||'Admin'}</div>
+    </div>
+    ${n.photoUrl?`<img src="${n.photoUrl}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--b1)">` : ''}
+    <div style="display:flex;flex-direction:column;gap:6px;margin-left:10px">
+      <button class="btn btn-b" onclick="editNotice('${n.id}')">✏️</button>
+      <button class="btn btn-r" onclick="deleteNotice('${n.id}')">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+window.saveNotice = async function() {
+  const title = document.getElementById('n-title').value.trim();
+  const body = document.getElementById('n-body').value.trim();
+  const type = document.getElementById('n-type').value;
+  const editId = document.getElementById('editNoticeId').value;
+  const photoFile = document.getElementById('n-photo').files[0];
+  if (!title || !body) { alert('শিরোনাম ও বিবরণ দিন।'); return; }
+
+  let photoUrl = null;
+  if (photoFile) {
+    const fd = new FormData();
+    fd.append('file', photoFile);
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder','somaj-kallyan/notices');
+    const res = await fetch(CLOUDINARY_URL, {method:'POST',body:fd});
+    const data = await res.json();
+    photoUrl = data.secure_url;
+  }
+
+  const payload = {title, body, type, postedBy: currentUserData?.name||'Admin', updatedAt: serverTimestamp()};
+  if (photoUrl) payload.photoUrl = photoUrl;
+
+  if (editId) {
+    await updateDoc(doc(db,'notices',editId), payload);
+    flash('nFlash','✅ নোটিশ আপডেট হয়েছে।');
+  } else {
+    payload.createdAt = serverTimestamp();
+    await addDoc(collection(db,'notices'), payload);
+    flash('nFlash','✅ নতুন নোটিশ যোগ হয়েছে।');
+  }
+  document.getElementById('editNoticeId').value='';
+  document.getElementById('n-title').value='';
+  document.getElementById('n-body').value='';
+  switchNoticeTab('list', document.querySelector('.ptab'));
+  loadNotices();
+};
+
+window.editNotice = async function(id) {
+  const snap = await getDoc(doc(db,'notices',id));
+  if (!snap.exists()) return;
+  const n = snap.data();
+  document.getElementById('editNoticeId').value = id;
+  document.getElementById('n-title').value = n.title||'';
+  document.getElementById('n-body').value = n.body||'';
+  document.getElementById('n-type').value = n.type||'default';
+  document.getElementById('noticeFormTitle').textContent = '✏️ নোটিশ সম্পাদনা';
+  switchNoticeTab('add', document.querySelectorAll('.ptab')[1]);
+};
+
+window.deleteNotice = async function(id) {
+  if (!confirm('এই নোটিশ মুছে ফেলবেন?')) return;
+  await deleteDoc(doc(db,'notices',id));
+  flash('nFlash','🗑 নোটিশ মুছে ফেলা হয়েছে।');
+  loadNotices();
+};
+
+// ── GALLERY
+async function loadGallery() {
+  const snap = await getDocs(query(collection(db,'gallery'), orderBy('createdAt','desc')));
+  const list = snap.docs.map(d=>({...d.data(),id:d.id}));
+  const el = document.getElementById('galAdminGrid');
+  if (!el) return;
+  if (list.length===0) { el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📷</div>কোনো ছবি নেই</div>'; return; }
+  el.innerHTML = list.map(g=>`
+    <div style="border-radius:12px;overflow:hidden;border:1px solid var(--b1);background:var(--glass);position:relative;">
+      <img src="${g.src}" style="width:100%;height:140px;object-fit:cover;display:block">
+      <div style="padding:10px">
+        <div style="color:var(--sgold);font-size:12px;font-weight:600;margin-bottom:4px">${g.caption||'-'}</div>
+        <div style="color:rgba(255,255,255,.4);font-size:11px">${g.cat||'-'}</div>
+      </div>
+      <button class="btn btn-r" onclick="deleteGalPhoto('${g.id}')" style="position:absolute;top:8px;right:8px;padding:4px 8px">🗑</button>
+    </div>`).join('');
+}
+
+window.previewGalPhoto = function(input) {
+  const wrap = document.getElementById('galPreviewWrap');
+  if (input.files[0]) {
+    const url = URL.createObjectURL(input.files[0]);
+    wrap.innerHTML = `<img class="img-preview" src="${url}">`;
+  }
+};
+
+window.uploadGalleryPhoto = async function() {
+  const file = document.getElementById('g-photo').files[0];
+  const caption = document.getElementById('g-caption').value.trim();
+  const cat = document.getElementById('g-cat').value;
+  if (!file || !caption) { alert('ছবি ও বিবরণ দিন।'); return; }
+  const btn = event.target; btn.disabled=true; btn.textContent='⏳ আপলোড হচ্ছে...';
+  const fd = new FormData();
+  fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET); fd.append('folder','somaj-kallyan/gallery');
+  const res = await fetch(CLOUDINARY_URL,{method:'POST',body:fd});
+  const data = await res.json();
+  await addDoc(collection(db,'gallery'),{src:data.secure_url, caption, cat, uploadedBy:currentUserData?.name||'Admin', createdAt:serverTimestamp()});
+  flash('gFlash','✅ ছবি যোগ হয়েছে।');
+  btn.disabled=false; btn.textContent='📤 আপলোড করুন';
+  document.getElementById('g-photo').value='';
+  document.getElementById('g-caption').value='';
+  document.getElementById('galPreviewWrap').innerHTML='';
+  loadGallery();
+  switchGalTab('list',document.querySelector('.ptab'));
+};
+
+window.deleteGalPhoto = async function(id) {
+  if (!confirm('ছবি মুছে ফেলবেন?')) return;
+  await deleteDoc(doc(db,'gallery',id));
+  flash('gFlash','🗑 ছবি মুছে ফেলা হয়েছে।');
+  loadGallery();
+};
+
+// ── STATS
+async function loadStats() {
+  const snap = await getDoc(doc(db,'config','stats'));
+  if (!snap.exists()) return;
+  const s = snap.data();
+  const fields={members:'st-members',branches:'st-branches',activities:'st-activities',years:'st-years',students:'st-students',trees:'st-trees',blood:'st-blood',families:'st-families'};
+  Object.entries(fields).forEach(([k,id])=>{ const el=document.getElementById(id); if(el&&s[k]) el.value=s[k]; });
+}
+
+window.saveStats = async function() {
+  const fields={members:'st-members',branches:'st-branches',activities:'st-activities',years:'st-years',students:'st-students',trees:'st-trees',blood:'st-blood',families:'st-families'};
+  const data={};
+  Object.entries(fields).forEach(([k,id])=>{ const v=document.getElementById(id)?.value; if(v) data[k]=parseInt(v)||0; });
+  await setDoc(doc(db,'config','stats'), {...data, updatedAt:serverTimestamp()});
+  flash('stFlash','✅ পরিসংখ্যান আপডেট হয়েছে।');
+};
+
+// ── Logout
+window.doLogout = function() { signOut(auth).then(()=>window.location.href='login.html'); };
+
+// ── Helpers
+function flash(id, msg, type='ok') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'flash show flash-'+type;
+  setTimeout(()=>el.classList.remove('show'),4000);
+}
+</script>
+
+<script>
+// ── SECTION NAVIGATION
+const sections = ['dashboard','pending','members','admins','notices','gallery','stats'];
+const sectionTitles = {
+  dashboard:'📊 ড্যাশবোর্ড', pending:'⏳ পেন্ডিং আবেদন', members:'👥 সকল সদস্য',
+  admins:'🔑 Admin ব্যবস্থাপনা', notices:'📢 নোটিশ', gallery:'📷 গ্যালারি', stats:'📈 পরিসংখ্যান'
+};
+
+function goSection(id) {
+  sections.forEach(s=>{
+    const el=document.getElementById('s-'+s); if(el) el.style.display=s===id?'block':'none';
+  });
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navItems=document.querySelectorAll('.nav-item');
+  navItems.forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+id+"'")) n.classList.add('active');});
+  document.getElementById('sectionTitle').textContent = sectionTitles[id]||id;
+  closeSidebar();
+}
+
+function switchNoticeTab(tab, btn) {
+  document.getElementById('noticeListPanel').style.display = tab==='list'?'block':'none';
+  document.getElementById('noticeAddPanel').style.display = tab==='add'?'block':'none';
+  document.querySelectorAll('#s-notices .ptab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function switchGalTab(tab, btn) {
+  document.getElementById('galListPanel').style.display = tab==='list'?'block':'none';
+  document.getElementById('galAddPanel').style.display = tab==='add'?'block':'none';
+  document.querySelectorAll('#s-gallery .ptab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('currentTime').textContent = now.toLocaleTimeString('bn-BD');
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</body>
+</html>

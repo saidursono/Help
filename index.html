@@ -498,11 +498,27 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
       <li><a id="nl-about" onclick="go('about')">ℹ️ আমরা</a></li>
       <li><a id="nl-contact" onclick="go('contact')">📞 যোগাযোগ</a></li>
     </ul>
+    <div id="navLoginBtn" style="display:flex;gap:8px;align-items:center;margin-left:8px">
+      <button id="loginNavBtn" onclick="window.location.href='login.html'" style="padding:7px 14px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🔐 লগইন</button>
+      <div id="userNavMenu" style="display:none;position:relative">
+        <button id="userNavBtn" onclick="toggleUserMenu()" style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(240,180,41,.12);border:1px solid var(--b2);border-radius:8px;color:var(--sgold);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;">
+          <span id="navUserAv" style="width:26px;height:26px;border-radius:50%;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;overflow:hidden;border:1.5px solid var(--gold);flex-shrink:0">?</span>
+          <span id="navUserName">...</span> ▾
+        </button>
+        <div id="userDropdown" style="display:none;position:absolute;top:40px;right:0;background:rgba(6,26,6,.97);border:1px solid var(--b2);border-radius:12px;padding:8px;min-width:180px;z-index:999;backdrop-filter:var(--blur)">
+          <a onclick="go('dashboard')" style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.8);cursor:pointer;font-size:13px;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(240,180,41,.1)'" onmouseout="this.style.background='none'">👤 আমার প্রোফাইল</a>
+          <a onclick="window.location.href='admin.html'" id="adminLinkNav" style="display:none;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;color:var(--sgold);cursor:pointer;font-size:13px;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(240,180,41,.1)'" onmouseout="this.style.background='none'">⚙️ Admin Panel</a>
+          <div style="height:1px;background:rgba(255,255,255,.06);margin:6px 0"></div>
+          <a onclick="doLogoutMain()" style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;color:#ff6b6b;cursor:pointer;font-size:13px;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(244,67,54,.08)'" onmouseout="this.style.background='none'">🚪 লগআউট</a>
+        </div>
+      </div>
+    </div>
     <div class="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
 <div class="mob" id="mobMenu">
+  <a onclick="go('dashboard');toggleMob()">👤 আমার প্রোফাইল</a>
   <a onclick="go('home');toggleMob()">🏠 হোম</a>
   <a onclick="go('members');toggleMob()">👥 সদস্য তালিকা</a>
   <a onclick="go('notice');toggleMob()">📢 নোটিশ বোর্ড</a>
@@ -1114,6 +1130,48 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
 </div>
 
 <!-- FOOTER -->
+
+<!-- ══════════ MEMBER DASHBOARD ══════════ -->
+<div class="page" id="p-dashboard">
+  <div class="ph"><h1>👤 আমার প্রোফাইল</h1><p>স্বাগতম, <span id="dashWelcomeName">...</span></p></div>
+  <div style="padding:28px 20px;max-width:900px;margin:0 auto">
+
+    <!-- Profile Card -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px" id="dashGrid">
+      <div style="background:var(--glass);border:1px solid var(--b2);border-radius:20px;padding:28px;text-align:center">
+        <div style="width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);margin:0 auto 14px;overflow:hidden;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:700;box-shadow:0 0 25px rgba(240,180,41,.3)" id="dashAv"></div>
+        <div style="color:var(--sgold);font-size:1.2rem;font-weight:700" id="dashName">-</div>
+        <div style="margin-top:8px" id="dashBadge"></div>
+        <div style="color:var(--text2);font-size:13px;margin-top:6px" id="dashId"></div>
+        <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button onclick="downloadMyCard()" style="padding:9px 16px;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">🪪 ID Card ডাউনলোড</button>
+          <button onclick="downloadMyCert()" style="padding:9px 16px;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.3);color:var(--sgold);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">📜 Certificate</button>
+        </div>
+      </div>
+      <div style="background:var(--glass);border:1px solid var(--b1);border-radius:20px;padding:24px">
+        <h4 style="color:var(--sgold);font-size:.9rem;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)">📋 আমার তথ্য</h4>
+        <div id="dashInfo" style="display:grid;gap:8px;font-size:13px"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div id="dashStatusBox"></div>
+
+    <!-- Gallery upload for approved members -->
+    <div id="memberGalleryUpload" style="display:none;background:var(--glass);border:1px solid var(--b1);border-radius:16px;padding:22px;margin-top:16px">
+      <h4 style="color:var(--sgold);font-size:.95rem;font-weight:700;margin-bottom:14px">📷 গ্যালারিতে ছবি যোগ করুন</h4>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;flex-wrap:wrap">
+        <div>
+          <div style="margin-bottom:8px"><input type="file" id="memberGalFile" accept="image/*" style="background:var(--glass2);border:1px solid var(--b1);border-radius:8px;padding:8px;color:#fff;width:100%;font-size:13px;font-family:inherit;"></div>
+          <input type="text" id="memberGalCaption" placeholder="ছবির বিবরণ..." style="width:100%;padding:9px 14px;background:var(--glass2);border:1px solid var(--b1);border-radius:8px;color:#fff;font-size:13px;font-family:inherit;outline:none;">
+        </div>
+        <button onclick="memberUploadGallery()" style="padding:10px 18px;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">📤 আপলোড</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   <div class="ft-n">সমাজ কল্যাণ যুব সংগঠন</div>
   <div class="ft-s">❝ সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ ❞</div>
@@ -1850,4 +1908,459 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+
+<!-- Firebase Dynamic Integration -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I",
+  authDomain: "somaj-kallyan.firebaseapp.com",
+  projectId: "somaj-kallyan",
+  appId: "1:392871962816:web:0f7ebbc36a3d8c784da525"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dasurbavl/image/upload';
+const UPLOAD_PRESET = 'somaj-kallyan-upload';
+
+let fbUser = null, fbUserData = null;
+
+// ── Auth State
+onAuthStateChanged(auth, async (user) => {
+  fbUser = user;
+  const loginBtn = document.getElementById('loginNavBtn');
+  const userMenu = document.getElementById('userNavMenu');
+
+  if (user) {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists()) {
+      fbUserData = snap.data();
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (userMenu) userMenu.style.display = 'flex';
+
+      // Update nav user info
+      const nameEl = document.getElementById('navUserName');
+      const avEl = document.getElementById('navUserAv');
+      if (nameEl) nameEl.textContent = fbUserData.name?.split(' ')[0] || 'সদস্য';
+      if (avEl) {
+        if (fbUserData.photoUrl) avEl.innerHTML = `<img src="${fbUserData.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+        else avEl.textContent = fbUserData.name?.charAt(0) || '?';
+      }
+
+      // Show admin link
+      const adminLink = document.getElementById('adminLinkNav');
+      if (adminLink && (fbUserData.role === 'admin' || fbUserData.role === 'superadmin')) {
+        adminLink.style.display = 'flex';
+      }
+
+      // Load dynamic content
+      await loadFirebaseMembers();
+      await loadFirebaseNotices();
+      await loadFirebaseGallery();
+      await loadFirebaseStats();
+      setupDashboard();
+    }
+  } else {
+    if (loginBtn) loginBtn.style.display = 'block';
+    if (userMenu) userMenu.style.display = 'none';
+    // Load public content anyway
+    await loadFirebaseMembers();
+    await loadFirebaseNotices();
+    await loadFirebaseGallery();
+    await loadFirebaseStats();
+  }
+});
+
+// ── LOAD MEMBERS from Firebase
+async function loadFirebaseMembers() {
+  try {
+    const snap = await getDocs(query(collection(db,'users'), where('status','==','approved'), orderBy('memberId','asc')));
+    if (snap.empty) return; // Fall back to static data
+    const members = snap.docs.map(d => ({...d.data(), uid: d.id}));
+    // Override global mData
+    window.mData = members.map((m, i) => ({
+      n: parseInt(m.memberId?.split('-')[1]) || i+1,
+      name: m.name || '-',
+      area: m.area || '-',
+      ph: m.ph || m.phone || null,
+      role: m.position || m.role || 'সদস্য',
+      photo: m.photoUrl || '',
+      uid: m.uid,
+      memberId: m.memberId,
+      bloodGroup: m.bloodGroup,
+      dob: m.dob,
+      gender: m.gender,
+      email: m.email,
+    }));
+    if (typeof filterM === 'function') filterM();
+  } catch(e) { console.log('Using static member data', e); }
+}
+
+// ── LOAD NOTICES from Firebase
+async function loadFirebaseNotices() {
+  try {
+    const snap = await getDocs(query(collection(db,'notices'), orderBy('createdAt','desc')));
+    if (snap.empty) return;
+    const notices = snap.docs.map(d => ({...d.data(), id: d.id}));
+    const typeMap = {urgent:'tag-urgent',info:'tag-info',success:'tag-success',default:'tag-gold'};
+    const icoMap = {urgent:'🚨',info:'ℹ️',success:'✅',default:'📢'};
+    const noticeHtml = notices.map(n => `
+      <div class="notice-card ${n.type||'default'}">
+        <div class="notice-ico">${icoMap[n.type]||'📢'}</div>
+        <div class="notice-body">
+          <span class="notice-tag ${typeMap[n.type]||'tag-gold'}">${n.type==='urgent'?'জরুরি':n.type==='info'?'তথ্য':n.type==='success'?'সফলতা':'নোটিশ'}</span>
+          <h4>${n.title||'-'}</h4>
+          <p>${n.body||''}</p>
+          ${n.photoUrl?`<img src="${n.photoUrl}" style="max-width:100%;border-radius:8px;margin-top:10px;border:1px solid rgba(255,255,255,.1)">` : ''}
+          <div class="notice-date">📅 ${n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'} · ${n.postedBy||'Admin'}</div>
+        </div>
+      </div>`).join('');
+
+    // Update notice page
+    const noticePage = document.querySelector('#p-notice .notice-list');
+    if (noticePage) noticePage.innerHTML = noticeHtml;
+    // Update home notice preview
+    const homeNotice = document.querySelector('#p-home .notice-list');
+    if (homeNotice && notices.length > 0) {
+      homeNotice.innerHTML = notices.slice(0,2).map(n => `
+        <div class="notice-card ${n.type||'default'}">
+          <div class="notice-ico">${icoMap[n.type]||'📢'}</div>
+          <div class="notice-body">
+            <span class="notice-tag ${typeMap[n.type]||'tag-gold'}">${n.type==='urgent'?'জরুরি':'নোটিশ'}</span>
+            <h4>${n.title||'-'}</h4><p>${(n.body||'').substring(0,120)}...</p>
+            <div class="notice-date">📅 ${n.createdAt?.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('bn-BD'):'-'}</div>
+          </div>
+        </div>`).join('');
+    }
+  } catch(e) { console.log('Notice load error', e); }
+}
+
+// ── LOAD GALLERY from Firebase
+async function loadFirebaseGallery() {
+  try {
+    const snap = await getDocs(query(collection(db,'gallery'), orderBy('createdAt','desc')));
+    if (snap.empty) return;
+    const items = snap.docs.map(d => ({...d.data(), id: d.id}));
+    window.galData = items.map(g => ({cat: g.cat||'event', emoji: '📷', label: g.caption||'-', src: g.src}));
+    if (typeof renderGal === 'function') renderGal();
+  } catch(e) { console.log('Gallery load error', e); }
+}
+
+// ── LOAD STATS from Firebase
+async function loadFirebaseStats() {
+  try {
+    const snap = await getDoc(doc(db,'config','stats'));
+    if (!snap.exists()) return;
+    const s = snap.data();
+    const maps = {members:'cnt1',branches:'cnt2',activities:'cnt3',years:'cnt4',students:'cnt5'};
+    Object.entries(maps).forEach(([k,id]) => {
+      const el = document.getElementById(id);
+      if (el && s[k]) el.textContent = toBn ? toBn(s[k]) + '+' : s[k] + '+';
+    });
+  } catch(e) {}
+}
+
+// ── DASHBOARD SETUP
+function setupDashboard() {
+  if (!fbUserData) return;
+  const m = fbUserData;
+
+  // Welcome
+  const wn = document.getElementById('dashWelcomeName');
+  if (wn) wn.textContent = m.name?.split(' ')[0] || 'সদস্য';
+
+  // Avatar
+  const av = document.getElementById('dashAv');
+  if (av) {
+    if (m.photoUrl) av.innerHTML = `<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    else av.textContent = m.name?.charAt(0) || '?';
+  }
+
+  // Name & badges
+  const dn = document.getElementById('dashName');
+  if (dn) dn.textContent = m.name || '-';
+  const db2 = document.getElementById('dashBadge');
+  if (db2) db2.innerHTML = `<span style="display:inline-block;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);color:var(--sgold)">${m.position||'সদস্য'}</span>`;
+  const di = document.getElementById('dashId');
+  if (di) di.textContent = m.memberId ? `🪪 ID: ${m.memberId}` : (m.status==='pending'?'⏳ আবেদন পর্যালোচনাধীন':'');
+
+  // Info grid
+  const info = document.getElementById('dashInfo');
+  if (info) info.innerHTML = [
+    ['📞','ফোন',m.phone],['📍','এলাকা',m.area],['🩸','রক্তের গ্রুপ',m.bloodGroup],
+    ['⚤','লিঙ্গ',m.gender],['🎂','জন্ম তারিখ',m.dob],['📧','ইমেইল',m.email],
+  ].filter(([,, v])=>v).map(([ico,k,v])=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--glass);border:1px solid var(--b1);border-radius:8px">
+      <span>${ico}</span><span style="color:rgba(255,255,255,.5);font-size:12px">${k}</span>
+      <span style="margin-left:auto;color:var(--sgold);font-size:13px;font-weight:500">${v}</span>
+    </div>`).join('');
+
+  // Status box
+  const sb = document.getElementById('dashStatusBox');
+  if (sb) {
+    if (m.status === 'pending') {
+      sb.innerHTML = `<div style="text-align:center;padding:20px;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.2);border-radius:14px">
+        <div style="font-size:2.5rem">⏳</div>
+        <div style="color:#ffd54f;font-size:1rem;font-weight:700;margin-top:8px">আবেদন পর্যালোচনাধীন</div>
+        <p style="color:rgba(255,255,255,.5);font-size:13px;margin-top:6px">Admin অনুমোদন করলে ID Card ও Certificate পাবেন।</p>
+      </div>`;
+    }
+  }
+
+  // Gallery upload for approved
+  const galUp = document.getElementById('memberGalleryUpload');
+  if (galUp && m.status === 'approved') galUp.style.display = 'block';
+
+  // Store for ID card / cert generation
+  window._myMemberData = m;
+}
+
+// ── GALLERY UPLOAD by member
+window.memberUploadGallery = async function() {
+  if (!fbUser || !fbUserData || fbUserData.status !== 'approved') { alert('শুধু অনুমোদিত সদস্যরাই ছবি যোগ করতে পারবেন।'); return; }
+  const file = document.getElementById('memberGalFile').files[0];
+  const caption = document.getElementById('memberGalCaption').value.trim();
+  if (!file || !caption) { alert('ছবি ও বিবরণ দিন।'); return; }
+  const btn = event.target; btn.disabled=true; btn.textContent='⏳';
+  const fd = new FormData();
+  fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET); fd.append('folder','somaj-kallyan/gallery');
+  const res = await fetch(CLOUDINARY_URL,{method:'POST',body:fd});
+  const data = await res.json();
+  await addDoc(collection(db,'gallery'),{src:data.secure_url, caption, cat:'event', uploadedBy:fbUserData.name, createdAt:serverTimestamp()});
+  btn.disabled=false; btn.textContent='📤 আপলোড';
+  document.getElementById('memberGalFile').value='';
+  document.getElementById('memberGalCaption').value='';
+  alert('✅ ছবি সফলভাবে যোগ হয়েছে!');
+  await loadFirebaseGallery();
+  if (typeof renderGal === 'function') renderGal();
+};
+
+// ── LOGOUT
+window.doLogoutMain = function() {
+  signOut(auth).then(() => window.location.reload());
+};
+
+// ── ID CARD DOWNLOAD for logged in user
+window.downloadMyCard = function() {
+  const m = window._myMemberData;
+  if (!m) { alert('তথ্য লোড হয়নি।'); return; }
+  if (m.status !== 'approved') { alert('অনুমোদিত সদস্যরাই ID Card পাবেন।'); return; }
+  generateIDCard(m);
+};
+
+window.downloadMyCert = function() {
+  const m = window._myMemberData;
+  if (!m) return;
+  if (m.status !== 'approved') { alert('অনুমোদিত সদস্যরাই Certificate পাবেন।'); return; }
+  // Use existing downloadCert function with modified data
+  const memberObj = {
+    n: parseInt(m.memberId?.split('-')[1]) || 1,
+    name: m.name, area: m.area, ph: m.phone,
+    role: m.position || 'সদস্য', photo: m.photoUrl || ''
+  };
+  if (typeof downloadCert === 'function') {
+    // simulate click
+    const fakeEvent = { target: { innerHTML:'', disabled: false } };
+    window.event && Object.assign(window.event, fakeEvent);
+    downloadCert(memberObj.n);
+  }
+};
+
+// ── SHINY ID CARD GENERATOR
+function generateIDCard(m) {
+  const W = 856, H = 540; // Standard ID card 85.6mm x 53.98mm at 96dpi scaled
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const c = canvas.getContext('2d');
+
+  // Background - holographic-style gradient
+  const bg = c.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#061a06');
+  bg.addColorStop(0.3, '#0d2e0d');
+  bg.addColorStop(0.6, '#112d11');
+  bg.addColorStop(1, '#061a06');
+  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+
+  // Holographic shimmer effect
+  for (let i = 0; i < 6; i++) {
+    const x = Math.random() * W, y = Math.random() * H;
+    const grad = c.createRadialGradient(x, y, 0, x, y, 200);
+    grad.addColorStop(0, `rgba(240,180,41,0.06)`);
+    grad.addColorStop(1, 'transparent');
+    c.fillStyle = grad; c.fillRect(0, 0, W, H);
+  }
+
+  // Diagonal pattern
+  c.strokeStyle = 'rgba(240,180,41,0.04)'; c.lineWidth = 1;
+  for (let i = -H; i < W + H; i += 30) {
+    c.beginPath(); c.moveTo(i, 0); c.lineTo(i + H, H); c.stroke();
+  }
+
+  // Top accent bar - gradient
+  const topBar = c.createLinearGradient(0, 0, W, 0);
+  topBar.addColorStop(0, '#b8860b'); topBar.addColorStop(0.5, '#ffd966'); topBar.addColorStop(1, '#b8860b');
+  c.fillStyle = topBar; c.fillRect(0, 0, W, 8);
+
+  // Bottom accent bar
+  c.fillStyle = topBar; c.fillRect(0, H - 8, W, 8);
+
+  // Left panel (photo area) - darker
+  const leftBg = c.createLinearGradient(0, 0, 220, H);
+  leftBg.addColorStop(0, 'rgba(240,180,41,0.12)');
+  leftBg.addColorStop(1, 'rgba(6,26,6,0.5)');
+  c.fillStyle = leftBg;
+  c.fillRect(0, 8, 220, H - 16);
+
+  // Vertical separator
+  c.strokeStyle = 'rgba(240,180,41,0.5)'; c.lineWidth = 2;
+  c.beginPath(); c.moveTo(220, 20); c.lineTo(220, H - 20); c.stroke();
+
+  // Org logo area
+  c.fillStyle = 'rgba(240,180,41,0.1)';
+  c.beginPath(); c.arc(110, 95, 58, 0, Math.PI * 2); c.fill();
+  c.strokeStyle = 'rgba(240,180,41,0.6)'; c.lineWidth = 2.5;
+  c.beginPath(); c.arc(110, 95, 58, 0, Math.PI * 2); c.stroke();
+
+  // Photo placeholder / actual photo
+  const drawCard = (photoImg) => {
+    // Photo circle
+    c.save();
+    c.beginPath(); c.arc(110, 95, 54, 0, Math.PI * 2); c.clip();
+    if (photoImg) c.drawImage(photoImg, 56, 41, 108, 108);
+    else {
+      c.fillStyle = '#1b6b1b';
+      c.fillRect(56, 41, 108, 108);
+      c.fillStyle = '#ffd966';
+      c.font = 'bold 48px "Hind Siliguri",Arial';
+      c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(m.name?.charAt(0) || '?', 110, 97);
+    }
+    c.restore();
+
+    // Photo border gold ring
+    c.strokeStyle = '#ffd966'; c.lineWidth = 3;
+    c.beginPath(); c.arc(110, 95, 54, 0, Math.PI * 2); c.stroke();
+
+    // Member ID below photo
+    c.fillStyle = 'rgba(255,215,102,0.9)';
+    c.font = 'bold 13px Arial'; c.textAlign = 'center';
+    c.fillText('ID: ' + (m.memberId || '2025-???'), 110, 170);
+
+    // Org name on left panel
+    c.fillStyle = '#ffd966'; c.font = 'bold 10px "Hind Siliguri",Arial';
+    c.fillText('সমাজ কল্যাণ', 110, 195);
+    c.fillStyle = 'rgba(165,214,167,0.7)';
+    c.font = '9px "Hind Siliguri",Arial';
+    c.fillText('যুব সংগঠন', 110, 210);
+
+    // Right side content
+    c.textAlign = 'left';
+
+    // Org name at top right
+    c.fillStyle = '#ffd966'; c.font = 'bold 18px "Hind Siliguri",Arial';
+    c.fillText('সমাজ কল্যাণ যুব সংগঠন', 240, 55);
+    c.fillStyle = 'rgba(165,214,167,0.6)'; c.font = 'italic 12px Georgia,serif';
+    c.fillText('Somaj Kalyan Jubo Sangathan', 240, 74);
+
+    // Divider
+    const d = c.createLinearGradient(240, 0, W - 20, 0);
+    d.addColorStop(0, 'rgba(240,180,41,0.7)'); d.addColorStop(1, 'transparent');
+    c.strokeStyle = d; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(240, 85); c.lineTo(W - 20, 85); c.stroke();
+
+    // MEMBER CARD title
+    c.fillStyle = 'rgba(255,255,255,0.15)';
+    c.fillRect(240, 94, 180, 28);
+    c.fillStyle = '#ffd966'; c.font = 'bold 15px "Hind Siliguri",Arial';
+    c.textAlign = 'center';
+    c.fillText('সদস্যপদ কার্ড / MEMBER CARD', 240 + 90, 113);
+    c.textAlign = 'left';
+
+    // Member name - large
+    c.fillStyle = '#ffffff'; c.font = 'bold 24px "Hind Siliguri",Arial';
+    c.fillText(m.name || '-', 240, 158);
+
+    // Info rows
+    const rows = [
+      ['পদবি', m.position || 'সদস্য'],
+      ['এলাকা', m.area || '-'],
+      ['ফোন', m.phone || '-'],
+      ['রক্ত', m.bloodGroup || '-'],
+    ];
+    rows.forEach((row, i) => {
+      const y = 185 + i * 42;
+      c.fillStyle = 'rgba(255,255,255,0.04)';
+      c.fillRect(240, y - 16, W - 260, 36);
+      c.fillStyle = 'rgba(165,214,167,0.55)';
+      c.font = '11px "Hind Siliguri",Arial';
+      c.fillText(row[0], 248, y);
+      c.fillStyle = '#ffd966';
+      c.font = 'bold 14px "Hind Siliguri",Arial';
+      c.fillText(row[1], 248, y + 17);
+    });
+
+    // Signature area
+    c.strokeStyle = 'rgba(240,180,41,0.35)'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(240, 360); c.lineTo(460, 360); c.stroke();
+    c.fillStyle = 'rgba(165,214,167,0.5)'; c.font = '11px "Hind Siliguri",Arial';
+    c.fillText('সভাপতির স্বাক্ষর', 240, 374);
+
+    // Developer watermark
+    c.fillStyle = 'rgba(255,215,0,0.18)'; c.font = 'bold 9px Arial';
+    c.textAlign = 'right';
+    c.fillText('Dev: Saidur Rahman', W - 16, H - 16);
+
+    // Bottom strip
+    c.fillStyle = 'rgba(240,180,41,0.1)'; c.fillRect(0, H - 36, W, 28);
+    c.fillStyle = 'rgba(255,255,255,0.4)'; c.font = '10px Arial';
+    c.textAlign = 'center';
+    c.fillText('চরপাড়া, দৌলতপুর, কুষ্টিয়া  ·  ০১৮১৭-৯৮৪৫২৪  ·  Issued: ' + new Date().getFullYear(), W / 2, H - 14);
+
+    // Download
+    setTimeout(() => {
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 53.98] });
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 85.6, 53.98);
+        pdf.save(`IDCard_${m.name?.replace(/\s+/g,'_')}.pdf`);
+      } catch (e) {
+        const a = document.createElement('a');
+        a.download = `IDCard_${m.name?.replace(/\s+/g,'_')}.png`;
+        a.href = canvas.toDataURL('image/png'); a.click();
+      }
+    }, 100);
+  };
+
+  // Load photo
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => drawCard(img);
+  img.onerror = () => drawCard(null);
+  img.src = m.photoUrl || '';
+  if (!m.photoUrl) drawCard(null);
+}
+
+window._generateIDCard = generateIDCard;
+</script>
+
+<script>
+// ── UI helpers for nav user menu
+function toggleUserMenu() {
+  const dd = document.getElementById('userDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', (e) => {
+  const btn = document.getElementById('userNavBtn');
+  const dd = document.getElementById('userDropdown');
+  if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+</script>
+
 </body></html>
