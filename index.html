@@ -1313,11 +1313,11 @@ function openModal(n){
 }
 
 /* ══════════════════════════════════════════════════════
-   CERTIFICATE GENERATOR — PDF via Canvas → jsPDF
-   সব সদস্যের জন্য একই ডিজাইন, নাম/এলাকা/মোবাইল অটো
+   CERTIFICATE GENERATOR v2 — Royal Navy + Gold Style
+   A4 Landscape | QR Code | লোগো সিল | নতুন ডিজাইন
 ══════════════════════════════════════════════════════ */
 function downloadCert(n){
-  const m = mData.find(x=>x.n===n);
+  const m = (window.mData||mData).find(x=>x.n===n);
   if(!m) return;
 
   const btn = event.target;
@@ -1325,243 +1325,306 @@ function downloadCert(n){
   btn.innerHTML = '⏳ তৈরি হচ্ছে...';
   btn.disabled = true;
 
-  // ── A4 landscape ~150dpi
-  const W = 1754, H = 1240;
+  // A4 landscape @150dpi
+  const W=1754, H=1240;
 
-  // ফটো লোড করে তারপর draw করব
-  function drawCertificate(photoImg){
-    const canvas = document.createElement('canvas');
-    canvas.width = W; canvas.height = H;
-    const c = canvas.getContext('2d');
-    const cx = W/2;
+  // ── QR Code (সদস্য ফোন নম্বর লিঙ্ক)
+  function makeQR(canvas, cx, cy, size, text){
+    // সরল QR placeholder — real QR API URL দিয়ে ইমেজ লোড
+    return new Promise(resolve=>{
+      const qImg=new Image();
+      qImg.crossOrigin='anonymous';
+      const phone=(m.ph||'').replace(/-/g,'');
+      const qUrl=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('tel:+880'+phone.replace(/^0/,''))}&bgcolor=ffffff&color=1a3a6b&qzone=1`;
+      qImg.onload=()=>resolve(qImg);
+      qImg.onerror=()=>resolve(null);
+      qImg.src=qUrl;
+    });
+  }
 
-    // ─── BACKGROUND ──────────────────────────────────────
-    const bg = c.createRadialGradient(cx,H/2,10,cx,H/2,H*0.9);
-    bg.addColorStop(0,'#0d2e0d');
-    bg.addColorStop(0.55,'#071a07');
-    bg.addColorStop(1,'#020c02');
+  function drawCertificate(photoImg, qrImg){
+    const canvas=document.createElement('canvas');
+    canvas.width=W; canvas.height=H;
+    const c=canvas.getContext('2d');
+    const cx=W/2;
+
+    // ══ BACKGROUND — Navy Blue Royal ══
+    const bg=c.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#0a1628');
+    bg.addColorStop(0.35,'#0d2145');
+    bg.addColorStop(0.65,'#0f2a58');
+    bg.addColorStop(1,'#08142a');
     c.fillStyle=bg; c.fillRect(0,0,W,H);
 
-    // সূক্ষ্ম dot pattern
-    c.fillStyle='rgba(240,180,41,0.03)';
-    for(let x=50;x<W;x+=58) for(let y=50;y<H;y+=58){
-      c.beginPath(); c.arc(x,y,1.4,0,Math.PI*2); c.fill();
-    }
+    // সূক্ষ্ম জ্যামিতিক প্যাটার্ন (তারার মতো)
+    c.strokeStyle='rgba(255,215,0,0.04)'; c.lineWidth=1;
+    for(let x=0;x<W;x+=60){ c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke(); }
+    for(let y=0;y<H;y+=60){ c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke(); }
 
-    // ─── BORDERS ─────────────────────────────────────────
+    // ── গোল্ডেন গ্লো ব্যাকগ্রাউন্ড
+    const glow=c.createRadialGradient(cx,H/2,50,cx,H/2,700);
+    glow.addColorStop(0,'rgba(255,215,0,0.07)');
+    glow.addColorStop(1,'transparent');
+    c.fillStyle=glow; c.fillRect(0,0,W,H);
+
+    // ══ OUTER BORDER — ডবল সোনালি বর্ডার ══
     function rr(x,y,w,h,r){
-      c.beginPath();
-      c.moveTo(x+r,y); c.lineTo(x+w-r,y);
-      c.arcTo(x+w,y,x+w,y+r,r);
-      c.lineTo(x+w,y+h-r);
-      c.arcTo(x+w,y+h,x+w-r,y+h,r);
-      c.lineTo(x+r,y+h);
-      c.arcTo(x,y+h,x,y+h-r,r);
-      c.lineTo(x,y+r);
-      c.arcTo(x,y,x+r,y,r);
-      c.closePath();
+      c.beginPath(); c.moveTo(x+r,y); c.lineTo(x+w-r,y);
+      c.arcTo(x+w,y,x+w,y+r,r); c.lineTo(x+w,y+h-r);
+      c.arcTo(x+w,y+h,x+w-r,y+h,r); c.lineTo(x+r,y+h);
+      c.arcTo(x,y+h,x,y+h-r,r); c.lineTo(x,y+r);
+      c.arcTo(x,y,x+r,y,r); c.closePath();
     }
-    // সোনালি বাইরের বর্ডার
-    const bg2=c.createLinearGradient(0,0,W,H);
-    bg2.addColorStop(0,'#b8860b'); bg2.addColorStop(0.5,'#ffd966'); bg2.addColorStop(1,'#b8860b');
-    c.strokeStyle=bg2; c.lineWidth=6; rr(28,28,W-56,H-56,16); c.stroke();
-    c.strokeStyle='rgba(240,180,41,0.35)'; c.lineWidth=1.5; rr(44,44,W-88,H-88,12); c.stroke();
-    c.strokeStyle='rgba(240,180,41,0.15)'; c.lineWidth=1;   rr(58,58,W-116,H-116,8); c.stroke();
+    const goldGrad=c.createLinearGradient(0,0,W,H);
+    goldGrad.addColorStop(0,'#c8a000'); goldGrad.addColorStop(0.25,'#ffd700');
+    goldGrad.addColorStop(0.5,'#ffe55c'); goldGrad.addColorStop(0.75,'#ffd700'); goldGrad.addColorStop(1,'#c8a000');
 
-    // কোণের অলঙ্কার
-    function corner(ox,oy,sx,sy){
-      c.save(); c.translate(ox,oy); c.scale(sx,sy);
-      [110,88,68].forEach((r,i)=>{
-        c.strokeStyle=`rgba(240,180,41,${0.22-i*0.05})`; c.lineWidth=i===0?2:1;
+    c.strokeStyle=goldGrad; c.lineWidth=7; rr(22,22,W-44,H-44,18); c.stroke();
+    c.strokeStyle='rgba(255,215,0,0.4)'; c.lineWidth=2; rr(36,36,W-72,H-72,14); c.stroke();
+    c.strokeStyle='rgba(255,215,0,0.15)'; c.lineWidth=1; rr(48,48,W-96,H-96,10); c.stroke();
+
+    // ── কোণের ফুলেল অলঙ্কার
+    function floral(ox,oy,flip){
+      c.save(); c.translate(ox,oy); c.scale(flip?-1:1,flip?-1:1);
+      c.fillStyle='rgba(255,215,0,0.7)';
+      // বড় ডায়মন্ড
+      c.save(); c.rotate(Math.PI/4); c.fillRect(-10,-10,20,20); c.restore();
+      // ছোট সার্কেল আর্ক
+      [70,95,118].forEach((r,i)=>{
+        c.strokeStyle=`rgba(255,215,0,${0.35-i*0.08})`; c.lineWidth=i===0?2.5:1.5;
         c.beginPath(); c.arc(0,0,r,0,Math.PI/2); c.stroke();
       });
-      c.fillStyle='rgba(240,180,41,0.6)';
-      c.save(); c.translate(55,55); c.rotate(Math.PI/4); c.fillRect(-5,-5,10,10); c.restore();
+      // কোণে ছোট ডায়মন্ড
+      [[48,48],[72,30],[30,72]].forEach(([dx,dy])=>{
+        c.save(); c.translate(dx,dy); c.rotate(Math.PI/4);
+        c.fillRect(-4,-4,8,8); c.restore();
+      });
       c.restore();
     }
-    corner(58,58,1,1); corner(W-58,58,-1,1); corner(58,H-58,1,-1); corner(W-58,H-58,-1,-1);
+    floral(50,50,false); floral(W-50,50,true);
+    c.save(); c.translate(50,H-50); c.scale(1,-1); floral(0,0,false); c.restore();
+    c.save(); c.translate(W-50,H-50); c.scale(-1,-1); floral(0,0,false); c.restore();
 
-    // ─── HEADER BAND ─────────────────────────────────────
-    const hb=c.createLinearGradient(0,70,0,180);
-    hb.addColorStop(0,'rgba(240,180,41,0.14)'); hb.addColorStop(1,'rgba(240,180,41,0)');
-    c.fillStyle=hb; c.fillRect(80,70,W-160,110);
+    // ══ TOP HEADER BAND ══
+    const hband=c.createLinearGradient(0,62,0,160);
+    hband.addColorStop(0,'rgba(255,215,0,0.18)');
+    hband.addColorStop(0.5,'rgba(255,215,0,0.08)');
+    hband.addColorStop(1,'rgba(255,215,0,0)');
+    c.fillStyle=hband; c.fillRect(60,62,W-120,98);
 
-    // ─── ORG NAME শীর্ষে ─────────────────────────────────
-    c.textAlign='center'; c.textBaseline='alphabetic';
-    c.fillStyle='#ffd966';
-    c.font='bold 38px "Hind Siliguri",Arial';
-    c.fillText('সমাজ কল্যাণ যুব সংগঠন', cx, 130);
-    c.fillStyle='rgba(165,214,167,0.7)';
+    // ── সীল / লোগো বৃত্ত (বাম দিকে)
+    const sealX=140, sealY=118, sealR=58;
+    // বাইরের রিং
+    c.strokeStyle=goldGrad; c.lineWidth=3;
+    c.beginPath(); c.arc(sealX,sealY,sealR,0,Math.PI*2); c.stroke();
+    c.strokeStyle='rgba(255,215,0,0.25)'; c.lineWidth=1.5;
+    c.beginPath(); c.arc(sealX,sealY,sealR+8,0,Math.PI*2); c.stroke();
+    // সীলের ভেতরের পটভূমি
+    const sealBg=c.createRadialGradient(sealX,sealY,0,sealX,sealY,sealR);
+    sealBg.addColorStop(0,'rgba(255,215,0,0.22)'); sealBg.addColorStop(1,'rgba(255,215,0,0.04)');
+    c.fillStyle=sealBg; c.beginPath(); c.arc(sealX,sealY,sealR,0,Math.PI*2); c.fill();
+    // সীলের ভেতরে লেখা
+    c.fillStyle='#ffd700'; c.textAlign='center'; c.textBaseline='middle';
+    c.font='bold 13px "Hind Siliguri",Arial'; c.fillText('সমাজ কল্যাণ',sealX,sealY-14);
+    c.font='bold 11px "Hind Siliguri",Arial'; c.fillText('যুব সংগঠন',sealX,sealY+2);
+    c.font='9px Arial'; c.fillStyle='rgba(255,215,0,0.6)'; c.fillText('Est. 2025',sealX,sealY+18);
+    // দাঁতযুক্ত বাইরের রিং (সীল ইফেক্ট)
+    for(let a=0;a<Math.PI*2;a+=Math.PI/18){
+      c.fillStyle='rgba(255,215,0,0.55)';
+      c.save(); c.translate(sealX+Math.cos(a)*(sealR+14),sealY+Math.sin(a)*(sealR+14));
+      c.rotate(a); c.fillRect(-2,-3,4,6); c.restore();
+    }
+
+    // ══ সংগঠনের নাম — শীর্ষে মাঝে ══
+    c.textBaseline='alphabetic'; c.textAlign='center';
+    c.fillStyle='#ffd700';
+    c.font='bold 42px "Hind Siliguri",Arial';
+    c.fillText('সমাজ কল্যাণ যুব সংগঠন', cx, 110);
+    c.fillStyle='rgba(200,180,255,0.65)';
     c.font='italic 16px Georgia,serif';
-    c.fillText('Somaj Kalyan Jubo Sangathan  ·  Established 2025', cx, 158);
+    c.fillText('Somaj Kalyan Jubo Sangathan  ·  Ramkrisnopur, Doulatpur, Kushtia', cx, 138);
 
-    // ─── DIVIDER ─────────────────────────────────────────
-    function divider(y,w=480){
+    // ── গোল্ডেন ডিভাইডার
+    function divider(y,w=500,thick=1.5){
       const dg=c.createLinearGradient(cx-w,y,cx+w,y);
-      dg.addColorStop(0,'transparent'); dg.addColorStop(0.5,'rgba(240,180,41,0.65)'); dg.addColorStop(1,'transparent');
-      c.strokeStyle=dg; c.lineWidth=1.5;
+      dg.addColorStop(0,'transparent'); dg.addColorStop(0.3,'rgba(255,215,0,0.5)');
+      dg.addColorStop(0.5,'rgba(255,215,0,0.9)'); dg.addColorStop(0.7,'rgba(255,215,0,0.5)'); dg.addColorStop(1,'transparent');
+      c.strokeStyle=dg; c.lineWidth=thick;
       c.beginPath(); c.moveTo(cx-w,y); c.lineTo(cx+w,y); c.stroke();
-      c.fillStyle='rgba(240,180,41,0.7)';
-      c.save(); c.translate(cx,y); c.rotate(Math.PI/4); c.fillRect(-4,-4,8,8); c.restore();
-      [-28,28].forEach(d=>{ c.save(); c.translate(cx+d,y); c.rotate(Math.PI/4); c.fillRect(-2.5,-2.5,5,5); c.restore(); });
+      c.fillStyle='#ffd700';
+      c.save(); c.translate(cx,y); c.rotate(Math.PI/4); c.fillRect(-5,-5,10,10); c.restore();
+      [-35,35].forEach(d=>{c.save();c.translate(cx+d,y);c.rotate(Math.PI/4);c.fillRect(-3,-3,6,6);c.restore();});
     }
-    divider(174, 440);
+    divider(158,500);
 
-    // ─── CERTIFICATE TITLE ───────────────────────────────
-    c.fillStyle='rgba(240,180,41,0.07)';
-    rr(cx-310,190,620,64,10); c.fill();
-    c.fillStyle='#ffd966';
-    c.font='bold 48px "Hind Siliguri",Arial';
-    c.fillText('সদস্যপদ সার্টিফিকেট', cx, 244);
-    c.fillStyle='rgba(165,214,167,0.5)';
-    c.font='italic 16px Georgia,serif';
-    c.fillText('Certificate of Membership', cx, 268);
+    // ══ CERTIFICATE TITLE ══
+    const titleBg=c.createLinearGradient(cx-340,170,cx+340,170);
+    titleBg.addColorStop(0,'rgba(255,215,0,0)'); titleBg.addColorStop(0.2,'rgba(255,215,0,0.12)');
+    titleBg.addColorStop(0.8,'rgba(255,215,0,0.12)'); titleBg.addColorStop(1,'rgba(255,215,0,0)');
+    c.fillStyle=titleBg; rr(cx-340,170,680,72,10); c.fill();
+    c.fillStyle='#ffffff';
+    c.font='bold 50px "Hind Siliguri",Arial';
+    c.fillText('সদস্যপদ সার্টিফিকেট', cx, 228);
+    c.fillStyle='rgba(255,215,0,0.55)';
+    c.font='italic 17px Georgia,serif';
+    c.fillText('Certificate of Membership', cx, 254);
+    divider(272,380);
 
-    divider(284, 350);
-
-    // ─── সদস্যের ফটো — উপরে বাম কোণে ছোট গোল ─────────
-    const photoR = 46; // ছোট radius
-    const photoX = 135, photoY = 155; // উপরে বাম কোণে (border এর ভেতরে)
-
-    // গোলাকার ক্লিপ
-    c.save();
-    c.beginPath(); c.arc(photoX,photoY,photoR,0,Math.PI*2); c.clip();
-    if(photoImg){
-      const s = photoR*2;
-      c.drawImage(photoImg, photoX-photoR, photoY-photoR, s, s);
-    } else {
-      // ফটো নেই — সবুজ gradient + আদ্যক্ষর
-      const ag=c.createRadialGradient(photoX,photoY,4,photoX,photoY,photoR);
-      ag.addColorStop(0,'#2e8b2e'); ag.addColorStop(1,'#0d2e0d');
-      c.fillStyle=ag; c.fillRect(photoX-photoR,photoY-photoR,photoR*2,photoR*2);
-      c.fillStyle='#ffd966';
-      c.font=`bold 38px "Hind Siliguri",Arial`;
+    // ══ সদস্যের ফটো — বাম দিকে বড় ══
+    const pX=200, pY=540, pR=110;
+    // ফটোর পেছনে glowing ring
+    const pGlow=c.createRadialGradient(pX,pY,pR-20,pX,pY,pR+30);
+    pGlow.addColorStop(0,'rgba(255,215,0,0.35)'); pGlow.addColorStop(1,'rgba(255,215,0,0)');
+    c.fillStyle=pGlow; c.beginPath(); c.arc(pX,pY,pR+30,0,Math.PI*2); c.fill();
+    // ফটো ক্লিপ
+    c.save(); c.beginPath(); c.arc(pX,pY,pR,0,Math.PI*2); c.clip();
+    if(photoImg){ c.drawImage(photoImg,pX-pR,pY-pR,pR*2,pR*2); }
+    else{
+      const av=c.createRadialGradient(pX,pY,5,pX,pY,pR);
+      av.addColorStop(0,'#1a3a6b'); av.addColorStop(1,'#0a1628');
+      c.fillStyle=av; c.fillRect(pX-pR,pY-pR,pR*2,pR*2);
+      c.fillStyle='#ffd700'; c.font=`bold 80px "Hind Siliguri",Arial`;
       c.textAlign='center'; c.textBaseline='middle';
-      c.fillText(ini(m.name), photoX, photoY+1);
+      c.fillText(ini(m.name),pX,pY+4);
     }
-    c.restore();
-    c.textBaseline='alphabetic';
-
-    // ফটোর সোনালি বর্ডার
-    c.strokeStyle='#ffd966'; c.lineWidth=3;
-    c.beginPath(); c.arc(photoX,photoY,photoR+2,0,Math.PI*2); c.stroke();
-    c.strokeStyle='rgba(255,215,102,0.2)'; c.lineWidth=1.5;
-    c.beginPath(); c.arc(photoX,photoY,photoR+7,0,Math.PI*2); c.stroke();
-
-    // ─── নাম — মাঝে, certificate title এর নিচে ──────────
+    c.restore(); c.textBaseline='alphabetic';
+    // ফটো বর্ডার
+    c.strokeStyle=goldGrad; c.lineWidth=4;
+    c.beginPath(); c.arc(pX,pY,pR+2,0,Math.PI*2); c.stroke();
+    c.strokeStyle='rgba(255,255,255,0.2)'; c.lineWidth=1.5;
+    c.beginPath(); c.arc(pX,pY,pR+9,0,Math.PI*2); c.stroke();
+    // ফটোর নিচে নাম
     c.textAlign='center';
-    c.fillStyle='#ffd966';
-    c.font='bold 52px "Hind Siliguri",Arial';
-    c.fillText(m.name, cx, 380);
+    c.fillStyle='rgba(255,215,0,0.8)'; c.font='bold 15px "Hind Siliguri",Arial';
+    c.fillText('সদস্য নং — #'+String(m.n).padStart(3,'0'), pX, pY+pR+26);
 
-    // নামের নিচে আন্ডারলাইন
-    const nw=c.measureText(m.name).width;
-    const ul=c.createLinearGradient(cx-nw/2,0,cx+nw/2,0);
-    ul.addColorStop(0,'transparent'); ul.addColorStop(0.5,'rgba(240,180,41,0.6)'); ul.addColorStop(1,'transparent');
-    c.strokeStyle=ul; c.lineWidth=1.8;
-    c.beginPath(); c.moveTo(cx-nw/2+20,394); c.lineTo(cx+nw/2-20,394); c.stroke();
+    // ══ সদস্যের নাম ও তথ্য — ডান দিকে ══
+    c.textAlign='left';
+    const tx=370;
 
-    // ─── Body text ────────────────────────────────────────
-    c.fillStyle='rgba(232,245,232,0.8)';
+    // নাম
+    c.fillStyle='#ffffff';
+    c.font='bold 54px "Hind Siliguri",Arial';
+    c.fillText(m.name, tx, 340);
+    // নামের নিচে লাইন
+    const nw2=c.measureText(m.name).width;
+    const ul2=c.createLinearGradient(tx,0,tx+nw2,0);
+    ul2.addColorStop(0,'rgba(255,215,0,0.9)'); ul2.addColorStop(1,'rgba(255,215,0,0.1)');
+    c.strokeStyle=ul2; c.lineWidth=2;
+    c.beginPath(); c.moveTo(tx,356); c.lineTo(tx+Math.min(nw2,1100),356); c.stroke();
+
+    // প্রত্যয়ন বাক্য
+    c.fillStyle='rgba(200,220,255,0.8)';
     c.font='20px "Hind Siliguri",Arial';
-    c.fillText('এতদ্বারা প্রত্যয়ন করা যাচ্ছে যে উপরোক্ত ব্যক্তি', cx, 434);
-    c.fillStyle='rgba(240,180,41,0.85)';
-    c.font='bold 22px "Hind Siliguri",Arial';
-    c.fillText('সমাজ কল্যাণ যুব সংগঠনের একজন নিষ্ঠাবান ও সম্মানিত সদস্য।', cx, 464);
-    c.fillStyle='rgba(165,214,167,0.65)';
-    c.font='italic 15px Georgia,serif';
-    c.fillText('is hereby recognized as a dedicated and honored member of Somaj Kalyan Jubo Sangathan.', cx, 490);
+    c.fillText('এতদ্বারা প্রত্যয়ন করা যাচ্ছে যে উপরোক্ত ব্যক্তি', tx, 400);
+    c.fillStyle='rgba(255,215,0,0.9)';
+    c.font='bold 21px "Hind Siliguri",Arial';
+    c.fillText('সমাজ কল্যাণ যুব সংগঠনের একজন নিষ্ঠাবান ও সম্মানিত সদস্য।', tx, 430);
+    c.fillStyle='rgba(160,180,220,0.6)';
+    c.font='italic 14px Georgia,serif';
+    c.fillText('is a dedicated and honored member of Somaj Kalyan Jubo Sangathan.', tx, 456);
 
-    divider(508, 440);
+    divider(475, 620);
 
-    // ─── INFO BOX ─────────────────────────────────────────
-    c.fillStyle='rgba(255,255,255,0.03)';
-    rr(cx-420,524,840,128,12); c.fill();
-    c.strokeStyle='rgba(240,180,41,0.18)'; c.lineWidth=1; c.stroke();
-
-    const cols=[
-      {label:'সদস্য নং / ID',   val:'#'+String(m.n).padStart(3,'0')},
-      {label:'পদবি / Role',     val:m.role},
-      {label:'এলাকা / Area',   val:m.area!=='—'?m.area:'N/A'},
-      {label:'মোবাইল / Phone', val:m.ph||'Confidential'},
+    // ── তথ্য সারি (Info grid)
+    const infos=[
+      {ico:'🔢', k:'সদস্য নম্বর', v:'#'+String(m.n).padStart(3,'0')},
+      {ico:'⭐', k:'পদবি',        v:m.role||'সদস্য'},
+      {ico:'📍', k:'এলাকা',       v:m.area||'—'},
+      {ico:'📞', k:'মোবাইল',      v:m.ph||'Confidential'},
     ];
-    const cw=840/4, sx=cx-420;
-    cols.forEach((col,i)=>{
-      const x=sx+cw*i+cw/2;
-      if(i>0){ c.strokeStyle='rgba(240,180,41,0.12)'; c.lineWidth=1;
-        c.beginPath(); c.moveTo(sx+cw*i,536); c.lineTo(sx+cw*i,640); c.stroke(); }
-      c.fillStyle='rgba(165,214,167,0.6)';
-      c.font='14px "Hind Siliguri",Arial';
-      c.fillText(col.label, x, 562);
-      c.fillStyle='#ffd966';
-      c.font='bold 19px "Hind Siliguri",Arial';
-      c.fillText(col.val, x, 596);
+    infos.forEach((info,i)=>{
+      const iy=510+i*56;
+      const ixL=tx, ixR=tx+340;
+      if(i%1===0){
+        // row bg
+        c.fillStyle=i%2===0?'rgba(255,255,255,0.04)':'rgba(255,215,0,0.03)';
+        rr(ixL-8,iy-22,720,42,8); c.fill();
+      }
+      c.fillStyle='rgba(255,215,0,0.7)'; c.font='18px Arial';
+      c.fillText(info.ico, ixL, iy+2);
+      c.fillStyle='rgba(160,190,220,0.7)'; c.font='14px "Hind Siliguri",Arial';
+      c.fillText(info.k+':', ixL+30, iy+2);
+      c.fillStyle='#ffffff'; c.font='bold 17px "Hind Siliguri",Arial';
+      c.fillText(info.v, ixL+180, iy+2);
     });
 
-    // ─── MOTIVATIONAL QUOTE ───────────────────────────────
-    divider(666, 420);
-    c.fillStyle='rgba(240,180,41,0.75)';
-    c.font='italic bold 19px "Hind Siliguri",Georgia,serif';
-    c.fillText('"যুবশক্তিই পরিবর্তনের হাতিয়ার — সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ"', cx, 700);
-    c.fillStyle='rgba(165,214,167,0.45)';
-    c.font='italic 14px Georgia,serif';
-    c.fillText('"Youth is the weapon of change — Dedicated to service, committed to progress"', cx, 724);
-    divider(740, 420);
+    // যোগদানের তারিখ
+    const joinDate=m.joinDate||'মার্চ ২০২৫';
+    c.fillStyle='rgba(255,215,0,0.5)'; c.font='14px "Hind Siliguri",Arial'; c.textAlign='left';
+    c.fillText('📅 যোগদান: '+joinDate, tx, 744);
 
-    // ─── SIGNATURE ────────────────────────────────────────
+    // ══ QR CODE — নিচে ডানে ══
+    if(qrImg && m.ph){
+      const qX=W-220, qY=H-220, qS=160;
+      // QR border
+      c.fillStyle='rgba(255,255,255,0.95)';
+      rr(qX-8,qY-8,qS+16,qS+16,6); c.fill();
+      c.drawImage(qrImg,qX,qY,qS,qS);
+      c.strokeStyle='rgba(255,215,0,0.8)'; c.lineWidth=2;
+      rr(qX-8,qY-8,qS+16,qS+16,6); c.stroke();
+      c.fillStyle='rgba(255,215,0,0.7)'; c.font='bold 11px Arial'; c.textAlign='center';
+      c.fillText('📱 স্ক্যান করুন', qX+qS/2, qY+qS+22);
+      c.fillStyle='rgba(160,180,220,0.5)'; c.font='10px Arial';
+      c.fillText('Scan to verify', qX+qS/2, qY+qS+36);
+    }
+
+    // ══ SIGNATURE SECTION ══
+    divider(770, 580);
     const sigs=[
-      {x:cx-360, name:'মোঃ শিমুল হোসেন', role:'সভাপতি / President'},
-      {x:cx,     name:'মোঃ জাকির হোসেন', role:'সাধারণ সম্পাদক'},
-      {x:cx+360, name:'মোঃ শুভ আলী',     role:'সাধারণ সম্পাদক'},
+      {x:cx-400, name:'মোঃ শিমুল হোসেন', role:'সভাপতি / President'},
+      {x:cx,     name:'মোঃ জাকির হোসেন', role:'সম্পাদক'},
+      {x:cx+400, name:'মোঃ শুভ আলী',     role:'সম্পাদক'},
     ];
     sigs.forEach(s=>{
-      const sg=c.createLinearGradient(s.x-110,0,s.x+110,0);
-      sg.addColorStop(0,'transparent'); sg.addColorStop(0.5,'rgba(240,180,41,0.5)'); sg.addColorStop(1,'transparent');
+      // সিগনেচার লাইন
+      const sg=c.createLinearGradient(s.x-120,0,s.x+120,0);
+      sg.addColorStop(0,'transparent'); sg.addColorStop(0.5,'rgba(255,215,0,0.6)'); sg.addColorStop(1,'transparent');
       c.strokeStyle=sg; c.lineWidth=1.5;
-      c.beginPath(); c.moveTo(s.x-110,806); c.lineTo(s.x+110,806); c.stroke();
-      c.fillStyle='#ffd966'; c.font='bold 17px "Hind Siliguri",Arial';
-      c.fillText(s.name, s.x, 830);
-      c.fillStyle='rgba(165,214,167,0.6)'; c.font='13px "Hind Siliguri",Arial';
-      c.fillText(s.role, s.x, 850);
+      c.beginPath(); c.moveTo(s.x-120,808); c.lineTo(s.x+120,808); c.stroke();
+      c.fillStyle='#ffd700'; c.font='bold 16px "Hind Siliguri",Arial'; c.textAlign='center';
+      c.fillText(s.name, s.x, 832);
+      c.fillStyle='rgba(160,190,220,0.65)'; c.font='13px "Hind Siliguri",Arial';
+      c.fillText(s.role, s.x, 852);
     });
 
-    // তারিখ
+    // ══ তারিখ ══
     const today=new Date();
     const bnM=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-    c.fillStyle='rgba(255,255,255,0.35)';
-    c.font='15px "Hind Siliguri",Arial';
-    c.fillText('তারিখ: '+today.getDate()+' '+bnM[today.getMonth()]+' '+today.getFullYear()+
-      '  |  Date: '+today.toLocaleDateString('en-GB'), cx, 900);
+    c.fillStyle='rgba(255,255,255,0.3)'; c.font='14px "Hind Siliguri",Arial'; c.textAlign='center';
+    c.fillText('ইস্যু তারিখ: '+today.getDate()+' '+bnM[today.getMonth()]+' '+today.getFullYear()+'  ·  Issue Date: '+today.toLocaleDateString('en-GB'), cx, 888);
 
-    // ─── FOOTER ───────────────────────────────────────────
-    c.fillStyle='rgba(240,180,41,0.38)';
-    c.font='14px Arial';
-    c.fillText('সমাজ কল্যাণ যুব সংগঠন  ·  চরপাড়া, বাংলাদেশ  ·  ০১৮১৭-৯৮৪৫২৪', cx, 940);
-    c.fillStyle='rgba(255,255,255,0.2)';
-    c.font='12px Arial';
-    c.fillText('This certificate is issued and authorized by Somaj Kalyan Jubo Sangathan', cx, 962);
+    // ══ MOTIVATIONAL QUOTE ══
+    divider(904, 460);
+    c.fillStyle='rgba(255,215,0,0.7)';
+    c.font='italic bold 18px "Hind Siliguri",Georgia,serif'; c.textAlign='center';
+    c.fillText('"যুবশক্তিই পরিবর্তনের হাতিয়ার — সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ"', cx, 938);
+    c.fillStyle='rgba(160,180,220,0.45)'; c.font='italic 13px Georgia,serif';
+    c.fillText('"Youth is the weapon of change — Dedicated to service, committed to progress"', cx, 960);
 
-    // watermark
-    c.save();
-    c.globalAlpha=0.035; c.fillStyle='#ffd966';
-    c.font='bold 120px "Hind Siliguri",Arial';
-    c.translate(cx,H/2+40); c.rotate(-0.28);
-    c.fillText('সমাজ কল্যাণ', 0, 0);
-    c.restore();
+    // ══ FOOTER ══
+    const footBg=c.createLinearGradient(0,H-52,0,H-22);
+    footBg.addColorStop(0,'rgba(255,215,0,0)'); footBg.addColorStop(1,'rgba(255,215,0,0.1)');
+    c.fillStyle=footBg; c.fillRect(60,H-52,W-120,30);
+    c.fillStyle='rgba(255,215,0,0.45)'; c.font='13px Arial'; c.textAlign='center';
+    c.fillText('সমাজ কল্যাণ যুব সংগঠন  ·  রামকৃষ্ণপুর, দৌলতপুর, কুষ্টিয়া  ·  ০১৮১৭-৯৮৪৫২৪', cx, H-28);
 
-    // নিচের বাম কোণে ছোট developer credit
-    c.save();
-    c.globalAlpha=0.42; c.fillStyle='#ffd700';
-    c.font='12px Arial'; c.textAlign='left';
-    c.fillText('💻 Dev: Saidur Rahman', 55, H-38);
-    c.restore();
+    // ══ WATERMARK ══
+    c.save(); c.globalAlpha=0.03; c.fillStyle='#ffffff';
+    c.font='bold 180px "Hind Siliguri",Arial'; c.textAlign='center'; c.textBaseline='middle';
+    c.translate(cx,H/2); c.rotate(-0.22); c.fillText('সমাজ কল্যাণ',0,0); c.restore();
 
-    // ─── PDF DOWNLOAD ────────────────────────────────────
+    // ══ DEVELOPER CREDIT ══
+    c.save(); c.globalAlpha=0.55; c.fillStyle='#ffd700';
+    c.font='bold 11px Arial'; c.textAlign='right'; c.textBaseline='alphabetic';
+    c.fillText('💻 Developer: Saidur Rahman', W-58, H-42); c.restore();
+
+    // ── PDF DOWNLOAD
     setTimeout(()=>{
       try{
         const {jsPDF}=window.jspdf;
         const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-        pdf.addImage(canvas.toDataURL('image/jpeg',0.95),'JPEG',0,0,297,210);
+        pdf.addImage(canvas.toDataURL('image/jpeg',0.96),'JPEG',0,0,297,210);
         pdf.save(`Certificate_${m.name.replace(/\s+/g,'_')}_#${m.n}.pdf`);
       }catch(e){
         const a=document.createElement('a');
@@ -1572,14 +1635,24 @@ function downloadCert(n){
     },150);
   }// end drawCertificate
 
-  // ── ফটো লোড করার চেষ্টা করো, না পারলে null দিয়ে draw করো
-  const img=new Image();
-  img.crossOrigin='anonymous';
-  img.onload=()=>drawCertificate(img);
-  img.onerror=()=>drawCertificate(null);
-  img.src=m.photo;
-  // যদি ছবি ইতিমধ্যে cache এ থাকে
-  if(img.complete && img.naturalWidth>0) drawCertificate(img);
+  // ── ফটো + QR একসাথে লোড
+  const photoImg_=new Image(); photoImg_.crossOrigin='anonymous';
+  let photoLoaded=false, qrLoaded=false;
+  let _photo=null, _qr=null;
+  function tryDraw(){ if(photoLoaded&&qrLoaded) drawCertificate(_photo,_qr); }
+  photoImg_.onload=()=>{_photo=photoImg_;photoLoaded=true;tryDraw();};
+  photoImg_.onerror=()=>{photoLoaded=true;tryDraw();};
+  photoImg_.src=m.photo||'';
+  if(!m.photo){photoLoaded=true;}
+  if(m.ph){
+    const phone=(m.ph||'').replace(/-/g,'');
+    const qUrl=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('tel:+880'+phone.replace(/^0/,''))}&bgcolor=ffffff&color=1a3a6b&qzone=1`;
+    const qImg=new Image(); qImg.crossOrigin='anonymous';
+    qImg.onload=()=>{_qr=qImg;qrLoaded=true;tryDraw();};
+    qImg.onerror=()=>{qrLoaded=true;tryDraw();};
+    qImg.src=qUrl;
+  } else { qrLoaded=true; }
+  if(photoImg_.complete&&photoImg_.naturalWidth>0){_photo=photoImg_;photoLoaded=true;tryDraw();}
 }
 
 function closeModal(e){
@@ -2183,178 +2256,227 @@ window.downloadMyCert = function() {
   }
 };
 
-// ── SHINY ID CARD GENERATOR
+// ── GOLDEN + WHITE CLASSIC ID CARD GENERATOR
 function generateIDCard(m) {
-  const W = 856, H = 540; // Standard ID card 85.6mm x 53.98mm at 96dpi scaled
+  // ID card size: 85.6mm x 53.98mm → @10px/mm = 856x540
+  const W = 856, H = 540;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const c = canvas.getContext('2d');
 
-  // Background - holographic-style gradient
-  const bg = c.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0, '#061a06');
-  bg.addColorStop(0.3, '#0d2e0d');
-  bg.addColorStop(0.6, '#112d11');
-  bg.addColorStop(1, '#061a06');
-  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  const drawCard = (photoImg, qrImg) => {
+    // ══ BACKGROUND — সাদা + হালকা গোল্ড টিন্ট ══
+    c.fillStyle = '#fffef8';
+    c.fillRect(0, 0, W, H);
 
-  // Holographic shimmer effect
-  for (let i = 0; i < 6; i++) {
-    const x = Math.random() * W, y = Math.random() * H;
-    const grad = c.createRadialGradient(x, y, 0, x, y, 200);
-    grad.addColorStop(0, `rgba(240,180,41,0.06)`);
-    grad.addColorStop(1, 'transparent');
-    c.fillStyle = grad; c.fillRect(0, 0, W, H);
-  }
-
-  // Diagonal pattern
-  c.strokeStyle = 'rgba(240,180,41,0.04)'; c.lineWidth = 1;
-  for (let i = -H; i < W + H; i += 30) {
-    c.beginPath(); c.moveTo(i, 0); c.lineTo(i + H, H); c.stroke();
-  }
-
-  // Top accent bar - gradient
-  const topBar = c.createLinearGradient(0, 0, W, 0);
-  topBar.addColorStop(0, '#b8860b'); topBar.addColorStop(0.5, '#ffd966'); topBar.addColorStop(1, '#b8860b');
-  c.fillStyle = topBar; c.fillRect(0, 0, W, 8);
-
-  // Bottom accent bar
-  c.fillStyle = topBar; c.fillRect(0, H - 8, W, 8);
-
-  // Left panel (photo area) - darker
-  const leftBg = c.createLinearGradient(0, 0, 220, H);
-  leftBg.addColorStop(0, 'rgba(240,180,41,0.12)');
-  leftBg.addColorStop(1, 'rgba(6,26,6,0.5)');
-  c.fillStyle = leftBg;
-  c.fillRect(0, 8, 220, H - 16);
-
-  // Vertical separator
-  c.strokeStyle = 'rgba(240,180,41,0.5)'; c.lineWidth = 2;
-  c.beginPath(); c.moveTo(220, 20); c.lineTo(220, H - 20); c.stroke();
-
-  // Org logo area
-  c.fillStyle = 'rgba(240,180,41,0.1)';
-  c.beginPath(); c.arc(110, 95, 58, 0, Math.PI * 2); c.fill();
-  c.strokeStyle = 'rgba(240,180,41,0.6)'; c.lineWidth = 2.5;
-  c.beginPath(); c.arc(110, 95, 58, 0, Math.PI * 2); c.stroke();
-
-  // Photo placeholder / actual photo
-  const drawCard = (photoImg) => {
-    // Photo circle
-    c.save();
-    c.beginPath(); c.arc(110, 95, 54, 0, Math.PI * 2); c.clip();
-    if (photoImg) c.drawImage(photoImg, 56, 41, 108, 108);
-    else {
-      c.fillStyle = '#1b6b1b';
-      c.fillRect(56, 41, 108, 108);
-      c.fillStyle = '#ffd966';
-      c.font = 'bold 48px "Hind Siliguri",Arial';
-      c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillText(m.name?.charAt(0) || '?', 110, 97);
+    // সূক্ষ্ম ডায়াগোনাল ওয়াটারমার্ক প্যাটার্ন
+    c.strokeStyle = 'rgba(200,160,0,0.06)'; c.lineWidth = 1;
+    for(let i = -H; i < W+H; i += 28){
+      c.beginPath(); c.moveTo(i,0); c.lineTo(i+H,H); c.stroke();
     }
-    c.restore();
 
-    // Photo border gold ring
-    c.strokeStyle = '#ffd966'; c.lineWidth = 3;
-    c.beginPath(); c.arc(110, 95, 54, 0, Math.PI * 2); c.stroke();
+    // ══ গোল্ডেন গ্র্যাডিয়েন্ট TOP BAR (হেডার) ══
+    const topGrad = c.createLinearGradient(0,0,W,0);
+    topGrad.addColorStop(0,'#b8860b');
+    topGrad.addColorStop(0.3,'#daa520');
+    topGrad.addColorStop(0.5,'#ffd700');
+    topGrad.addColorStop(0.7,'#daa520');
+    topGrad.addColorStop(1,'#b8860b');
+    c.fillStyle = topGrad; c.fillRect(0, 0, W, 72);
 
-    // Member ID below photo
-    c.fillStyle = 'rgba(255,215,102,0.9)';
-    c.font = 'bold 13px Arial'; c.textAlign = 'center';
-    c.fillText('ID: ' + (m.memberId || '2025-???'), 110, 170);
+    // Top bar এ সংগঠনের নাম
+    c.fillStyle = '#fff8dc'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = 'bold 20px "Hind Siliguri",Arial';
+    c.fillText('সমাজ কল্যাণ যুব সংগঠন', W/2, 28);
+    c.fillStyle = 'rgba(255,248,220,0.75)';
+    c.font = 'italic 11px Georgia,serif';
+    c.fillText('Somaj Kalyan Jubo Sangathan  ·  Est. 2025', W/2, 52);
 
-    // Org name on left panel
-    c.fillStyle = '#ffd966'; c.font = 'bold 10px "Hind Siliguri",Arial';
-    c.fillText('সমাজ কল্যাণ', 110, 195);
-    c.fillStyle = 'rgba(165,214,167,0.7)';
-    c.font = '9px "Hind Siliguri",Arial';
-    c.fillText('যুব সংগঠন', 110, 210);
+    // ══ OUTER BORDER — ডবল গোল্ড ══
+    const borderGrad = c.createLinearGradient(0,0,W,H);
+    borderGrad.addColorStop(0,'#b8860b'); borderGrad.addColorStop(0.5,'#ffd700'); borderGrad.addColorStop(1,'#b8860b');
+    c.strokeStyle = borderGrad; c.lineWidth = 5;
+    c.strokeRect(2.5, 2.5, W-5, H-5);
+    c.strokeStyle = 'rgba(184,134,11,0.35)'; c.lineWidth = 1.5;
+    c.strokeRect(10, 10, W-20, H-20);
 
-    // Right side content
-    c.textAlign = 'left';
+    // ══ BOTTOM GOLD FOOTER BAR ══
+    const botGrad = c.createLinearGradient(0,0,W,0);
+    botGrad.addColorStop(0,'#b8860b'); botGrad.addColorStop(0.5,'#ffd700'); botGrad.addColorStop(1,'#b8860b');
+    c.fillStyle = botGrad; c.fillRect(0, H-38, W, 38);
+    c.fillStyle = 'rgba(30,20,0,0.75)'; c.textAlign='center'; c.textBaseline='middle';
+    c.font = 'bold 10px Arial';
+    c.fillText('রামকৃষ্ণপুর, দৌলতপুর, কুষ্টিয়া  ·  ০১৮১৭-৯৮৪৫২৪  ·  Issued: '+new Date().getFullYear(), W/2, H-19);
 
-    // Org name at top right
-    c.fillStyle = '#ffd966'; c.font = 'bold 18px "Hind Siliguri",Arial';
-    c.fillText('সমাজ কল্যাণ যুব সংগঠন', 240, 55);
-    c.fillStyle = 'rgba(165,214,167,0.6)'; c.font = 'italic 12px Georgia,serif';
-    c.fillText('Somaj Kalyan Jubo Sangathan', 240, 74);
+    // ══ LEFT SECTION — ফটো ══
+    // ফটো এর পেছনে সোনালি গোল বৃত্ত
+    const pX=118, pY=280, pR=85;
+    const pGlow = c.createRadialGradient(pX,pY,pR-15,pX,pY,pR+20);
+    pGlow.addColorStop(0,'rgba(218,165,32,0.25)'); pGlow.addColorStop(1,'rgba(218,165,32,0)');
+    c.fillStyle=pGlow; c.beginPath(); c.arc(pX,pY,pR+20,0,Math.PI*2); c.fill();
 
-    // Divider
-    const d = c.createLinearGradient(240, 0, W - 20, 0);
-    d.addColorStop(0, 'rgba(240,180,41,0.7)'); d.addColorStop(1, 'transparent');
-    c.strokeStyle = d; c.lineWidth = 1;
-    c.beginPath(); c.moveTo(240, 85); c.lineTo(W - 20, 85); c.stroke();
+    // ফটো ক্লিপ গোলাকার
+    c.save(); c.beginPath(); c.arc(pX,pY,pR,0,Math.PI*2); c.clip();
+    if(photoImg){
+      c.drawImage(photoImg, pX-pR, pY-pR, pR*2, pR*2);
+    } else {
+      // ফটো না থাকলে monogram
+      const avGrad = c.createRadialGradient(pX,pY,5,pX,pY,pR);
+      avGrad.addColorStop(0,'#fff8dc'); avGrad.addColorStop(1,'#f5e6a3');
+      c.fillStyle = avGrad; c.fillRect(pX-pR,pY-pR,pR*2,pR*2);
+      c.fillStyle = '#8b6914'; c.font='bold 60px "Hind Siliguri",Arial';
+      c.textAlign='center'; c.textBaseline='middle';
+      c.fillText(ini(m.name||m.n), pX, pY+3);
+    }
+    c.restore(); c.textBaseline='alphabetic';
 
-    // MEMBER CARD title
-    c.fillStyle = 'rgba(255,255,255,0.15)';
-    c.fillRect(240, 94, 180, 28);
-    c.fillStyle = '#ffd966'; c.font = 'bold 15px "Hind Siliguri",Arial';
-    c.textAlign = 'center';
-    c.fillText('সদস্যপদ কার্ড / MEMBER CARD', 240 + 90, 113);
-    c.textAlign = 'left';
+    // ফটো বর্ডার — গোল্ড রিং
+    c.strokeStyle=borderGrad; c.lineWidth=3.5;
+    c.beginPath(); c.arc(pX,pY,pR+2,0,Math.PI*2); c.stroke();
+    c.strokeStyle='rgba(184,134,11,0.3)'; c.lineWidth=1.5;
+    c.beginPath(); c.arc(pX,pY,pR+9,0,Math.PI*2); c.stroke();
 
-    // Member name - large
-    c.fillStyle = '#ffffff'; c.font = 'bold 24px "Hind Siliguri",Arial';
-    c.fillText(m.name || '-', 240, 158);
+    // সদস্য নম্বর ব্যাজ (ফটোর নিচে)
+    const idNum = m.n ? String(m.n).padStart(3,'0') : '???';
+    const idText = '#'+idNum;
+    c.fillStyle='#b8860b'; c.textAlign='center';
+    c.font='bold 14px Arial';
+    c.fillText(idText, pX, pY+pR+22);
+    c.fillStyle='rgba(100,70,0,0.5)'; c.font='10px "Hind Siliguri",Arial';
+    c.fillText('সদস্য নং', pX, pY+pR+36);
 
-    // Info rows
-    const rows = [
-      ['পদবি', m.position || 'সদস্য'],
-      ['এলাকা', m.area || '-'],
-      ['ফোন', m.phone || '-'],
-      ['রক্ত', m.bloodGroup || '-'],
+    // ══ সিলের মতো ছোট সংগঠন লোগো — ফটোর উপরে ══
+    const sx=pX, sy=112, sr=28;
+    const sGrad=c.createRadialGradient(sx,sy,0,sx,sy,sr);
+    sGrad.addColorStop(0,'#fff8dc'); sGrad.addColorStop(1,'#f5e0a0');
+    c.fillStyle=sGrad; c.beginPath(); c.arc(sx,sy,sr,0,Math.PI*2); c.fill();
+    c.strokeStyle=borderGrad; c.lineWidth=2;
+    c.beginPath(); c.arc(sx,sy,sr,0,Math.PI*2); c.stroke();
+    // দাঁতযুক্ত রিং
+    for(let a=0;a<Math.PI*2;a+=Math.PI/12){
+      c.fillStyle='rgba(184,134,11,0.6)';
+      c.save(); c.translate(sx+Math.cos(a)*(sr+7),sy+Math.sin(a)*(sr+7));
+      c.rotate(a); c.fillRect(-1.5,-3,3,6); c.restore();
+    }
+    c.fillStyle='#8b6914'; c.font='bold 9px "Hind Siliguri",Arial';
+    c.textAlign='center'; c.textBaseline='middle';
+    c.fillText('স.ক.যু.স', sx, sy+1); c.textBaseline='alphabetic';
+
+    // ══ VERTICAL DIVIDER ══
+    const dvGrad=c.createLinearGradient(0,72,0,H-38);
+    dvGrad.addColorStop(0,'rgba(184,134,11,0.6)'); dvGrad.addColorStop(0.5,'rgba(218,165,32,0.9)'); dvGrad.addColorStop(1,'rgba(184,134,11,0.6)');
+    c.strokeStyle=dvGrad; c.lineWidth=1.5;
+    c.beginPath(); c.moveTo(230,80); c.lineTo(230,H-46); c.stroke();
+
+    // ══ RIGHT SECTION — তথ্য ══
+    const rx=252;
+    c.textAlign='left'; c.textBaseline='alphabetic';
+
+    // MEMBER CARD ট্যাগ
+    const tagGrad=c.createLinearGradient(rx,88,rx+200,88);
+    tagGrad.addColorStop(0,'#daa520'); tagGrad.addColorStop(1,'#b8860b');
+    c.fillStyle=tagGrad;
+    // rounded rect tag
+    c.beginPath(); c.roundRect(rx,88,210,26,5); c.fill();
+    c.fillStyle='#fffef0'; c.font='bold 12px "Hind Siliguri",Arial';
+    c.textAlign='center'; c.textBaseline='middle';
+    c.fillText('সদস্যপদ কার্ড / MEMBER CARD', rx+105, 101);
+    c.textAlign='left'; c.textBaseline='alphabetic';
+
+    // সদস্যের নাম (বড়)
+    c.fillStyle='#1a1200';
+    c.font='bold 26px "Hind Siliguri",Arial';
+    // নাম একটু বড় হলে ছোট করো
+    const nameW=c.measureText(m.name||'-').width;
+    if(nameW>530) c.font='bold 21px "Hind Siliguri",Arial';
+    c.fillText(m.name||'-', rx, 148);
+    // নামের নিচে গোল্ড আন্ডারলাইন
+    c.strokeStyle='rgba(184,134,11,0.5)'; c.lineWidth=1.5;
+    c.beginPath(); c.moveTo(rx,155); c.lineTo(rx+Math.min(nameW,540),155); c.stroke();
+
+    // তথ্য সারি — আইকন + লেবেল + মান
+    const rows=[
+      {ico:'⭐', k:'পদবি',      v: m.position||m.role||'সদস্য'},
+      {ico:'📍', k:'এলাকা',    v: m.area||'-'},
+      {ico:'📞', k:'মোবাইল',   v: m.phone||m.ph||'-'},
+      {ico:'🩸', k:'রক্ত',     v: m.bloodGroup||'—'},
     ];
-    rows.forEach((row, i) => {
-      const y = 185 + i * 42;
-      c.fillStyle = 'rgba(255,255,255,0.04)';
-      c.fillRect(240, y - 16, W - 260, 36);
-      c.fillStyle = 'rgba(165,214,167,0.55)';
-      c.font = '11px "Hind Siliguri",Arial';
-      c.fillText(row[0], 248, y);
-      c.fillStyle = '#ffd966';
-      c.font = 'bold 14px "Hind Siliguri",Arial';
-      c.fillText(row[1], 248, y + 17);
+    rows.forEach((row,i)=>{
+      const ry=182+i*56;
+      // alternating subtle bg
+      if(i%2===0){ c.fillStyle='rgba(218,165,32,0.06)'; c.fillRect(rx-4,ry-16,550,44); }
+      c.fillStyle='rgba(100,70,0,0.5)'; c.font='11px "Hind Siliguri",Arial';
+      c.fillText(row.ico+' '+row.k, rx, ry);
+      c.fillStyle='#2a1800'; c.font='bold 15px "Hind Siliguri",Arial';
+      c.fillText(row.v, rx+14, ry+18);
     });
 
-    // Signature area
-    c.strokeStyle = 'rgba(240,180,41,0.35)'; c.lineWidth = 1;
-    c.beginPath(); c.moveTo(240, 360); c.lineTo(460, 360); c.stroke();
-    c.fillStyle = 'rgba(165,214,167,0.5)'; c.font = '11px "Hind Siliguri",Arial';
-    c.fillText('সভাপতির স্বাক্ষর', 240, 374);
+    // ══ স্বাক্ষর লাইন ══
+    const sigX=rx, sigY=430;
+    c.strokeStyle='rgba(184,134,11,0.6)'; c.lineWidth=1.5;
+    c.setLineDash([4,3]);
+    c.beginPath(); c.moveTo(sigX,sigY); c.lineTo(sigX+200,sigY); c.stroke();
+    c.setLineDash([]);
+    c.fillStyle='rgba(100,70,0,0.55)'; c.font='10px "Hind Siliguri",Arial';
+    c.fillText('সভাপতির স্বাক্ষর', sigX, sigY+14);
+    c.fillStyle='rgba(100,70,0,0.4)'; c.font='9px Arial';
+    c.fillText('মোঃ শিমুল হোসেন', sigX, sigY+26);
 
-    // Developer watermark
-    c.fillStyle = 'rgba(255,215,0,0.18)'; c.font = 'bold 9px Arial';
-    c.textAlign = 'right';
-    c.fillText('Dev: Saidur Rahman', W - 16, H - 16);
+    // ══ QR CODE — নিচে ডানে ══
+    const qX=W-142, qY=H-176, qS=120;
+    if(qrImg && (m.phone||m.ph)){
+      c.fillStyle='#ffffff';
+      c.fillRect(qX-4,qY-4,qS+8,qS+8);
+      c.strokeStyle='rgba(184,134,11,0.7)'; c.lineWidth=1.5;
+      c.strokeRect(qX-4,qY-4,qS+8,qS+8);
+      c.drawImage(qrImg,qX,qY,qS,qS);
+      c.fillStyle='rgba(100,70,0,0.6)'; c.font='bold 9px Arial'; c.textAlign='center';
+      c.fillText('📱 Verify', qX+qS/2, qY+qS+14);
+    }
 
-    // Bottom strip
-    c.fillStyle = 'rgba(240,180,41,0.1)'; c.fillRect(0, H - 36, W, 28);
-    c.fillStyle = 'rgba(255,255,255,0.4)'; c.font = '10px Arial';
-    c.textAlign = 'center';
-    c.fillText('চরপাড়া, দৌলতপুর, কুষ্টিয়া  ·  ০১৮১৭-৯৮৪৫২৪  ·  Issued: ' + new Date().getFullYear(), W / 2, H - 14);
+    // ══ DEVELOPER CREDIT ══
+    c.fillStyle='rgba(184,134,11,0.4)'; c.font='bold 8px Arial';
+    c.textAlign='right'; c.textBaseline='alphabetic';
+    c.fillText('💻 Dev: Saidur Rahman', W-14, H-42);
 
-    // Download
-    setTimeout(() => {
-      try {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 53.98] });
-        pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 85.6, 53.98);
-        pdf.save(`IDCard_${m.name?.replace(/\s+/g,'_')}.pdf`);
-      } catch (e) {
-        const a = document.createElement('a');
-        a.download = `IDCard_${m.name?.replace(/\s+/g,'_')}.png`;
-        a.href = canvas.toDataURL('image/png'); a.click();
+    // ══ PDF DOWNLOAD ══
+    setTimeout(()=>{
+      try{
+        const {jsPDF}=window.jspdf;
+        const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:[85.6,53.98]});
+        pdf.addImage(canvas.toDataURL('image/jpeg',0.96),'JPEG',0,0,85.6,53.98);
+        pdf.save(`IDCard_${(m.name||'member').replace(/\s+/g,'_')}.pdf`);
+      }catch(e){
+        const a=document.createElement('a');
+        a.download=`IDCard_${(m.name||'member').replace(/\s+/g,'_')}.png`;
+        a.href=canvas.toDataURL('image/png'); a.click();
       }
-    }, 100);
-  };
+    },100);
+  };// end drawCard
 
-  // Load photo
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => drawCard(img);
-  img.onerror = () => drawCard(null);
-  img.src = m.photoUrl || '';
-  if (!m.photoUrl) drawCard(null);
+  // ── ফটো + QR একসাথে লোড
+  let photoLoaded=false, qrLoaded=false, _photo=null, _qr=null;
+  function tryDraw(){ if(photoLoaded&&qrLoaded) drawCard(_photo,_qr); }
+
+  const photoSrc = m.photoUrl||m.photo||'';
+  if(photoSrc){
+    const img=new Image(); img.crossOrigin='anonymous';
+    img.onload=()=>{_photo=img;photoLoaded=true;tryDraw();};
+    img.onerror=()=>{photoLoaded=true;tryDraw();};
+    img.src=photoSrc;
+    if(img.complete&&img.naturalWidth>0){_photo=img;photoLoaded=true;}
+  } else { photoLoaded=true; }
+
+  const phone=(m.phone||m.ph||'').replace(/-/g,'');
+  if(phone){
+    const qUrl=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('tel:+880'+phone.replace(/^0/,''))}&bgcolor=ffffff&color=8b6914&qzone=1`;
+    const qImg=new Image(); qImg.crossOrigin='anonymous';
+    qImg.onload=()=>{_qr=qImg;qrLoaded=true;tryDraw();};
+    qImg.onerror=()=>{qrLoaded=true;tryDraw();};
+    qImg.src=qUrl;
+  } else { qrLoaded=true; }
+
+  tryDraw();
 }
 
 window._generateIDCard = generateIDCard;
