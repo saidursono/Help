@@ -255,6 +255,69 @@ tr:hover td{background:rgba(255,255,255,.03);}
     <!-- ══ ALL MEMBERS ══ -->
     <div id="s-members" style="display:none">
       <div class="flash flash-ok" id="mFlash"></div>
+      <div class="page-tabs">
+        <button class="ptab active" onclick="switchMemberTab('list',this)">👥 সদস্য তালিকা</button>
+        <button class="ptab" onclick="switchMemberTab('add',this)">➕ নতুন সদস্য যোগ</button>
+      </div>
+
+      <!-- Member Add Panel -->
+      <div id="memberAddPanel" style="display:none">
+        <div class="form-panel">
+          <h4>➕ নতুন সদস্য যোগ করুন (Admin কর্তৃক)</h4>
+          <div class="flash" id="addMemberFlash"></div>
+          <div class="grid2">
+            <div class="fg"><label>পুরো নাম *</label><input type="text" id="am-name" placeholder="মোঃ ..."></div>
+            <div class="fg"><label>মোবাইল নম্বর *</label><input type="tel" id="am-phone" placeholder="01XXXXXXXXX"></div>
+            <div class="fg"><label>ইমেইল *</label><input type="email" id="am-email" placeholder="email@gmail.com"></div>
+            <div class="fg"><label>পাসওয়ার্ড *</label><input type="password" id="am-pass" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+            <div class="fg"><label>এলাকা *</label>
+              <select id="am-area">
+                <option value="">-- এলাকা বেছে নিন --</option>
+                <option>কান্দিরপাড়া</option><option>ইনসাফ নগর</option>
+                <option>চাইডুবা</option><option>হলদার পাড়া</option>
+                <option>চরপাড়া</option><option>মোহাম্মদপুর</option>
+                <option>নিচপাড়া</option><option>সোনাতলা</option>
+              </select>
+            </div>
+            <div class="fg"><label>রক্তের গ্রুপ</label>
+              <select id="am-blood">
+                <option value="">-- রক্তের গ্রুপ --</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+            </div>
+            <div class="fg"><label>লিঙ্গ</label>
+              <select id="am-gender">
+                <option value="পুরুষ">পুরুষ</option>
+                <option value="মহিলা">মহিলা</option>
+              </select>
+            </div>
+            <div class="fg"><label>জন্ম তারিখ</label><input type="date" id="am-dob"></div>
+            <div class="fg"><label>পদবি</label>
+              <select id="am-position">
+                <option value="সদস্য">সদস্য</option>
+                <option value="সভাপতি">সভাপতি</option>
+                <option value="সাধারণ সম্পাদক">সাধারণ সম্পাদক</option>
+                <option value="সহ-সভাপতি">সহ-সভাপতি</option>
+                <option value="কোষাধ্যক্ষ">কোষাধ্যক্ষ</option>
+                <option value="কার্যনির্বাহী সদস্য">কার্যনির্বাহী সদস্য</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg"><label>ঠিকানা</label><input type="text" id="am-address" placeholder="বিস্তারিত ঠিকানা"></div>
+          <div class="fg"><label>ছবি (ঐচ্ছিক)</label>
+            <input type="file" id="am-photo" accept="image/*" onchange="previewAddMemberPhoto(this)">
+            <div id="amPhotoPreview" class="img-preview-wrap"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+            <button class="btn btn-g btn-lg" onclick="addMemberByAdmin()">✅ সদস্য যোগ করুন</button>
+            <button class="btn btn-b btn-lg" onclick="switchMemberTab('list',document.querySelector('.ptab'))">← ফিরে যান</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member List Panel -->
+      <div id="memberListPanel">
       <div class="table-wrap">
         <div class="table-head">
           <h3>👥 সকল সদস্য</h3>
@@ -269,6 +332,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
         </table>
         </div>
       </div>
+      </div><!-- /memberListPanel -->
     </div>
 
     <!-- ══ ADMIN MANAGEMENT ══ -->
@@ -391,6 +455,53 @@ tr:hover td{background:rgba(255,255,255,.03);}
   </div><!-- /content -->
 </div><!-- /main -->
 
+<!-- Profile Edit Modal (Super Admin only) -->
+<div id="profileEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:600;padding:20px;overflow-y:auto;display:none;align-items:center;justify-content:center;">
+  <div style="background:rgba(13,46,13,.97);border:1px solid var(--b2);border-radius:20px;max-width:560px;width:100%;padding:28px;position:relative;margin:auto;">
+    <button onclick="document.getElementById('profileEditModal').style.display='none'" style="position:absolute;top:14px;right:14px;background:var(--glass2);border:1px solid var(--b1);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;">✕</button>
+    <h3 style="color:var(--sgold);font-size:1.1rem;font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)">✏️ সদস্য প্রোফাইল সম্পাদনা</h3>
+    <div class="flash" id="editProfileFlash"></div>
+    <input type="hidden" id="ep-uid">
+    <div class="grid2">
+      <div class="fg"><label>পুরো নাম</label><input type="text" id="ep-name"></div>
+      <div class="fg"><label>মোবাইল</label><input type="tel" id="ep-phone"></div>
+      <div class="fg"><label>এলাকা</label>
+        <select id="ep-area">
+          <option value="">-- এলাকা --</option>
+          <option>কান্দিরপাড়া</option><option>ইনসাফ নগর</option>
+          <option>চাইডুবা</option><option>হলদার পাড়া</option>
+          <option>চরপাড়া</option><option>মোহাম্মদপুর</option>
+          <option>নিচপাড়া</option><option>সোনাতলা</option>
+        </select>
+      </div>
+      <div class="fg"><label>রক্তের গ্রুপ</label>
+        <select id="ep-blood">
+          <option value="">--</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+        </select>
+      </div>
+      <div class="fg"><label>পদবি</label>
+        <select id="ep-position">
+          <option value="সদস্য">সদস্য</option>
+          <option value="সভাপতি">সভাপতি</option>
+          <option value="সাধারণ সম্পাদক">সাধারণ সম্পাদক</option>
+          <option value="সহ-সভাপতি">সহ-সভাপতি</option>
+          <option value="কোষাধ্যক্ষ">কোষাধ্যক্ষ</option>
+          <option value="কার্যনির্বাহী সদস্য">কার্যনির্বাহী সদস্য</option>
+        </select>
+      </div>
+      <div class="fg"><label>জন্ম তারিখ</label><input type="date" id="ep-dob"></div>
+    </div>
+    <div class="fg"><label>ঠিকানা</label><input type="text" id="ep-address"></div>
+    <div class="fg"><label>Member ID</label><input type="text" id="ep-memberid" placeholder="যেমন: 2025-001"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+      <button class="btn btn-g btn-lg" onclick="saveProfileEdit()">💾 পরিবর্তন সংরক্ষণ</button>
+      <button class="btn btn-b btn-lg" onclick="document.getElementById('profileEditModal').style.display='none'">বাতিল</button>
+    </div>
+  </div>
+</div>
+
 <!-- Member Detail Modal -->
 <div id="memberDetailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;padding:20px;overflow-y:auto;display:flex;align-items:center;justify-content:center;">
   <div style="background:rgba(13,46,13,.97);border:1px solid var(--b2);border-radius:20px;max-width:500px;width:100%;padding:28px;position:relative;">
@@ -441,7 +552,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 function initAdmin(data) {
-  document.getElementById('sidebarName').textContent = data.name || user.email;
+  document.getElementById('sidebarName').textContent = data.name || currentUser?.email || 'Admin';
   document.getElementById('sidebarRole').textContent = data.role === 'superadmin' ? 'Super Admin' : 'Admin';
   document.getElementById('adminBadge').textContent = data.role === 'superadmin' ? '⭐ Super Admin' : '🔑 Admin';
   if (data.photoUrl) {
@@ -454,8 +565,10 @@ function initAdmin(data) {
 
   loadDashboard();
   loadPending();
-  loadMembers();
-  if (data.role === 'superadmin') loadAdmins();
+  // loadMembers আগে call করো যাতে adminSelectMember dropdown populate হয়
+  loadMembers().then(() => {
+    if (data.role === 'superadmin') loadAdmins();
+  });
   loadNotices();
   loadGallery();
   loadStats();
@@ -563,6 +676,7 @@ function renderMembers(list) {
     <td><span class="badge ${m.role==='superadmin'?'b-superadmin':m.role==='admin'?'b-admin':'b-approved'}">${m.role==='superadmin'?'Super Admin':m.role==='admin'?'Admin':'সদস্য'}</span></td>
     <td style="display:flex;gap:6px;flex-wrap:wrap;">
       <button class="btn btn-b" onclick="viewMember('${m.uid}')">👁</button>
+      <button class="btn btn-g" onclick="openProfileEdit('${m.uid}')">✏️</button>
       <button class="btn btn-r" onclick="removeMember('${m.uid}')">🗑</button>
     </td>
   </tr>`).join('');
@@ -833,6 +947,136 @@ window.saveStats = async function() {
 
 // ── Logout
 window.doLogout = function() { signOut(auth).then(()=>window.location.href='login.html'); };
+
+// ── Member tab switcher
+window.switchMemberTab = function(tab, btn) {
+  document.getElementById('memberListPanel').style.display = tab==='list' ? 'block' : 'none';
+  document.getElementById('memberAddPanel').style.display = tab==='add' ? 'block' : 'none';
+  document.querySelectorAll('#s-members .ptab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+};
+
+// ── Photo preview for add member
+window.previewAddMemberPhoto = function(input) {
+  const wrap = document.getElementById('amPhotoPreview');
+  if (input.files[0]) {
+    const url = URL.createObjectURL(input.files[0]);
+    wrap.innerHTML = `<img class="img-preview" src="${url}">`;
+  }
+};
+
+// ── Add Member by Admin (Firebase Auth + Firestore)
+window.addMemberByAdmin = async function() {
+  const name = document.getElementById('am-name').value.trim();
+  const phone = document.getElementById('am-phone').value.trim();
+  const email = document.getElementById('am-email').value.trim();
+  const pass = document.getElementById('am-pass').value;
+  const area = document.getElementById('am-area').value;
+  const blood = document.getElementById('am-blood').value;
+  const gender = document.getElementById('am-gender').value;
+  const dob = document.getElementById('am-dob').value;
+  const position = document.getElementById('am-position').value;
+  const address = document.getElementById('am-address').value.trim();
+  const photoFile = document.getElementById('am-photo').files[0];
+
+  if (!name||!phone||!email||!pass||!area) {
+    flash('addMemberFlash','⚠️ নাম, ফোন, ইমেইল, পাসওয়ার্ড ও এলাকা আবশ্যিক।','err'); return;
+  }
+  if (pass.length < 6) { flash('addMemberFlash','⚠️ পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।','err'); return; }
+
+  const btn = event.target; btn.disabled=true; btn.textContent='⏳ যোগ হচ্ছে...';
+
+  try {
+    // Upload photo if provided
+    let photoUrl = '';
+    if (photoFile) {
+      btn.textContent = '📸 ছবি আপলোড হচ্ছে...';
+      const fd = new FormData();
+      fd.append('file',photoFile); fd.append('upload_preset',UPLOAD_PRESET); fd.append('folder','somaj-kallyan/members');
+      const res = await fetch(CLOUDINARY_URL,{method:'POST',body:fd});
+      const data = await res.json();
+      photoUrl = data.secure_url || '';
+    }
+
+    // Create Firebase Auth account
+    btn.textContent = '🔐 অ্যাকাউন্ট তৈরি হচ্ছে...';
+    const { createUserWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+    // Generate Member ID
+    const year = new Date().getFullYear();
+    const approvedSnap = await getDocs(query(collection(db,'users'),where('status','==','approved')));
+    const serial = String(approvedSnap.size + 1).padStart(3,'0');
+    const memberId = `${year}-${serial}`;
+
+    // Save to Firestore
+    const { setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(doc(db,'users',cred.user.uid), {
+      uid: cred.user.uid,
+      name, phone, area, email, photoUrl,
+      bloodGroup: blood, gender, dob, address,
+      role: 'member',
+      status: 'approved',
+      position: position || 'সদস্য',
+      memberId,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    flash('addMemberFlash', `✅ সদস্য যোগ হয়েছে! ID: ${memberId}`);
+    // Clear form
+    ['am-name','am-phone','am-email','am-pass','am-address'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.value='';
+    });
+    document.getElementById('amPhotoPreview').innerHTML = '';
+    loadMembers(); loadDashboard();
+  } catch(e) {
+    const msg = e.code==='auth/email-already-in-use' ? '❌ এই ইমেইলে আগেই অ্যাকাউন্ট আছে।' : '❌ '+e.message;
+    flash('addMemberFlash', msg, 'err');
+  }
+  btn.disabled=false; btn.textContent='✅ সদস্য যোগ করুন';
+};
+
+// ── Open Profile Edit (Super Admin only)
+window.openProfileEdit = async function(uid) {
+  if (currentUserData?.role !== 'superadmin') { alert('শুধু Super Admin এই কাজ করতে পারবেন।'); return; }
+  const snap = await getDoc(doc(db,'users',uid));
+  if (!snap.exists()) return;
+  const m = snap.data();
+  document.getElementById('ep-uid').value = uid;
+  document.getElementById('ep-name').value = m.name||'';
+  document.getElementById('ep-phone').value = m.phone||'';
+  document.getElementById('ep-area').value = m.area||'';
+  document.getElementById('ep-blood').value = m.bloodGroup||'';
+  document.getElementById('ep-position').value = m.position||'সদস্য';
+  document.getElementById('ep-dob').value = m.dob||'';
+  document.getElementById('ep-address').value = m.address||'';
+  document.getElementById('ep-memberid').value = m.memberId||'';
+  document.getElementById('editProfileFlash').className = 'flash';
+  document.getElementById('profileEditModal').style.display = 'flex';
+};
+
+// ── Save Profile Edit
+window.saveProfileEdit = async function() {
+  const uid = document.getElementById('ep-uid').value;
+  if (!uid) return;
+  const name = document.getElementById('ep-name').value.trim();
+  const phone = document.getElementById('ep-phone').value.trim();
+  const area = document.getElementById('ep-area').value;
+  const bloodGroup = document.getElementById('ep-blood').value;
+  const position = document.getElementById('ep-position').value;
+  const dob = document.getElementById('ep-dob').value;
+  const address = document.getElementById('ep-address').value.trim();
+  const memberId = document.getElementById('ep-memberid').value.trim();
+  if (!name) { flash('editProfileFlash','⚠️ নাম খালি রাখা যাবে না।','err'); return; }
+  try {
+    const updates = { name, phone, area, bloodGroup, position, dob, address, updatedAt: serverTimestamp() };
+    if (memberId) updates.memberId = memberId;
+    await updateDoc(doc(db,'users',uid), updates);
+    flash('editProfileFlash','✅ প্রোফাইল আপডেট হয়েছে!');
+    setTimeout(()=>{ document.getElementById('profileEditModal').style.display='none'; loadMembers(); }, 1200);
+  } catch(e) { flash('editProfileFlash','❌ '+e.message,'err'); }
+};
 
 // ── Helpers
 function flash(id, msg, type='ok') {
