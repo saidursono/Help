@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>সার্টিফিকেট ও ID কার্ড — সমাজ কল্যাণ যুব সংগঠন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;900&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --g1:#061a06;--g2:#0d2e0d;--g3:#1b6b1b;--g4:#2e8b2e;--g5:#43a843;
+  --gold:#f0b429;--sgold:#ffd966;--dgold:#c8940a;--lgold:#fff3cd;
+  --glass:rgba(255,255,255,0.07);--glass2:rgba(255,255,255,0.12);
+  --b1:rgba(255,255,255,0.15);--b2:rgba(240,180,41,0.35);
+  --blur:blur(18px);--text:#e8f5e8;--text2:#a5d6a7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--g1);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 15% 20%,rgba(46,139,46,.28),transparent 65%),
+    radial-gradient(ellipse 55% 70% at 85% 75%,rgba(27,107,27,.22),transparent 65%);}
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;}
+.o1{width:420px;height:420px;top:-120px;right:-120px;background:radial-gradient(circle,rgba(240,180,41,.1),transparent 70%);animation:ofl 22s ease-in-out infinite;}
+.o2{width:320px;height:320px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(46,139,46,.18),transparent 70%);animation:ofl 28s ease-in-out infinite reverse;}
+@keyframes ofl{0%,100%{transform:translateY(0)}40%{transform:translateY(-30px)}70%{transform:translateY(15px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fu{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--g1);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;}
+.ld-ring{width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,215,102,.15);border-top:3px solid var(--sgold);animation:spin .85s linear infinite;}
+.ld-txt{color:var(--sgold);margin-top:14px;font-size:13px;opacity:.65;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,26,6,.9);backdrop-filter:var(--blur);border-bottom:1px solid var(--b2);box-shadow:0 4px 30px rgba(0,0,0,.35);}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 24px;}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;}
+.brand-ico{width:42px;height:42px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);}
+.brand-ico img{width:100%;height:100%;object-fit:cover;}
+.brand-txt{color:var(--sgold);font-size:13px;font-weight:700;line-height:1.3;}
+.brand-txt span{display:block;color:var(--text2);font-size:10px;font-weight:400;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-back{padding:8px 16px;border-radius:8px;background:var(--glass2);border:1px solid var(--b1);color:var(--sgold);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;}
+.nav-back:hover{background:rgba(240,180,41,.15);}
+.nav-user{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(240,180,41,.1);border:1px solid var(--b2);border-radius:8px;}
+.nav-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+.nav-av img{width:100%;height:100%;object-fit:cover;}
+.nav-name{color:var(--sgold);font-size:13px;font-weight:600;}
+
+/* PAGE HEADER */
+.page-header{padding:90px 20px 40px;text-align:center;position:relative;z-index:1;}
+.ph-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.3);color:var(--sgold);font-size:13px;margin-bottom:16px;}
+.ph-title{font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--sgold);margin-bottom:8px;}
+.ph-sub{color:var(--text2);font-size:15px;}
+.ph-bar{width:70px;height:3px;background:linear-gradient(90deg,var(--gold),var(--sgold));margin:16px auto 0;border-radius:2px;}
+
+/* NOT LOGGED IN */
+#notLoggedIn{position:relative;z-index:1;max-width:500px;margin:0 auto;padding:40px 20px;text-align:center;display:none;}
+.nli-box{background:rgba(13,46,13,.9);backdrop-filter:var(--blur);border:1px solid var(--b2);border-radius:24px;padding:48px 36px;}
+.nli-ico{font-size:4rem;margin-bottom:16px;}
+.nli-box h3{color:var(--sgold);font-size:1.4rem;font-weight:700;margin-bottom:10px;}
+.nli-box p{color:rgba(255,255,255,.65);font-size:14px;line-height:1.8;margin-bottom:24px;}
+.btn-login{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;transition:all .3s;}
+.btn-login:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(240,180,41,.5);}
+
+/* MAIN CONTENT */
+#mainContent{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 20px 60px;display:none;}
+
+/* USER INFO CARD */
+.user-card{background:rgba(13,46,13,.7);backdrop-filter:var(--blur);border:1px solid var(--b2);border-radius:20px;padding:24px 28px;margin-bottom:32px;display:flex;align-items:center;gap:20px;animation:fu .6s ease both;}
+.user-big-av{width:80px;height:80px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;background:linear-gradient(135deg,var(--g3),var(--g5));display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;flex-shrink:0;box-shadow:0 0 20px rgba(240,180,41,.3);}
+.user-big-av img{width:100%;height:100%;object-fit:cover;}
+.user-details h2{color:var(--sgold);font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+.user-details p{color:var(--text2);font-size:13px;}
+.user-badge{display:inline-block;margin-top:8px;padding:3px 14px;border-radius:20px;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);color:var(--sgold);font-size:12px;font-weight:600;}
+.user-status-ok{margin-left:auto;text-align:right;}
+.status-dot{width:10px;height:10px;border-radius:50%;background:#4caf50;display:inline-block;margin-right:6px;animation:pulse 2s infinite;}
+.status-txt{color:#81c784;font-size:13px;font-weight:600;}
+
+/* SECTION TABS */
+.cert-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;animation:fu .6s .1s ease both;opacity:0;animation-fill-mode:forwards;}
+.ctab{padding:10px 20px;border-radius:12px;cursor:pointer;border:1px solid var(--b1);background:var(--glass);color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;transition:all .25s;}
+.ctab.active,.ctab:hover{background:rgba(240,180,41,.15);border-color:var(--b2);color:var(--sgold);}
+.ctab.active{background:linear-gradient(135deg,rgba(240,180,41,.2),rgba(240,180,41,.08));}
+
+/* CERT SECTIONS */
+.cert-section{display:none;animation:fu .5s ease both;}
+.cert-section.active{display:block;}
+
+/* SECTION HEADER */
+.sec-hdr{text-align:center;margin-bottom:28px;}
+.sec-hdr h3{color:var(--sgold);font-size:1.4rem;font-weight:700;margin-bottom:6px;}
+.sec-hdr p{color:var(--text2);font-size:14px;}
+
+/* CERTIFICATE PREVIEW BOX */
+.cert-preview-wrap{background:rgba(13,46,13,.5);backdrop-filter:var(--blur);border:1px solid var(--b1);border-radius:20px;padding:28px;margin-bottom:20px;}
+
+/* ══════════════════════════════════
+   CERTIFICATE DESIGNS (Canvas-based preview)
+══════════════════════════════════ */
+.cert-canvas-wrap{display:flex;justify-content:center;margin-bottom:20px;}
+canvas.cert-canvas{max-width:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(240,180,41,.15);border:2px solid rgba(240,180,41,.3);}
+
+/* DOWNLOAD BUTTONS */
+.dl-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.dl-btn{display:flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .3s;}
+.dl-pdf{background:linear-gradient(135deg,#e53935,#c62828);color:#fff;box-shadow:0 4px 20px rgba(229,57,53,.3);}
+.dl-pdf:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(229,57,53,.5);}
+.dl-jpg{background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);box-shadow:0 4px 20px rgba(240,180,41,.3);}
+.dl-jpg:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(240,180,41,.5);}
+.dl-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;}
+
+/* INFO GRID */
+.cert-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px;}
+.cert-info-item{padding:14px 16px;background:var(--glass);border:1px solid var(--b1);border-radius:12px;display:flex;align-items:center;gap:10px;}
+.cert-info-ico{font-size:1.1rem;}
+.cert-info-txt strong{display:block;color:var(--sgold);font-size:11px;margin-bottom:2px;}
+.cert-info-txt span{color:rgba(255,255,255,.8);font-size:13px;}
+
+/* PENDING MESSAGE */
+.pending-cert{text-align:center;padding:48px 24px;background:rgba(255,193,7,.06);border:1px solid rgba(255,193,7,.2);border-radius:20px;}
+.pending-cert .ico{font-size:3.5rem;margin-bottom:14px;}
+.pending-cert h4{color:#ffd54f;font-size:1.2rem;font-weight:700;margin-bottom:8px;}
+.pending-cert p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.8;}
+
+/* FOOTER */
+footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px solid var(--b2);padding:24px 20px;text-align:center;position:relative;z-index:1;}
+.ft-c{color:rgba(255,255,255,.25);font-size:12px;}
+.ft-dev{color:rgba(255,215,0,.5);font-size:12px;font-weight:600;}
+
+@media(max-width:640px){
+  .user-card{flex-direction:column;text-align:center;}
+  .user-status-ok{margin-left:0;text-align:center;}
+  .cert-tabs{justify-content:center;}
+}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div>
+
+<!-- LOADER -->
+<div id="loader"><div class="ld-ring"></div><div class="ld-txt">লোড হচ্ছে...</div></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <a class="brand" href="index.html">
+      <div class="brand-ico"><img src="https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg" alt="লোগো"></div>
+      <div class="brand-txt">সমাজ কল্যাণ যুব সংগঠন<span>Somaj Kalyan Jubo Sangathan</span></div>
+    </a>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">← মূল পেজ</a>
+      <div class="nav-user" id="navUser" style="display:none">
+        <div class="nav-av" id="navAv"></div>
+        <span class="nav-name" id="navName">...</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-badge">🏆 সার্টিফিকেট পোর্টাল</div>
+  <h1 class="ph-title">সার্টিফিকেট ও ID কার্ড</h1>
+  <p class="ph-sub">Certificates & Identity Card — সমাজ কল্যাণ যুব সংগঠন</p>
+  <div class="ph-bar"></div>
+</div>
+
+<!-- NOT LOGGED IN -->
+<div id="notLoggedIn">
+  <div class="nli-box">
+    <div class="nli-ico">🔐</div>
+    <h3>লগইন করুন</h3>
+    <p>সার্টিফিকেট ও ID কার্ড দেখতে এবং ডাউনলোড করতে আপনাকে লগইন করতে হবে।</p>
+    <a href="login.html" class="btn-login">🔐 লগইন করুন</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+  <!-- User Info Card -->
+  <div class="user-card" id="userCard">
+    <div class="user-big-av" id="bigAv"></div>
+    <div class="user-details">
+      <h2 id="uName">-</h2>
+      <p id="uInfo">-</p>
+      <span class="user-badge" id="uBadge">সদস্য</span>
+    </div>
+    <div class="user-status-ok">
+      <div><span class="status-dot"></span><span class="status-txt">অনুমোদিত সদস্য</span></div>
+      <div style="color:var(--text2);font-size:12px;margin-top:4px" id="uId"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="cert-tabs">
+    <button class="ctab active" onclick="showCert('membership',this)">🏅 সদস্যপদ সার্টিফিকেট</button>
+    <button class="ctab" onclick="showCert('idcard',this)">🪪 ID কার্ড</button>
+    <button class="ctab" onclick="showCert('volunteer',this)">🙋 স্বেচ্ছাসেবী সার্টিফিকেট</button>
+    <button class="ctab" onclick="showCert('participation',this)">🎯 অংশগ্রহণ সার্টিফিকেট</button>
+  </div>
+
+  <!-- ══ MEMBERSHIP CERTIFICATE ══ -->
+  <div class="cert-section active" id="sec-membership">
+    <div class="sec-hdr">
+      <h3>🏅 সদস্যপদ সার্টিফিকেট</h3>
+      <p>Membership Certificate — সমাজ কল্যাণ যুব সংগঠন</p>
+    </div>
+    <div class="cert-preview-wrap">
+      <div class="cert-canvas-wrap">
+        <canvas id="membershipCanvas" class="cert-canvas" width="1122" height="794"></canvas>
+      </div>
+      <div class="dl-btns">
+        <button class="dl-btn dl-pdf" onclick="downloadCert('membership','pdf')">📄 PDF ডাউনলোড</button>
+        <button class="dl-btn dl-jpg" onclick="downloadCert('membership','jpg')">🖼️ JPG ডাউনলোড</button>
+      </div>
+    </div>
+    <div class="cert-info-grid" id="membershipInfo"></div>
+  </div>
+
+  <!-- ══ ID CARD ══ -->
+  <div class="cert-section" id="sec-idcard">
+    <div class="sec-hdr">
+      <h3>🪪 পরিচয়পত্র (ID কার্ড)</h3>
+      <p>Identity Card — সমাজ কল্যাণ যুব সংগঠন</p>
+    </div>
+    <div class="cert-preview-wrap">
+      <div class="cert-canvas-wrap">
+        <canvas id="idCanvas" class="cert-canvas" width="856" height="540"></canvas>
+      </div>
+      <div class="dl-btns">
+        <button class="dl-btn dl-pdf" onclick="downloadCert('idcard','pdf')">📄 PDF ডাউনলোড</button>
+        <button class="dl-btn dl-jpg" onclick="downloadCert('idcard','jpg')">🖼️ JPG ডাউনলোড</button>
+      </div>
+    </div>
+    <div class="cert-info-grid" id="idInfo"></div>
+  </div>
+
+  <!-- ══ VOLUNTEER CERTIFICATE ══ -->
+  <div class="cert-section" id="sec-volunteer">
+    <div class="sec-hdr">
+      <h3>🙋 স্বেচ্ছাসেবী সার্টিফিকেট</h3>
+      <p>Volunteer Certificate — সমাজ কল্যাণ যুব সংগঠন</p>
+    </div>
+    <div class="cert-preview-wrap">
+      <div class="cert-canvas-wrap">
+        <canvas id="volunteerCanvas" class="cert-canvas" width="1122" height="794"></canvas>
+      </div>
+      <div class="dl-btns">
+        <button class="dl-btn dl-pdf" onclick="downloadCert('volunteer','pdf')">📄 PDF ডাউনলোড</button>
+        <button class="dl-btn dl-jpg" onclick="downloadCert('volunteer','jpg')">🖼️ JPG ডাউনলোড</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PARTICIPATION CERTIFICATE ══ -->
+  <div class="cert-section" id="sec-participation">
+    <div class="sec-hdr">
+      <h3>🎯 অংশগ্রহণ সার্টিফিকেট</h3>
+      <p>Participation Certificate — সমাজ কল্যাণ যুব সংগঠন</p>
+    </div>
+    <div class="cert-preview-wrap">
+      <div class="cert-canvas-wrap">
+        <canvas id="participationCanvas" class="cert-canvas" width="1122" height="794"></canvas>
+      </div>
+      <div class="dl-btns">
+        <button class="dl-btn dl-pdf" onclick="downloadCert('participation','pdf')">📄 PDF ডাউনলোড</button>
+        <button class="dl-btn dl-jpg" onclick="downloadCert('participation','jpg')">🖼️ JPG ডাউনলোড</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-c">© ২০২৫–২০২৬ সমাজ কল্যাণ যুব সংগঠন · রামকৃষ্ণপুর, দৌলতপুর, কুষ্টিয়া</div>
+  <div style="margin-top:6px"><span class="ft-dev">🛠️ Developed by <a href="https://saidursono.github.io/Saidur/" target="_blank" style="color:rgba(255,215,0,.7);text-decoration:none">Saidur</a></span></div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT — Canvas Drawing & Firebase
+═══════════════════════════════════════ -->
+<script>
+let _member = null;
+let _photoImg = null;
+
+/* ══ TAB SWITCHING ══ */
+function showCert(id, btn) {
+  document.querySelectorAll('.cert-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  // Redraw canvas when tab shown
+  if (_member) {
+    setTimeout(() => {
+      if (id === 'membership') drawMembership(_member, _photoImg);
+      else if (id === 'idcard') drawIDCard(_member, _photoImg);
+      else if (id === 'volunteer') drawVolunteer(_member, _photoImg);
+      else if (id === 'participation') drawParticipation(_member, _photoImg);
+    }, 50);
+  }
+}
+
+/* ══ HELPER ══ */
+function bnNum(n) { return n.toString().replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
+function ini(nm) { return (nm || '?').replace('মোঃ ', '').replace('মোছাঃ ', '').trim().charAt(0); }
+function today() {
+  const d = new Date();
+  return `${bnNum(d.getDate())} ${['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'][d.getMonth()]} ${bnNum(d.getFullYear())}`;
+}
+function todayEn() {
+  const d = new Date();
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/* ══════════════════════════════════════════════════════
+   DRAW MEMBERSHIP CERTIFICATE (A4 Landscape 1122×794)
+══════════════════════════════════════════════════════ */
+function drawMembership(m, photo) {
+  const canvas = document.getElementById('membershipCanvas');
+  const c = canvas.getContext('2d');
+  const W = 1122, H = 794;
+  c.clearRect(0, 0, W, H);
+
+  // Background — cream parchment
+  c.fillStyle = '#fffef5';
+  c.fillRect(0, 0, W, H);
+
+  // Decorative background pattern
+  c.save();
+  c.globalAlpha = 0.03;
+  for (let i = 0; i < W; i += 40) {
+    for (let j = 0; j < H; j += 40) {
+      c.fillStyle = '#b8860b';
+      c.font = '20px serif';
+      c.fillText('✦', i, j);
+    }
+  }
+  c.restore();
+
+  // Outer gold border
+  const grd = c.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, '#b8860b');
+  grd.addColorStop(0.25, '#ffd700');
+  grd.addColorStop(0.5, '#daa520');
+  grd.addColorStop(0.75, '#ffd700');
+  grd.addColorStop(1, '#b8860b');
+
+  c.strokeStyle = grd;
+  c.lineWidth = 14;
+  c.strokeRect(7, 7, W - 14, H - 14);
+
+  // Inner border
+  c.strokeStyle = grd;
+  c.lineWidth = 3;
+  c.strokeRect(22, 22, W - 44, H - 44);
+
+  // Corner ornaments
+  drawCornerOrnament(c, 28, 28, grd);
+  drawCornerOrnament(c, W - 28, 28, grd, true);
+  drawCornerOrnament(c, 28, H - 28, grd, false, true);
+  drawCornerOrnament(c, W - 28, H - 28, grd, true, true);
+
+  // Left green accent bar
+  const gBar = c.createLinearGradient(0, 0, 0, H);
+  gBar.addColorStop(0, '#1b6b1b');
+  gBar.addColorStop(0.5, '#2e8b2e');
+  gBar.addColorStop(1, '#1b6b1b');
+  c.fillStyle = gBar;
+  c.fillRect(36, 36, 8, H - 72);
+
+  // Right green accent bar
+  c.fillStyle = gBar;
+  c.fillRect(W - 44, 36, 8, H - 72);
+
+  // Header area background
+  const hGrd = c.createLinearGradient(0, 36, 0, 180);
+  hGrd.addColorStop(0, 'rgba(27,107,27,0.08)');
+  hGrd.addColorStop(1, 'rgba(27,107,27,0)');
+  c.fillStyle = hGrd;
+  c.fillRect(52, 36, W - 104, 144);
+
+  // Logo circle placeholder (left top)
+  c.save();
+  c.beginPath();
+  c.arc(120, 105, 52, 0, Math.PI * 2);
+  c.fillStyle = '#1b6b1b';
+  c.fill();
+  c.strokeStyle = grd;
+  c.lineWidth = 3;
+  c.stroke();
+  c.restore();
+  // Logo text
+  c.fillStyle = '#ffd700';
+  c.font = 'bold 11px Arial';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('সংগঠন', 120, 100);
+  c.fillText('লোগো', 120, 115);
+
+  // Organization name header (center)
+  c.textAlign = 'center';
+  c.textBaseline = 'alphabetic';
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 32px "Hind Siliguri", serif';
+  c.fillText('সমাজ কল্যাণ যুব সংগঠন', W / 2, 80);
+
+  c.fillStyle = '#8b6914';
+  c.font = 'italic 14px Georgia';
+  c.fillText('Somaj Kalyan Jubo Sangathan', W / 2, 100);
+
+  c.fillStyle = '#555';
+  c.font = '12px Arial';
+  c.fillText('রামকৃষ্ণপুর, দৌলতপুর, কুষ্টিয়া  ·  Est. 2025', W / 2, 118);
+
+  // Divider line with ornament
+  c.strokeStyle = grd;
+  c.lineWidth = 1.5;
+  c.beginPath();
+  c.moveTo(60, 138);
+  c.lineTo(W / 2 - 60, 138);
+  c.stroke();
+  c.fillStyle = '#b8860b';
+  c.font = '20px serif';
+  c.textAlign = 'center';
+  c.fillText('❖', W / 2, 143);
+  c.beginPath();
+  c.moveTo(W / 2 + 60, 138);
+  c.lineTo(W - 60, 138);
+  c.stroke();
+
+  // Certificate title
+  c.fillStyle = '#1a1200';
+  c.font = 'bold 42px "Cinzel", "Playfair Display", serif';
+  c.textAlign = 'center';
+  c.fillText('CERTIFICATE OF MEMBERSHIP', W / 2, 195);
+
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 22px "Hind Siliguri"';
+  c.fillText('সদস্যপদ সার্টিফিকেট', W / 2, 225);
+
+  // Decorative line under title
+  const tLine = c.createLinearGradient(200, 0, W - 200, 0);
+  tLine.addColorStop(0, 'transparent');
+  tLine.addColorStop(0.2, '#b8860b');
+  tLine.addColorStop(0.5, '#ffd700');
+  tLine.addColorStop(0.8, '#b8860b');
+  tLine.addColorStop(1, 'transparent');
+  c.strokeStyle = tLine;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(200, 238);
+  c.lineTo(W - 200, 238);
+  c.stroke();
+
+  // Photo circle (right side)
+  const pX = W - 148, pY = 380, pR = 82;
+  c.save();
+  c.beginPath();
+  c.arc(pX, pY, pR, 0, Math.PI * 2);
+  c.clip();
+  if (photo) {
+    c.drawImage(photo, pX - pR, pY - pR, pR * 2, pR * 2);
+  } else {
+    c.fillStyle = '#e8f5e8';
+    c.fillRect(pX - pR, pY - pR, pR * 2, pR * 2);
+    c.fillStyle = '#1b6b1b';
+    c.font = `bold 64px "Hind Siliguri"`;
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(ini(m.name), pX, pY + 4);
+  }
+  c.restore();
+  c.strokeStyle = grd;
+  c.lineWidth = 4;
+  c.beginPath();
+  c.arc(pX, pY, pR + 2, 0, Math.PI * 2);
+  c.stroke();
+  // Second ring
+  c.strokeStyle = 'rgba(184,134,11,0.3)';
+  c.lineWidth = 2;
+  c.beginPath();
+  c.arc(pX, pY, pR + 12, 0, Math.PI * 2);
+  c.stroke();
+
+  // Main text body
+  const lx = 80;
+  c.textAlign = 'left';
+  c.textBaseline = 'alphabetic';
+  c.fillStyle = '#3a3a3a';
+  c.font = '16px "Hind Siliguri"';
+  c.fillText('এটি প্রমাণ করা হচ্ছে যে,', lx, 278);
+  c.fillText('This is to certify that,', lx, 298);
+
+  // Member name — big
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 36px "Hind Siliguri"';
+  c.fillText(m.name || '-', lx, 352);
+  // Underline
+  const nWidth = c.measureText(m.name || '-').width;
+  c.strokeStyle = grd;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(lx, 358);
+  c.lineTo(lx + nWidth, 358);
+  c.stroke();
+
+  c.fillStyle = '#444';
+  c.font = '15px "Hind Siliguri"';
+  c.fillText(`পিতার নাম / Father: ${m.fatherName || m.address || '—'}`, lx, 388);
+  c.fillText(`গ্রাম / Village: ${m.area || m.village || '—'}`, lx, 413);
+  c.fillText(`মোবাইল / Mobile: ${m.phone || '—'}`, lx, 438);
+  c.fillText(`রক্তের গ্রুপ / Blood Group: ${m.bloodGroup || '—'}`, lx, 463);
+
+  // Main paragraph
+  c.fillStyle = '#333';
+  c.font = '14px "Hind Siliguri"';
+  const mainText = `সমাজ কল্যাণ যুব সংগঠনের একজন নিবেদিতপ্রাণ সদস্য হিসেবে স্বীকৃত এবং সংগঠনের সকল কার্যক্রমে সক্রিয়ভাবে অংশগ্রহণ করেন।`;
+  wrapText(c, mainText, lx, 498, 580, 22);
+
+  const enText = `is recognized as a dedicated member of Somaj Kalyan Jubo Sangathan and actively participates in all organizational activities.`;
+  c.fillStyle = '#555';
+  c.font = 'italic 13px Georgia';
+  wrapText(c, enText, lx, 546, 580, 20);
+
+  // Member ID & Date
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 15px "Hind Siliguri"';
+  c.fillText(`সদস্য নম্বর: ${m.memberId || '—'}`, lx, 598);
+  c.fillStyle = '#555';
+  c.font = '13px "Hind Siliguri"';
+  c.fillText(`তারিখ: ${today()}`, lx, 620);
+  c.font = 'italic 13px Georgia';
+  c.fillText(`Date: ${todayEn()}`, lx, 638);
+
+  // Signatures
+  drawSignature(c, 100, 720, 'সভাপতি', 'মোঃ শিমুল হোসেন', grd);
+  drawSignature(c, 400, 720, 'সাধারণ সম্পাদক', 'মোঃ জাকির হোসেন', grd);
+  drawSignature(c, 700, 720, 'সাধারণ সম্পাদক', 'মোঃ শুভ আলী', grd);
+
+  // Seal
+  drawSeal(c, W - 148, 635, 55, grd);
+
+  // Footer strip
+  const footGrd = c.createLinearGradient(0, H - 36, 0, H);
+  footGrd.addColorStop(0, '#1b6b1b');
+  footGrd.addColorStop(1, '#0d2e0d');
+  c.fillStyle = footGrd;
+  c.fillRect(52, H - 44, W - 104, 26);
+  c.fillStyle = 'rgba(255,215,0,0.9)';
+  c.font = '11px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ  ·  Dedicated to Service, Committed to Development', W / 2, H - 31);
+
+  // Watermark Developer credit
+  c.save();
+  c.globalAlpha = 0.07;
+  c.fillStyle = '#b8860b';
+  c.font = 'bold 18px Arial';
+  c.textAlign = 'right';
+  c.textBaseline = 'bottom';
+  c.fillText('Developed by Saidur', W - 60, H - 50);
+  c.restore();
+}
+
+/* ══════════════════════════════════════════
+   DRAW ID CARD (856×540 landscape)
+══════════════════════════════════════════ */
+function drawIDCard(m, photo) {
+  const canvas = document.getElementById('idCanvas');
+  const c = canvas.getContext('2d');
+  const W = 856, H = 540;
+  c.clearRect(0, 0, W, H);
+
+  // Background
+  c.fillStyle = '#fffef8';
+  c.fillRect(0, 0, W, H);
+
+  // Left green panel
+  const lPanel = c.createLinearGradient(0, 0, 180, H);
+  lPanel.addColorStop(0, '#061a06');
+  lPanel.addColorStop(0.4, '#1b6b1b');
+  lPanel.addColorStop(1, '#0d2e0d');
+  c.fillStyle = lPanel;
+  c.fillRect(0, 0, 200, H);
+
+  // Left panel decorative pattern
+  c.save();
+  c.globalAlpha = 0.08;
+  c.fillStyle = '#ffd700';
+  for (let i = 0; i < 200; i += 30) {
+    for (let j = 0; j < H; j += 30) {
+      c.beginPath();
+      c.arc(i, j, 6, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+  c.restore();
+
+  // Gold border
+  const grd = c.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, '#b8860b');
+  grd.addColorStop(0.5, '#ffd700');
+  grd.addColorStop(1, '#b8860b');
+  c.strokeStyle = grd;
+  c.lineWidth = 5;
+  c.strokeRect(2.5, 2.5, W - 5, H - 5);
+
+  // Photo on left panel
+  const pX = 100, pY = 210, pR = 75;
+  c.save();
+  c.beginPath();
+  c.arc(pX, pY, pR, 0, Math.PI * 2);
+  c.clip();
+  if (photo) {
+    c.drawImage(photo, pX - pR, pY - pR, pR * 2, pR * 2);
+  } else {
+    c.fillStyle = '#2e8b2e';
+    c.fillRect(pX - pR, pY - pR, pR * 2, pR * 2);
+    c.fillStyle = '#ffd700';
+    c.font = 'bold 52px Arial';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(ini(m.name), pX, pY + 3);
+  }
+  c.restore();
+  c.strokeStyle = grd;
+  c.lineWidth = 3.5;
+  c.beginPath();
+  c.arc(pX, pY, pR + 2, 0, Math.PI * 2);
+  c.stroke();
+
+  // Org name on left
+  c.fillStyle = '#ffd700';
+  c.font = 'bold 13px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'alphabetic';
+  c.fillText('সমাজ কল্যাণ', 100, 60);
+  c.fillText('যুব সংগঠন', 100, 78);
+  c.fillStyle = 'rgba(255,215,0,0.55)';
+  c.font = '10px Arial';
+  c.fillText('Est. 2025', 100, 95);
+
+  // ID tag on left bottom
+  c.fillStyle = 'rgba(255,215,0,0.15)';
+  c.fillRect(14, H - 80, 172, 50);
+  c.fillStyle = '#ffd700';
+  c.font = 'bold 11px Arial';
+  c.textAlign = 'center';
+  c.fillText('পরিচয়পত্র / ID CARD', 100, H - 56);
+  if (m.memberId) {
+    c.font = 'bold 14px Arial';
+    c.fillStyle = '#ffd966';
+    c.fillText(m.memberId, 100, H - 38);
+  }
+
+  // Right content area header
+  const rHdr = c.createLinearGradient(200, 0, W, 0);
+  rHdr.addColorStop(0, 'rgba(27,107,27,0.12)');
+  rHdr.addColorStop(1, 'rgba(27,107,27,0)');
+  c.fillStyle = rHdr;
+  c.fillRect(200, 0, W - 200, 72);
+
+  c.strokeStyle = grd;
+  c.lineWidth = 1;
+  c.beginPath();
+  c.moveTo(200, 72);
+  c.lineTo(W, 72);
+  c.stroke();
+
+  // Header text
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 18px "Hind Siliguri"';
+  c.textAlign = 'left';
+  c.fillText('সমাজ কল্যাণ যুব সংগঠন', 228, 32);
+  c.fillStyle = '#8b6914';
+  c.font = '11px Georgia';
+  c.fillText('Somaj Kalyan Jubo Sangathan · Ramkrisnopur, Doulatpur, Kushtia', 228, 50);
+
+  // Member info rows
+  const rx = 228, rows = [
+    ['👤', 'নাম / Name', m.name || '-'],
+    ['📍', 'গ্রাম / Village', m.area || m.village || '-'],
+    ['📞', 'মোবাইল / Mobile', m.phone || '-'],
+    ['⭐', 'পদবি / Position', m.position || 'সদস্য'],
+    ['🩸', 'রক্ত / Blood', m.bloodGroup || '-'],
+  ];
+
+  rows.forEach(([ico, label, val], i) => {
+    const ry = 102 + i * 72;
+    c.fillStyle = i % 2 === 0 ? 'rgba(27,107,27,0.04)' : 'transparent';
+    c.fillRect(210, ry - 18, W - 218, 52);
+    c.font = '12px Arial';
+    c.fillStyle = '#888';
+    c.textAlign = 'left';
+    c.fillText(`${ico}  ${label}`, rx, ry + 2);
+    c.font = 'bold 15px "Hind Siliguri"';
+    c.fillStyle = '#1a1200';
+    c.fillText(val, rx + 8, ry + 22);
+  });
+
+  // Footer strip
+  const footGrd = c.createLinearGradient(200, H - 38, W, H - 38);
+  footGrd.addColorStop(0, '#1b6b1b');
+  footGrd.addColorStop(1, '#0d2e0d');
+  c.fillStyle = footGrd;
+  c.fillRect(200, H - 38, W - 200, 38);
+  c.fillStyle = 'rgba(255,215,0,0.8)';
+  c.font = '10px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('সেবায় নিবেদিত · 01817-984524 · issaidur999@gmail.com', (200 + W) / 2, H - 19);
+
+  // Developer watermark
+  c.save();
+  c.globalAlpha = 0.06;
+  c.fillStyle = '#b8860b';
+  c.font = 'bold 11px Arial';
+  c.textAlign = 'right';
+  c.textBaseline = 'bottom';
+  c.fillText('Developed by Saidur', W - 12, H - 42);
+  c.restore();
+}
+
+/* ══════════════════════════════════════════
+   DRAW VOLUNTEER CERTIFICATE
+══════════════════════════════════════════ */
+function drawVolunteer(m, photo) {
+  const canvas = document.getElementById('volunteerCanvas');
+  const c = canvas.getContext('2d');
+  const W = 1122, H = 794;
+  c.clearRect(0, 0, W, H);
+
+  // Background — warm white with subtle green tint
+  c.fillStyle = '#f8fff8';
+  c.fillRect(0, 0, W, H);
+
+  // Background decorative arcs
+  c.save();
+  c.globalAlpha = 0.04;
+  c.strokeStyle = '#2e8b2e';
+  c.lineWidth = 60;
+  c.beginPath();
+  c.arc(-100, -100, 500, 0, Math.PI / 2);
+  c.stroke();
+  c.beginPath();
+  c.arc(W + 100, H + 100, 500, Math.PI, Math.PI + Math.PI / 2);
+  c.stroke();
+  c.restore();
+
+  // Border
+  const grd = c.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, '#1b6b1b');
+  grd.addColorStop(0.5, '#2e8b2e');
+  grd.addColorStop(1, '#1b6b1b');
+
+  c.strokeStyle = grd;
+  c.lineWidth = 16;
+  c.strokeRect(8, 8, W - 16, H - 16);
+
+  const goldGrd = c.createLinearGradient(0, 0, W, 0);
+  goldGrd.addColorStop(0, '#b8860b');
+  goldGrd.addColorStop(0.5, '#ffd700');
+  goldGrd.addColorStop(1, '#b8860b');
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 3;
+  c.strokeRect(24, 24, W - 48, H - 48);
+
+  // Top header bg
+  const topGrd = c.createLinearGradient(0, 30, 0, 160);
+  topGrd.addColorStop(0, 'rgba(27,107,27,0.12)');
+  topGrd.addColorStop(1, 'rgba(27,107,27,0)');
+  c.fillStyle = topGrd;
+  c.fillRect(30, 30, W - 60, 130);
+
+  // Org name
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 30px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'alphabetic';
+  c.fillText('সমাজ কল্যাণ যুব সংগঠন', W / 2, 82);
+  c.fillStyle = '#8b6914';
+  c.font = 'italic 14px Georgia';
+  c.fillText('Somaj Kalyan Jubo Sangathan · Ramkrisnopur, Doulatpur, Kushtia · Est. 2025', W / 2, 104);
+
+  // Divider
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 1.5;
+  c.beginPath();
+  c.moveTo(80, 122);
+  c.lineTo(W - 80, 122);
+  c.stroke();
+
+  // Title
+  c.fillStyle = '#0d6b0d';
+  c.font = 'bold 40px "Cinzel", "Playfair Display", serif';
+  c.fillText('VOLUNTEER CERTIFICATE', W / 2, 182);
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 22px "Hind Siliguri"';
+  c.fillText('স্বেচ্ছাসেবী সার্টিফিকেট', W / 2, 214);
+
+  // Volunteer icon / badge
+  c.fillStyle = 'rgba(27,107,27,0.08)';
+  c.beginPath();
+  c.arc(W / 2, 162, 72, 0, Math.PI * 2);
+  c.fill();
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.arc(W / 2, 162, 72, 0, Math.PI * 2);
+  c.stroke();
+  c.font = '64px serif';
+  c.fillStyle = '#1b6b1b';
+  c.textBaseline = 'middle';
+  c.fillText('🙋', W / 2, 162);
+  c.textBaseline = 'alphabetic';
+
+  // Body text
+  const lx = 80;
+  c.textAlign = 'left';
+  c.fillStyle = '#444';
+  c.font = '16px "Hind Siliguri"';
+  c.fillText('সশ্রদ্ধে প্রমাণ করা হচ্ছে যে,  /  This is to certify with honor that,', lx, 298);
+
+  // Name
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 38px "Hind Siliguri"';
+  c.fillText(m.name || '-', lx, 356);
+  const nw = c.measureText(m.name || '-').width;
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(lx, 363);
+  c.lineTo(lx + nw, 363);
+  c.stroke();
+
+  c.fillStyle = '#333';
+  c.font = '15px "Hind Siliguri"';
+  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  মোবাইল: ${m.phone || '—'}`, lx, 394);
+
+  const vtxt = `সমাজ কল্যাণ যুব সংগঠনের একজন নিষ্ঠাবান স্বেচ্ছাসেবী হিসেবে সংগঠনের বিভিন্ন সমাজসেবামূলক কার্যক্রম যেমন বৃক্ষরোপণ, শিক্ষা সহায়তা, রক্তদান, ত্রাণ বিতরণ ইত্যাদিতে সক্রিয়ভাবে অবদান রেখেছেন।`;
+  c.fillStyle = '#333';
+  c.font = '14px "Hind Siliguri"';
+  wrapText(c, vtxt, lx, 434, 680, 22);
+
+  const etxt = `has served as a dedicated volunteer of Somaj Kalyan Jubo Sangathan, actively contributing to tree plantation, education support, blood donation, relief distribution and other social welfare activities.`;
+  c.fillStyle = '#666';
+  c.font = 'italic 13px Georgia';
+  wrapText(c, etxt, lx, 500, 680, 20);
+
+  // Date & ID
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 13px "Hind Siliguri"';
+  c.fillText(`সদস্য ID: ${m.memberId || '—'}`, lx, 580);
+  c.fillStyle = '#555';
+  c.font = '13px "Hind Siliguri"';
+  c.fillText(`তারিখ: ${today()}  /  Date: ${todayEn()}`, lx, 600);
+
+  // Photo (right)
+  const pX = W - 148, pY = 420, pR = 78;
+  c.save();
+  c.beginPath();
+  c.arc(pX, pY, pR, 0, Math.PI * 2);
+  c.clip();
+  if (photo) { c.drawImage(photo, pX - pR, pY - pR, pR * 2, pR * 2); }
+  else {
+    c.fillStyle = '#e8f5e8';
+    c.fillRect(pX - pR, pY - pR, pR * 2, pR * 2);
+    c.fillStyle = '#1b6b1b';
+    c.font = 'bold 58px Arial';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(ini(m.name), pX, pY + 3);
+  }
+  c.restore();
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 4;
+  c.beginPath();
+  c.arc(pX, pY, pR + 2, 0, Math.PI * 2);
+  c.stroke();
+
+  // Signatures
+  drawSignature(c, 100, 720, 'সভাপতি', 'মোঃ শিমুল হোসেন', goldGrd);
+  drawSignature(c, 400, 720, 'সাধারণ সম্পাদক', 'মোঃ জাকির হোসেন', goldGrd);
+  drawSignature(c, 700, 720, 'সাধারণ সম্পাদক', 'মোঃ শুভ আলী', goldGrd);
+
+  // Seal
+  drawSeal(c, W - 148, 640, 50, goldGrd);
+
+  // Footer
+  const fg = c.createLinearGradient(0, H - 44, 0, H);
+  fg.addColorStop(0, '#1b6b1b');
+  fg.addColorStop(1, '#0d2e0d');
+  c.fillStyle = fg;
+  c.fillRect(30, H - 44, W - 60, 20);
+  c.fillStyle = 'rgba(255,215,0,0.85)';
+  c.font = '11px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('সেবায় নিবেদিত, উন্নয়নে প্রতিশ্রুতিবদ্ধ  ·  Dedicated to Service, Committed to Development', W / 2, H - 34);
+
+  // Watermark
+  c.save();
+  c.globalAlpha = 0.07;
+  c.fillStyle = '#b8860b';
+  c.font = 'bold 18px Arial';
+  c.textAlign = 'right';
+  c.textBaseline = 'bottom';
+  c.fillText('Developed by Saidur', W - 60, H - 50);
+  c.restore();
+}
+
+/* ══════════════════════════════════════════
+   DRAW PARTICIPATION CERTIFICATE
+══════════════════════════════════════════ */
+function drawParticipation(m, photo) {
+  const canvas = document.getElementById('participationCanvas');
+  const c = canvas.getContext('2d');
+  const W = 1122, H = 794;
+  c.clearRect(0, 0, W, H);
+
+  c.fillStyle = '#fffdf0';
+  c.fillRect(0, 0, W, H);
+
+  // Decorative bg
+  c.save();
+  c.globalAlpha = 0.025;
+  for (let i = 0; i < W; i += 60) {
+    for (let j = 0; j < H; j += 60) {
+      c.fillStyle = '#daa520';
+      c.beginPath();
+      c.arc(i, j, 12, 0, Math.PI * 2);
+      c.fill();
+    }
+  }
+  c.restore();
+
+  const goldGrd = c.createLinearGradient(0, 0, W, 0);
+  goldGrd.addColorStop(0, '#b8860b');
+  goldGrd.addColorStop(0.5, '#ffd700');
+  goldGrd.addColorStop(1, '#b8860b');
+
+  // Triple border
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 12;
+  c.strokeRect(6, 6, W - 12, H - 12);
+  c.strokeStyle = '#1b6b1b';
+  c.lineWidth = 4;
+  c.strokeRect(20, 20, W - 40, H - 40);
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 1.5;
+  c.strokeRect(30, 30, W - 60, H - 60);
+
+  // Header
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 28px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'alphabetic';
+  c.fillText('সমাজ কল্যাণ যুব সংগঠন', W / 2, 80);
+  c.fillStyle = '#8b6914';
+  c.font = 'italic 13px Georgia';
+  c.fillText('Somaj Kalyan Jubo Sangathan · Ramkrisnopur, Doulatpur, Kushtia', W / 2, 100);
+
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 1;
+  c.beginPath();
+  c.moveTo(80, 116);
+  c.lineTo(W - 80, 116);
+  c.stroke();
+
+  // Star medal icon
+  c.font = '52px serif';
+  c.fillStyle = '#daa520';
+  c.textBaseline = 'middle';
+  c.fillText('🏆', W / 2, 168);
+  c.textBaseline = 'alphabetic';
+
+  // Title
+  c.fillStyle = '#7a5500';
+  c.font = 'bold 38px "Cinzel", serif';
+  c.fillText('CERTIFICATE OF PARTICIPATION', W / 2, 224);
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 20px "Hind Siliguri"';
+  c.fillText('অংশগ্রহণ সার্টিফিকেট', W / 2, 254);
+
+  const tl = c.createLinearGradient(100, 0, W - 100, 0);
+  tl.addColorStop(0, 'transparent');
+  tl.addColorStop(0.3, '#daa520');
+  tl.addColorStop(0.7, '#daa520');
+  tl.addColorStop(1, 'transparent');
+  c.strokeStyle = tl;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(100, 268);
+  c.lineTo(W - 100, 268);
+  c.stroke();
+
+  // Body
+  const lx = 80;
+  c.textAlign = 'left';
+  c.fillStyle = '#444';
+  c.font = '16px "Hind Siliguri"';
+  c.fillText('সগৌরবে প্রমাণ করা হচ্ছে যে,  /  This is to proudly certify that,', lx, 308);
+
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 36px "Hind Siliguri"';
+  c.fillText(m.name || '-', lx, 360);
+  const nw = c.measureText(m.name || '-').width;
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(lx, 367);
+  c.lineTo(lx + nw, 367);
+  c.stroke();
+
+  c.fillStyle = '#444';
+  c.font = '15px "Hind Siliguri"';
+  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  ID: ${m.memberId || '—'}`, lx, 398);
+
+  const pt = `সমাজ কল্যাণ যুব সংগঠনের বিভিন্ন সামাজিক কার্যক্রম ও অনুষ্ঠানে সক্রিয়ভাবে অংশগ্রহণ করেছেন। তাঁর এই অবদান ও উদ্যোগ সংগঠনকে এগিয়ে নিয়ে যেতে সহায়তা করছে।`;
+  c.fillStyle = '#333';
+  c.font = '14px "Hind Siliguri"';
+  wrapText(c, pt, lx, 436, 680, 22);
+
+  const pe = `has actively participated in various social programs and events of Somaj Kalyan Jubo Sangathan. His/her contribution and enthusiasm is helping the organization move forward.`;
+  c.fillStyle = '#666';
+  c.font = 'italic 13px Georgia';
+  wrapText(c, pe, lx, 492, 680, 20);
+
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 13px "Hind Siliguri"';
+  c.fillText(`তারিখ: ${today()}  /  Date: ${todayEn()}`, lx, 572);
+
+  // Photo
+  const pX = W - 148, pY = 420, pR = 76;
+  c.save();
+  c.beginPath();
+  c.arc(pX, pY, pR, 0, Math.PI * 2);
+  c.clip();
+  if (photo) { c.drawImage(photo, pX - pR, pY - pR, pR * 2, pR * 2); }
+  else {
+    c.fillStyle = '#fff9e6';
+    c.fillRect(pX - pR, pY - pR, pR * 2, pR * 2);
+    c.fillStyle = '#8b6914';
+    c.font = 'bold 56px Arial';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(ini(m.name), pX, pY + 3);
+  }
+  c.restore();
+  c.strokeStyle = goldGrd;
+  c.lineWidth = 4;
+  c.beginPath();
+  c.arc(pX, pY, pR + 2, 0, Math.PI * 2);
+  c.stroke();
+
+  drawSignature(c, 100, 718, 'সভাপতি', 'মোঃ শিমুল হোসেন', goldGrd);
+  drawSignature(c, 400, 718, 'সাধারণ সম্পাদক', 'মোঃ জাকির হোসেন', goldGrd);
+  drawSignature(c, 700, 718, 'সাধারণ সম্পাদক', 'মোঃ শুভ আলী', goldGrd);
+  drawSeal(c, W - 148, 636, 50, goldGrd);
+
+  // Footer
+  const fg = c.createLinearGradient(0, H - 44, 0, H);
+  fg.addColorStop(0, '#7a5500');
+  fg.addColorStop(1, '#4a3300');
+  c.fillStyle = fg;
+  c.fillRect(36, H - 44, W - 72, 20);
+  c.fillStyle = 'rgba(255,215,0,0.85)';
+  c.font = '11px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('যুবশক্তিই পরিবর্তনের হাতিয়ার  ·  Youth is the Instrument of Change', W / 2, H - 34);
+
+  c.save();
+  c.globalAlpha = 0.07;
+  c.fillStyle = '#b8860b';
+  c.font = 'bold 18px Arial';
+  c.textAlign = 'right';
+  c.textBaseline = 'bottom';
+  c.fillText('Developed by Saidur', W - 60, H - 50);
+  c.restore();
+}
+
+/* ══ HELPER FUNCTIONS ══ */
+function wrapText(c, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  for (const word of words) {
+    const test = line + word + ' ';
+    if (c.measureText(test).width > maxW && line !== '') {
+      c.fillText(line.trim(), x, y);
+      line = word + ' ';
+      y += lineH;
+    } else {
+      line = test;
+    }
+  }
+  c.fillText(line.trim(), x, y);
+}
+
+function drawSignature(c, x, y, role, name, grd) {
+  c.strokeStyle = grd;
+  c.lineWidth = 1.5;
+  c.beginPath();
+  c.moveTo(x - 50, y);
+  c.lineTo(x + 110, y);
+  c.stroke();
+  c.fillStyle = '#1b6b1b';
+  c.font = 'bold 13px "Hind Siliguri"';
+  c.textAlign = 'center';
+  c.textBaseline = 'alphabetic';
+  c.fillText(role, x + 30, y + 18);
+  c.fillStyle = '#555';
+  c.font = '12px "Hind Siliguri"';
+  c.fillText(name, x + 30, y + 34);
+}
+
+function drawSeal(c, cx, cy, r, grd) {
+  c.save();
+  c.globalAlpha = 0.15;
+  c.strokeStyle = grd;
+  c.lineWidth = 3;
+  c.beginPath();
+  c.arc(cx, cy, r, 0, Math.PI * 2);
+  c.stroke();
+  c.beginPath();
+  c.arc(cx, cy, r - 8, 0, Math.PI * 2);
+  c.stroke();
+  c.fillStyle = '#1b6b1b';
+  c.font = `bold ${Math.round(r * 0.28)}px "Hind Siliguri"`;
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillText('সংগঠন', cx, cy - 5);
+  c.fillText('সীল', cx, cy + 12);
+  c.restore();
+}
+
+function drawCornerOrnament(c, x, y, grd, flipX = false, flipY = false) {
+  c.save();
+  c.translate(x, y);
+  if (flipX) c.scale(-1, 1);
+  if (flipY) c.scale(1, -1);
+  c.strokeStyle = grd;
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(0, 0); c.lineTo(40, 0); c.moveTo(0, 0); c.lineTo(0, 40);
+  c.stroke();
+  c.fillStyle = '#b8860b';
+  c.font = '16px serif';
+  c.textAlign = 'left';
+  c.textBaseline = 'top';
+  c.fillText('✦', 3, 3);
+  c.restore();
+}
+
+/* ══ DOWNLOAD ══ */
+function downloadCert(type, format) {
+  const canvasMap = {
+    membership: 'membershipCanvas',
+    idcard: 'idCanvas',
+    volunteer: 'volunteerCanvas',
+    participation: 'participationCanvas'
+  };
+  const nameMap = {
+    membership: 'সদস্যপদ_সার্টিফিকেট',
+    idcard: 'ID_কার্ড',
+    volunteer: 'স্বেচ্ছাসেবী_সার্টিফিকেট',
+    participation: 'অংশগ্রহণ_সার্টিফিকেট'
+  };
+  const canvas = document.getElementById(canvasMap[type]);
+  const mn = (_member?.name || 'member').replace(/\s+/g, '_');
+  const fname = `${nameMap[type]}_${mn}`;
+
+  if (format === 'jpg') {
+    const a = document.createElement('a');
+    a.download = fname + '.jpg';
+    a.href = canvas.toDataURL('image/jpeg', 0.96);
+    a.click();
+  } else {
+    try {
+      const { jsPDF } = window.jspdf;
+      const isLandscape = type !== 'idcard';
+      const isA4 = type !== 'idcard';
+      let pdf;
+      if (type === 'idcard') {
+        pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 53.98] });
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 85.6, 53.98);
+      } else {
+        pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 297, 210);
+      }
+      pdf.save(fname + '.pdf');
+    } catch (e) {
+      // fallback to jpg
+      const a = document.createElement('a');
+      a.download = fname + '.jpg';
+      a.href = canvas.toDataURL('image/jpeg', 0.96);
+      a.click();
+    }
+  }
+}
+
+/* ══ RENDER INFO GRID ══ */
+function renderInfoGrid(m) {
+  const mInfo = document.getElementById('membershipInfo');
+  const idInfo = document.getElementById('idInfo');
+  const rows = [
+    ['🪪', 'সদস্য ID', m.memberId || '—'],
+    ['👤', 'নাম', m.name || '—'],
+    ['📍', 'এলাকা', m.area || m.village || '—'],
+    ['📞', 'মোবাইল', m.phone || '—'],
+    ['🩸', 'রক্তের গ্রুপ', m.bloodGroup || '—'],
+    ['⭐', 'পদবি', m.position || 'সদস্য'],
+  ];
+  const html = rows.map(([i, k, v]) =>
+    `<div class="cert-info-item"><span class="cert-info-ico">${i}</span><div class="cert-info-txt"><strong>${k}</strong><span>${v}</span></div></div>`
+  ).join('');
+  if (mInfo) mInfo.innerHTML = html;
+  if (idInfo) idInfo.innerHTML = html;
+}
+</script>
+
+<!-- Firebase Module -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I",
+  authDomain: "somaj-kallyan.firebaseapp.com",
+  projectId: "somaj-kallyan",
+  appId: "1:392871962816:web:0f7ebbc36a3d8c784da525"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+function hideLoader() {
+  const l = document.getElementById('loader');
+  if (l) { l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 500); }
+}
+
+function loadPhoto(url) {
+  return new Promise(resolve => {
+    if (!url) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+onAuthStateChanged(auth, async (user) => {
+  hideLoader();
+  if (!user) {
+    document.getElementById('notLoggedIn').style.display = 'block';
+    return;
+  }
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (!snap.exists()) { document.getElementById('notLoggedIn').style.display = 'block'; return; }
+    const m = { ...snap.data(), uid: user.uid };
+
+    if (m.status !== 'approved') {
+      // Show pending message
+      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('mainContent').innerHTML = `
+        <div class="pending-cert">
+          <div class="ico">⏳</div>
+          <h4>অনুমোদনের অপেক্ষায়</h4>
+          <p>আপনার সদস্যপদ এখনো অনুমোদন হয়নি।<br>Admin অনুমোদন করলে সার্টিফিকেট পাবেন।<br><br>
+          যোগাযোগ: <strong style="color:var(--sgold)">01817-984524</strong></p>
+        </div>`;
+      return;
+    }
+
+    // Set global member
+    window._member = m;
+
+    // Update nav
+    document.getElementById('navUser').style.display = 'flex';
+    const navAv = document.getElementById('navAv');
+    if (m.photoUrl) navAv.innerHTML = `<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+    else navAv.textContent = (m.name || '?').charAt(0);
+    document.getElementById('navName').textContent = m.name?.split(' ')[0] || 'সদস্য';
+
+    // Update user card
+    document.getElementById('mainContent').style.display = 'block';
+    const bigAv = document.getElementById('bigAv');
+    if (m.photoUrl) bigAv.innerHTML = `<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    else bigAv.textContent = (m.name || '?').charAt(0);
+    document.getElementById('uName').textContent = m.name || '-';
+    document.getElementById('uInfo').textContent = `📍 ${m.area || m.village || '—'}  ·  📞 ${m.phone || '—'}`;
+    document.getElementById('uBadge').textContent = m.position || 'সদস্য';
+    document.getElementById('uId').textContent = m.memberId ? '🪪 ' + m.memberId : '';
+
+    // Load photo for canvas
+    const photoImg = await loadPhoto(m.photoUrl);
+    window._photoImg = photoImg;
+
+    // Render info grids
+    renderInfoGrid(m);
+
+    // Draw initial certificate (membership tab is default)
+    drawMembership(m, photoImg);
+
+  } catch (e) {
+    console.error('Error:', e.message);
+    document.getElementById('notLoggedIn').style.display = 'block';
+  }
+});
+</script>
+
+</body>
+</html>
