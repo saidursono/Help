@@ -206,15 +206,53 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="grid2">
       <div class="fg"><label>মোবাইল নম্বর <span>*</span></label><input type="tel" id="r-phone" placeholder="01XXXXXXXXX"></div>
       <div class="fg"><label>গ্রাম/এলাকা <span>*</span></label>
-        <select id="r-area">
+        <select id="r-area" onchange="toggleCustomArea(this)">
           <option value="">-- গ্রাম নির্বাচন --</option>
           <option>কান্দিরপাড়া</option><option>ইনসাফ নগর</option><option>চাইডুবা</option>
           <option>হলদার পাড়া</option><option>চরপাড়া</option><option>মোহাম্মদপুর</option>
-          <option>নিচপাড়া</option><option>সোনাতলা</option><option>অন্যান্য</option>
+          <option>নিচপাড়া</option><option>সোনাতলা</option>
+          <option value="other">✏️ অন্য এলাকা (নিজে লিখুন)</option>
         </select>
+        <input type="text" id="r-area-custom" placeholder="আপনার এলাকার নাম লিখুন..." style="display:none;margin-top:8px;">
       </div>
     </div>
     <div class="fg"><label>পূর্ণ ঠিকানা</label><input type="text" id="r-address" placeholder="বাড়ি নম্বর, ইউনিয়ন, থানা..."></div>
+
+    <!-- পেশা ও শিক্ষা -->
+    <div class="sec-title">💼 পেশা ও শিক্ষা</div>
+    <div class="grid2">
+      <div class="fg">
+        <label>পেশা <span>*</span></label>
+        <select id="r-job">
+          <option value="">-- পেশা নির্বাচন করুন --</option>
+          <option>ছাত্র/ছাত্রী</option>
+          <option>কৃষক</option>
+          <option>ব্যবসায়ী</option>
+          <option>চাকরিজীবী</option>
+          <option>শ্রমিক</option>
+          <option>শিক্ষক</option>
+          <option>ডাক্তার</option>
+          <option>ইঞ্জিনিয়ার</option>
+          <option>আইনজীবী</option>
+          <option>গৃহিণী</option>
+          <option>অন্যান্য</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>শিক্ষাগত যোগ্যতা <span>*</span></label>
+        <select id="r-education">
+          <option value="">-- শিক্ষা নির্বাচন করুন --</option>
+          <option>প্রাথমিক</option>
+          <option>জেএসসি / জেডিসি</option>
+          <option>এসএসসি / দাখিল</option>
+          <option>এইচএসসি / আলিম</option>
+          <option>ডিপ্লোমা</option>
+          <option>স্নাতক (অনার্স)</option>
+          <option>স্নাতকোত্তর (মাস্টার্স)</option>
+          <option>অন্যান্য</option>
+        </select>
+      </div>
+    </div>
 
     <!-- অ্যাকাউন্ট -->
     <div class="sec-title">🔐 অ্যাকাউন্ট তথ্য</div>
@@ -334,8 +372,12 @@ window.doRegister = async function() {
   const gender = document.getElementById('r-gender').value;
   const blood = document.getElementById('r-blood').value;
   const phone = document.getElementById('r-phone').value.trim();
-  const area = document.getElementById('r-area').value;
+  const areaSelect = document.getElementById('r-area').value;
+  const areaCustom = document.getElementById('r-area-custom').value.trim();
+  const area = areaSelect === 'other' ? areaCustom : areaSelect;
   const address = document.getElementById('r-address').value.trim();
+  const job = document.getElementById('r-job').value;
+  const education = document.getElementById('r-education').value;
   const email = document.getElementById('r-email').value.trim();
   const pass = document.getElementById('r-pass').value;
   const pass2 = document.getElementById('r-pass2').value;
@@ -345,7 +387,7 @@ window.doRegister = async function() {
 
   // Validation
   if (!photoFile) { showErr('reg', '📸 ছবি আপলোড করুন।'); return; }
-  if (!name || !dob || !gender || !blood || !phone || !area || !email || !pass) { showErr('reg', '⚠️ সব তারকা (*) চিহ্নিত ঘর পূরণ করুন।'); return; }
+  if (!name || !dob || !gender || !blood || !phone || !area || !job || !education || !email || !pass) { showErr('reg', '⚠️ সব তারকা (*) চিহ্নিত ঘর পূরণ করুন।'); return; }
   if (pass !== pass2) { showErr('reg', '❌ পাসওয়ার্ড দুটি মিলছে না।'); return; }
   if (pass.length < 6) { showErr('reg', '⚠️ পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
   if (!/^01[0-9]{9}$/.test(phone.replace(/-/g,''))) { showErr('reg', '⚠️ সঠিক বাংলাদেশি মোবাইল নম্বর দিন।'); return; }
@@ -368,6 +410,7 @@ window.doRegister = async function() {
       uid: cred.user.uid,
       name, dob, gender, bloodGroup: blood,
       phone, area, address, email,
+      job, education,
       photoUrl,
       role: 'member',
       status: 'pending',
@@ -379,7 +422,7 @@ window.doRegister = async function() {
 
     // 4. Create pending request
     await setDoc(doc(db, 'pendingRequests', cred.user.uid), {
-      uid: cred.user.uid, name, phone, area, email, photoUrl,
+      uid: cred.user.uid, name, phone, area, email, job, education, photoUrl,
       status: 'pending', createdAt: serverTimestamp()
     });
 
@@ -496,6 +539,17 @@ function showErr(form, msg) {
 function showOk(form, msg) {
   const el = document.getElementById(form + '-ok');
   el.textContent = msg; el.classList.add('show');
+}
+
+function toggleCustomArea(sel) {
+  const customInput = document.getElementById('r-area-custom');
+  if (sel.value === 'other') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
 }
 
 function hideAlerts() {
