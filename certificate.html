@@ -508,16 +508,17 @@ function drawMembership(m, photo) {
 
   c.fillStyle = '#444';
   c.font = '15px "Hind Siliguri"';
-  c.fillText(`পিতার নাম / Father: ${m.fatherName || m.address || '—'}`, lx, 388);
-  c.fillText(`গ্রাম / Village: ${m.area || m.village || '—'}`, lx, 413);
-  c.fillText(`মোবাইল / Mobile: ${m.phone || '—'}`, lx, 438);
-  c.fillText(`রক্তের গ্রুপ / Blood Group: ${m.bloodGroup || '—'}`, lx, 463);
+  c.fillText(`পেশা / Occupation: ${m.job || '—'}`, lx, 388);
+  c.fillText(`শিক্ষা / Education: ${m.education || '—'}`, lx, 413);
+  c.fillText(`গ্রাম / Village: ${m.area || m.village || '—'}`, lx, 438);
+  c.fillText(`মোবাইল / Mobile: ${m.phone || '—'}`, lx, 463);
+  c.fillText(`রক্তের গ্রুপ / Blood Group: ${m.bloodGroup || '—'}`, lx, 488);
 
   // Main paragraph
   c.fillStyle = '#333';
   c.font = '14px "Hind Siliguri"';
   const mainText = `সমাজ কল্যাণ যুব সংগঠনের একজন নিবেদিতপ্রাণ সদস্য হিসেবে স্বীকৃত এবং সংগঠনের সকল কার্যক্রমে সক্রিয়ভাবে অংশগ্রহণ করেন।`;
-  wrapText(c, mainText, lx, 498, 580, 22);
+  wrapText(c, mainText, lx, 518, 580, 22);
 
   const enText = `is recognized as a dedicated member of Somaj Kalyan Jubo Sangathan and actively participates in all organizational activities.`;
   c.fillStyle = '#555';
@@ -556,9 +557,9 @@ function drawMembership(m, photo) {
 
   // Watermark Developer credit
   c.save();
-  c.globalAlpha = 0.07;
-  c.fillStyle = '#b8860b';
-  c.font = 'bold 18px Arial';
+  c.globalAlpha = 0.22;
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 16px Arial';
   c.textAlign = 'right';
   c.textBaseline = 'bottom';
   c.fillText('Developed by Saidur', W - 60, H - 50);
@@ -684,21 +685,22 @@ function drawIDCard(m, photo) {
     ['👤', 'নাম / Name', m.name || '-'],
     ['📍', 'গ্রাম / Village', m.area || m.village || '-'],
     ['📞', 'মোবাইল / Mobile', m.phone || '-'],
+    ['💼', 'পেশা / Job', m.job || '-'],
+    ['🎓', 'শিক্ষা / Education', m.education || '-'],
     ['⭐', 'পদবি / Position', m.position || 'সদস্য'],
-    ['🩸', 'রক্ত / Blood', m.bloodGroup || '-'],
   ];
 
   rows.forEach(([ico, label, val], i) => {
-    const ry = 102 + i * 72;
+    const ry = 92 + i * 58;
     c.fillStyle = i % 2 === 0 ? 'rgba(27,107,27,0.04)' : 'transparent';
-    c.fillRect(210, ry - 18, W - 218, 52);
-    c.font = '12px Arial';
+    c.fillRect(210, ry - 14, W - 218, 44);
+    c.font = '11px Arial';
     c.fillStyle = '#888';
     c.textAlign = 'left';
     c.fillText(`${ico}  ${label}`, rx, ry + 2);
-    c.font = 'bold 15px "Hind Siliguri"';
+    c.font = 'bold 14px "Hind Siliguri"';
     c.fillStyle = '#1a1200';
-    c.fillText(val, rx + 8, ry + 22);
+    c.fillText(val, rx + 8, ry + 20);
   });
 
   // Footer strip
@@ -715,9 +717,9 @@ function drawIDCard(m, photo) {
 
   // Developer watermark
   c.save();
-  c.globalAlpha = 0.06;
-  c.fillStyle = '#b8860b';
-  c.font = 'bold 11px Arial';
+  c.globalAlpha = 0.25;
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 12px Arial';
   c.textAlign = 'right';
   c.textBaseline = 'bottom';
   c.fillText('Developed by Saidur', W - 12, H - 42);
@@ -838,7 +840,8 @@ function drawVolunteer(m, photo) {
 
   c.fillStyle = '#333';
   c.font = '15px "Hind Siliguri"';
-  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  মোবাইল: ${m.phone || '—'}`, lx, 394);
+  c.fillText(`পেশা: ${m.job || '—'}  ·  শিক্ষা: ${m.education || '—'}`, lx, 394);
+  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  মোবাইল: ${m.phone || '—'}`, lx, 416);
 
   const vtxt = `সমাজ কল্যাণ যুব সংগঠনের একজন নিষ্ঠাবান স্বেচ্ছাসেবী হিসেবে সংগঠনের বিভিন্ন সমাজসেবামূলক কার্যক্রম যেমন বৃক্ষরোপণ, শিক্ষা সহায়তা, রক্তদান, ত্রাণ বিতরণ ইত্যাদিতে সক্রিয়ভাবে অবদান রেখেছেন।`;
   c.fillStyle = '#333';
@@ -903,9 +906,9 @@ function drawVolunteer(m, photo) {
 
   // Watermark
   c.save();
-  c.globalAlpha = 0.07;
-  c.fillStyle = '#b8860b';
-  c.font = 'bold 18px Arial';
+  c.globalAlpha = 0.22;
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 16px Arial';
   c.textAlign = 'right';
   c.textBaseline = 'bottom';
   c.fillText('Developed by Saidur', W - 60, H - 50);
@@ -1017,17 +1020,18 @@ function drawParticipation(m, photo) {
 
   c.fillStyle = '#444';
   c.font = '15px "Hind Siliguri"';
-  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  ID: ${m.memberId || '—'}`, lx, 398);
+  c.fillText(`পেশা: ${m.job || '—'}  ·  শিক্ষা: ${m.education || '—'}`, lx, 398);
+  c.fillText(`গ্রাম: ${m.area || m.village || '—'}  ·  ID: ${m.memberId || '—'}`, lx, 420);
 
   const pt = `সমাজ কল্যাণ যুব সংগঠনের বিভিন্ন সামাজিক কার্যক্রম ও অনুষ্ঠানে সক্রিয়ভাবে অংশগ্রহণ করেছেন। তাঁর এই অবদান ও উদ্যোগ সংগঠনকে এগিয়ে নিয়ে যেতে সহায়তা করছে।`;
   c.fillStyle = '#333';
   c.font = '14px "Hind Siliguri"';
-  wrapText(c, pt, lx, 436, 680, 22);
+  wrapText(c, pt, lx, 450, 680, 22);
 
   const pe = `has actively participated in various social programs and events of Somaj Kalyan Jubo Sangathan. His/her contribution and enthusiasm is helping the organization move forward.`;
   c.fillStyle = '#666';
   c.font = 'italic 13px Georgia';
-  wrapText(c, pe, lx, 492, 680, 20);
+  wrapText(c, pe, lx, 506, 680, 20);
 
   c.fillStyle = '#1b6b1b';
   c.font = 'bold 13px "Hind Siliguri"';
@@ -1074,9 +1078,9 @@ function drawParticipation(m, photo) {
   c.fillText('যুবশক্তিই পরিবর্তনের হাতিয়ার  ·  Youth is the Instrument of Change', W / 2, H - 34);
 
   c.save();
-  c.globalAlpha = 0.07;
-  c.fillStyle = '#b8860b';
-  c.font = 'bold 18px Arial';
+  c.globalAlpha = 0.22;
+  c.fillStyle = '#8b6914';
+  c.font = 'bold 16px Arial';
   c.textAlign = 'right';
   c.textBaseline = 'bottom';
   c.fillText('Developed by Saidur', W - 60, H - 50);
@@ -1212,6 +1216,8 @@ function renderInfoGrid(m) {
     ['📍', 'এলাকা', m.area || m.village || '—'],
     ['📞', 'মোবাইল', m.phone || '—'],
     ['🩸', 'রক্তের গ্রুপ', m.bloodGroup || '—'],
+    ['💼', 'পেশা', m.job || '—'],
+    ['🎓', 'শিক্ষা', m.education || '—'],
     ['⭐', 'পদবি', m.position || 'সদস্য'],
   ];
   const html = rows.map(([i, k, v]) =>
@@ -1294,7 +1300,7 @@ onAuthStateChanged(auth, async (user) => {
     if (m.photoUrl) bigAv.innerHTML = `<img src="${m.photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
     else bigAv.textContent = (m.name || '?').charAt(0);
     document.getElementById('uName').textContent = m.name || '-';
-    document.getElementById('uInfo').textContent = `📍 ${m.area || m.village || '—'}  ·  📞 ${m.phone || '—'}`;
+    document.getElementById('uInfo').textContent = `📍 ${m.area || m.village || '—'}  ·  📞 ${m.phone || '—'}  ·  💼 ${m.job || '—'}  ·  🎓 ${m.education || '—'}`;
     document.getElementById('uBadge').textContent = m.position || 'সদস্য';
     document.getElementById('uId').textContent = m.memberId ? '🪪 ' + m.memberId : '';
 
