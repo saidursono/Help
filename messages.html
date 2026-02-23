@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>বার্তা — সমাজ কল্যাণ যুব সংগঠন</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0d2e0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#061a06;--g2:#0d2e0d;--g3:#1b6b1b;--g4:#2e8b2e;
+  --gold:#f0b429;--sgold:#ffd966;
+  --glass:rgba(255,255,255,0.07);--glass2:rgba(255,255,255,0.12);
+  --b1:rgba(255,255,255,0.15);--b2:rgba(240,180,41,0.35);
+  --blur:blur(18px);--text:#e8f5e8;--text2:#a5d6a7;
+  --danger:#ff5252;--online:#4caf50;--sb:256px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--g1);color:var(--text);display:flex;flex-direction:column;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 15% 20%,rgba(46,139,46,.28),transparent 65%),
+    radial-gradient(ellipse 55% 70% at 85% 75%,rgba(27,107,27,.22),transparent 65%);}
+#loader{position:fixed;inset:0;z-index:9999;background:var(--g1);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;}
+.ld-ring{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,215,102,.15);border-top:2px solid var(--sgold);animation:spin .85s linear infinite;}
+.ld-txt{color:var(--sgold);margin-top:14px;font-size:13px;opacity:.65;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#notAuth{display:none;position:fixed;inset:0;z-index:200;background:var(--g1);flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+#notAuth .ico{font-size:3rem;}
+#notAuth h3{color:var(--sgold);}
+#notAuth p{color:rgba(255,255,255,.5);font-size:13px;}
+#notAuth a{padding:12px 28px;background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);border-radius:10px;text-decoration:none;font-weight:700;}
+nav{position:relative;z-index:10;background:rgba(6,26,6,.95);backdrop-filter:var(--blur);border-bottom:1px solid var(--b2);flex-shrink:0;}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 14px;gap:8px;}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.brand-ico{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--gold);flex-shrink:0;}
+.brand-ico img{width:100%;height:100%;object-fit:cover;}
+.brand-txt{color:var(--sgold);font-size:12px;font-weight:700;line-height:1.3;}
+.brand-txt span{display:block;color:var(--text2);font-size:10px;font-weight:400;}
+.nav-r{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.nav-user{display:flex;align-items:center;gap:7px;padding:4px 9px;background:var(--glass);border:1px solid var(--b2);border-radius:8px;}
+.nav-av{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--gold);overflow:hidden;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);}
+.nav-av img{width:100%;height:100%;object-fit:cover;}
+.nav-name{color:var(--sgold);font-size:12px;font-weight:600;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.back-btn{padding:5px 11px;background:var(--glass);border:1px solid var(--b1);border-radius:8px;color:var(--text2);font-size:12px;text-decoration:none;}
+.menu-btn{background:none;border:1px solid var(--b1);border-radius:8px;color:var(--text2);font-size:1rem;cursor:pointer;padding:5px 9px;}
+.banner{padding:8px 16px;display:none;align-items:center;gap:10px;flex-shrink:0;}
+.banner.show{display:flex;}
+#notifBanner{background:rgba(240,180,41,.1);border-bottom:1px solid var(--b2);}
+#notifBanner p{flex:1;font-size:12px;color:var(--sgold);}
+#installBanner{background:rgba(46,139,46,.12);border-bottom:1px solid rgba(46,139,46,.3);}
+#installBanner p{flex:1;font-size:12px;color:var(--text2);}
+.ban-btn{padding:5px 14px;background:linear-gradient(135deg,var(--gold),var(--sgold));border:none;color:var(--g1);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.ban-x{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:1rem;padding:2px 6px;}
+@media(max-width:660px){ nav { display: none; } }
+.app{flex:1;display:flex;overflow:hidden;position:relative;z-index:1;}
+.sb{
+  width:360px;background:rgba(6,26,6,.97);
+  backdrop-filter:var(--blur);
+  border-right:1px solid rgba(255,255,255,.06);
+  display:flex;flex-direction:column;flex-shrink:0;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  z-index:100;
+}
+.sb-hdr{padding:12px 14px 0;flex-shrink:0;}
+.sb-hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.sb-my-av{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);background:var(--g3);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);}
+.sb-my-av img{width:100%;height:100%;object-fit:cover;}
+.sb-title{flex:1;color:#fff;font-size:22px;font-weight:800;letter-spacing:-.3px;}
+.sb-hdr-acts{display:flex;gap:6px;}
+.sb-ico-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.18s;}
+.sb-ico-btn:hover{background:rgba(255,255,255,.14);}
+#sbCloseBtn{display:none;}
+.sb-search-wrap{position:relative;margin-bottom:10px;}
+.sb-search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;}
+.sb-search-wrap input{width:100%;background:rgba(255,255,255,.08);border:none;border-radius:22px;padding:9px 14px 9px 34px;color:#fff;font-size:14px;font-family:inherit;outline:none;}
+.sb-search-wrap input::placeholder{color:rgba(255,255,255,.35);}
+.sb-search-wrap input:focus{background:rgba(255,255,255,.12);}
+.sb-tabs{display:flex;gap:6px;margin-bottom:8px;}
+.sb-tab{flex:1;padding:7px;border-radius:20px;border:none;background:rgba(255,255,255,.07);color:rgba(255,255,255,.45);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.18s;}
+.sb-tab.active{background:rgba(240,180,41,.15);color:var(--sgold);}
+.sb-list{flex:1;overflow-y:auto;padding:4px 6px 8px;}
+.sb-list::-webkit-scrollbar{width:3px;}
+.sb-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px;}
+.sb-lbl{color:rgba(255,255,255,.25);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:10px 8px 5px;}
+.ch-row{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 10px;border-radius:14px;
+  cursor:pointer;margin-bottom:1px;
+  transition:background .15s;position:relative;
+}
+.ch-row:hover{background:rgba(255,255,255,.06);}
+.ch-row.active{background:rgba(240,180,41,.12);}
+.ch-row.unread-row .ch-nm{color:#fff;font-weight:700;}
+.ch-row.unread-row .ch-prev{color:rgba(255,255,255,.75);font-weight:600;}
+.ch-row.unread-row .ch-time{color:var(--sgold);font-weight:700;}
+.ch-av{
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(46,139,46,.5),rgba(6,26,6,.8));
+  border:1.5px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+}
+.ch-row.active .ch-av{border-color:rgba(240,180,41,.5);}
+.ch-inf{flex:1;min-width:0;}
+.ch-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.ch-nm{color:rgba(255,255,255,.8);font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.ch-row.active .ch-nm{color:var(--sgold);}
+.ch-time{color:rgba(255,255,255,.28);font-size:11px;flex-shrink:0;margin-left:6px;}
+.ch-bot{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.ch-prev{color:rgba(255,255,255,.35);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.ch-badge{
+  background:var(--gold);color:var(--g1);
+  font-size:11px;font-weight:800;
+  min-width:20px;height:20px;border-radius:10px;
+  display:none;align-items:center;justify-content:center;
+  padding:0 5px;flex-shrink:0;
+}
+.ch-row.unread-row .ch-badge{display:flex;}
+.mem-row{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 10px;border-radius:14px;
+  cursor:pointer;margin-bottom:1px;transition:background .15s;
+}
+.mem-row:hover{background:rgba(255,255,255,.06);}
+.mem-row.active{background:rgba(240,180,41,.12);}
+.m-av{
+  width:50px;height:50px;border-radius:50%;
+  overflow:hidden;border:1.5px solid rgba(255,255,255,.1);
+  background:var(--g3);display:flex;align-items:center;
+  justify-content:center;font-size:15px;font-weight:700;
+  color:var(--gold);flex-shrink:0;position:relative;
+}
+.m-av img{width:100%;height:100%;object-fit:cover;}
+.ondot{
+  position:absolute;bottom:2px;right:2px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--online);border:2.5px solid rgba(6,26,6,.97);
+}
+.ondot.off{background:rgba(255,255,255,.15);}
+.m-inf{flex:1;min-width:0;}
+.m-nm{color:rgba(255,255,255,.85);font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.m-sub{color:rgba(255,255,255,.3);font-size:12px;margin-top:2px;}
+.m-sub.online{color:#4caf50;font-weight:600;}
+.sa-b{background:linear-gradient(135deg,var(--gold),var(--sgold));color:var(--g1);font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;}
+.a-b{background:rgba(240,180,41,.2);color:var(--sgold);font-size:9px;padding:1px 4px;border-radius:4px;}
+.sb-foot{padding:10px 14px;border-top:1px solid rgba(255,255,255,.05);}
+.logout-btn{width:100%;padding:9px;border:1px solid rgba(244,67,54,.25);background:rgba(244,67,54,.06);color:#ff6b6b;border-radius:10px;cursor:pointer;font-size:13px;font-family:inherit;transition:.18s;}
+.logout-btn:hover{background:rgba(244,67,54,.12);}
+.chat{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.back-to-list{display:none;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:none;color:#fff;font-size:1rem;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;}
+@media(max-width:700px){
+  .sb{
+    position:fixed;inset:0;width:100%;
+    transform:translateX(0);
+    border-right:none;
+  }
+  .sb.chat-open{transform:translateX(-100%);}
+  #sbCloseBtn{display:none !important;}
+  .chat{position:fixed;inset:0;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+  .chat.chat-open{transform:translateX(0);}
+  .back-to-list{display:flex;}
+}
+@media(min-width:701px){
+  .sb{transform:none !important;}
+  .chat{transform:none !important;}
+}
+.empty-st{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+.empty-st .ei{font-size:3rem;opacity:.4;}
+.empty-st p{color:rgba(255,255,255,.3);font-size:14px;}
+#chatUI{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.chat-hdr{padding:10px 14px;background:rgba(6,26,6,.8);backdrop-filter:var(--blur);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.c-av{width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid var(--b2);background:rgba(240,180,41,.08);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.c-av img{width:100%;height:100%;object-fit:cover;}
+.c-inf{flex:1;min-width:0;}
+.c-nm{color:var(--sgold);font-size:14px;font-weight:700;}
+.c-sub{color:rgba(255,255,255,.4);font-size:11px;}
+.c-acts{display:flex;gap:5px;flex-shrink:0;}
+.hbtn{width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:var(--glass);color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:.2s;}
+.hbtn:hover{border-color:var(--b2);color:var(--sgold);}
+.search-bar{padding:7px 14px;background:rgba(6,26,6,.6);border-bottom:1px solid rgba(255,255,255,.05);display:none;flex-shrink:0;}
+.search-bar input{width:100%;background:var(--glass2);border:1px solid var(--b1);border-radius:10px;padding:7px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;}
+.search-bar input:focus{border-color:var(--b2);}
+.search-bar input::placeholder{color:rgba(255,255,255,.3);}
+.pin-bar{padding:6px 14px;background:rgba(240,180,41,.07);border-bottom:1px solid rgba(240,180,41,.12);display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--sgold);cursor:pointer;flex-shrink:0;}
+.pin-bar:hover{background:rgba(240,180,41,.12);}
+.msgs{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:4px;position:relative;}
+.msgs::-webkit-scrollbar{width:4px;}
+.msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px;}
+.date-sep{display:flex;align-items:center;gap:8px;margin:6px 0;}
+.date-sep::before,.date-sep::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06);}
+.date-sep span{color:rgba(255,255,255,.28);font-size:10.5px;white-space:nowrap;}
+.mrow{display:flex;gap:7px;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.mrow.mine{flex-direction:row-reverse;}
+.mrow.sys{justify-content:center;margin:4px 0;}
+.mrow.dim{opacity:.3;}
+.mav{width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(255,255,255,.1);background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;align-self:flex-end;}
+.mav img{width:100%;height:100%;object-fit:cover;}
+.mbody{display:flex;flex-direction:column;max-width:68%;gap:2px;}
+.mine .mbody{align-items:flex-end;}
+.msdr{font-size:10.5px;color:rgba(255,255,255,.38);font-weight:600;display:flex;align-items:center;gap:4px;}
+.mbbl{padding:8px 12px;border-radius:16px;font-size:13.5px;line-height:1.6;word-break:break-word;position:relative;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.other .mbbl{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:4px;}
+.mine .mbbl{background:linear-gradient(135deg,rgba(46,139,46,.65),rgba(27,107,27,.8));border:1px solid rgba(46,139,46,.35);border-bottom-right-radius:4px;color:#fff;}
+.mbbl.pnd{border-color:rgba(240,180,41,.4)!important;}
+.msg-img{max-width:210px;max-height:170px;border-radius:9px;display:block;margin-top:5px;cursor:pointer;}
+.msg-vid{max-width:210px;border-radius:9px;display:block;margin-top:5px;}
+.vwrap{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.18);border-radius:8px;padding:5px 9px;margin-top:4px;min-width:160px;}
+.vplay{width:26px;height:26px;border-radius:50%;background:var(--gold);border:none;color:var(--g1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+.vwave{flex:1;height:16px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;}
+.vprog{height:100%;background:linear-gradient(90deg,var(--gold),var(--sgold));width:0%;transition:.1s linear;}
+.vdur{font-size:10px;color:rgba(255,255,255,.45);flex-shrink:0;}
+.mreacts{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;}
+.rchip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:2px 6px;font-size:11.5px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:2px;}
+.rchip:hover{background:rgba(255,255,255,.14);}
+.rchip.me{background:rgba(240,180,41,.15);border-color:var(--b2);}
+.rcnt{font-size:10.5px;color:rgba(255,255,255,.55);}
+.mfoot{display:flex;align-items:center;gap:5px;}
+.mtime{font-size:10px;color:rgba(255,255,255,.22);}
+.del-t{color:rgba(255,255,255,.28);font-style:italic;font-size:12px;}
+.sys-m{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:5px 12px;font-size:11.5px;color:rgba(255,255,255,.38);text-align:center;}
+mark.hi{background:rgba(240,180,41,.3);color:#fff;border-radius:3px;padding:0 2px;}
+.typing-bar{padding:3px 14px 5px;min-height:20px;flex-shrink:0;}
+.typing-txt{color:rgba(255,255,255,.32);font-size:11.5px;display:flex;align-items:center;gap:5px;}
+.dots span{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.28);animation:bl 1.2s infinite;display:inline-block;margin:0 1px;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes bl{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+.inp-area{padding:8px 11px;background:rgba(6,26,6,.88);backdrop-filter:var(--blur);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;position:relative;}
+.epk{position:absolute;bottom:62px;left:10px;background:rgba(10,34,10,.97);border:1px solid var(--b2);border-radius:13px;padding:9px;display:none;z-index:50;backdrop-filter:var(--blur);width:272px;}
+.epk.open{display:block;}
+.egrid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;}
+.egrid span{font-size:1.15rem;cursor:pointer;padding:4px;border-radius:6px;text-align:center;transition:.12s;}
+.egrid span:hover{background:var(--glass2);}
+.mprev{display:none;padding:5px 0 7px;align-items:center;gap:8px;}
+.mprev.show{display:flex;}
+.pthumb{width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--b2);}
+.pinf{flex:1;}
+.pnm{font-size:11.5px;color:var(--text2);}
+.psz{font-size:10.5px;color:rgba(255,255,255,.28);}
+.prm{background:var(--danger);border:none;color:#fff;border-radius:50%;width:19px;height:19px;cursor:pointer;font-size:10px;}
+.recui{display:none;align-items:center;gap:8px;padding:7px 10px;background:rgba(244,67,54,.08);border:1px solid rgba(244,67,54,.18);border-radius:10px;margin-bottom:7px;}
+.recui.show{display:flex;}
+.rdot{width:9px;height:9px;border-radius:50%;background:var(--danger);animation:pu 1s infinite;}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.25}}
+.rtm{color:var(--danger);font-size:13px;font-weight:700;flex:1;}
+.rstop{padding:5px 12px;background:var(--danger);border:none;color:#fff;border-radius:7px;cursor:pointer;font-size:12px;font-family:inherit;}
+.rcnl{padding:5px 10px;background:var(--glass);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:7px;cursor:pointer;font-size:12px;font-family:inherit;}
+.inp-row{display:flex;gap:7px;align-items:flex-end;}
+.act-btns{display:flex;gap:4px;}
+.abt{width:35px;height:35px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:var(--glass);color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:.2s;flex-shrink:0;position:relative;}
+.abt:hover{border-color:var(--b2);color:var(--sgold);}
+.abt input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.ibox{flex:1;display:flex;align-items:flex-end;background:var(--glass2);border:1px solid var(--b1);border-radius:13px;padding:0 9px;transition:.2s;}
+.ibox:focus-within{border-color:var(--b2);}
+.ebtn{color:rgba(255,255,255,.28);font-size:1rem;cursor:pointer;padding:7px 5px 7px 0;background:none;border:none;align-self:flex-end;transition:.15s;}
+.ebtn:hover{color:var(--sgold);}
+#msgInput{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:13.5px;font-family:inherit;resize:none;max-height:100px;padding:9px 0;line-height:1.5;min-height:36px;}
+#msgInput::placeholder{color:rgba(255,255,255,.28);}
+.sbtn{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--sgold));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:.2s;}
+.sbtn:hover{transform:scale(1.08);box-shadow:0 4px 14px rgba(240,180,41,.4);}
+.sbtn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+#sfab{position:absolute;bottom:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(240,180,41,.88);border:none;color:var(--g1);font-size:.95rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.4);z-index:5;}
+#sfab.show{display:flex;}
+#fcnt{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;border-radius:10px;padding:0 4px;font-size:9px;font-weight:700;display:none;}
+.ctx{position:fixed;background:rgba(10,34,10,.97);border:1px solid var(--b2);border-radius:12px;padding:5px;z-index:500;min-width:154px;backdrop-filter:var(--blur);display:none;}
+.ctx.show{display:block;}
+.cit{padding:8px 13px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--text);display:flex;align-items:center;gap:7px;transition:.12s;}
+.cit:hover{background:var(--glass2);}
+.cit.red{color:var(--danger);}
+.rpick{position:fixed;background:rgba(10,34,10,.97);border:1px solid var(--b2);border-radius:13px;padding:7px 9px;z-index:500;display:none;gap:3px;backdrop-filter:var(--blur);}
+.rpick.show{display:flex;}
+.rpick span{font-size:1.25rem;cursor:pointer;padding:4px;border-radius:6px;transition:.12s;}
+.rpick span:hover{background:var(--glass2);}
+.lb{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.93);align-items:center;justify-content:center;}
+.lb.open{display:flex;}
+.lb img,.lb video{max-width:92vw;max-height:92vh;border-radius:12px;object-fit:contain;}
+.lb-x{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.05rem;}
+#toast{display:none;position:fixed;top:68px;right:14px;z-index:9990;background:rgba(13,46,13,.97);border:1px solid var(--b2);border-radius:14px;padding:12px 16px;max-width:290px;cursor:pointer;animation:sIn .3s ease;}
+@keyframes sIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+#toast .t-title{color:var(--sgold);font-size:13px;font-weight:700;margin-bottom:3px;}
+#toast .t-body{color:rgba(255,255,255,.6);font-size:12px;}
+@media(max-width:660px){
+  .sb{position:fixed;top:0;bottom:0;left:0;z-index:100;transform:translateX(0);}
+  .brand-txt{display:none;}
+  .mbody{max-width:82%;}
+}
+</style>
+</head>
+<body>
+<div id="loader"><div class="ld-ring"></div><div class="ld-txt">লোড হচ্ছে...</div></div>
+<div id="notAuth" style="display:none">
+  <div class="ico">🔐</div><h3>লগইন প্রয়োজন</h3>
+  <p>অনুমোদিত সদস্যরাই বার্তা পাঠাতে পারবেন।</p>
+  <a href="login.html">লগইন করুন →</a>
+</div>
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="brand">
+      <div class="brand-ico"><img src="https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg" alt=""></div>
+      <div class="brand-txt">সমাজ কল্যাণ যুব সংগঠন<span>বার্তা</span></div>
+    </a>
+    <div class="nav-r">
+      <button class="menu-btn" onclick="toggleSb()">☰</button>
+      <div class="nav-user" id="navUser" style="display:none">
+        <div class="nav-av" id="navAv"></div>
+        <span class="nav-name" id="navName"></span>
+      </div>
+      <a href="index.html" class="back-btn">← ফিরুন</a>
+    </div>
+  </div>
+</nav>
+<div id="notifBanner" class="banner">
+  <p>🔔 নতুন বার্তার notification পেতে অনুমতি দিন</p>
+  <button class="ban-btn" onclick="askNotif()">চালু করুন</button>
+  <button class="ban-x" onclick="dimissBanner('notifBanner')">✕</button>
+</div>
+<div id="installBanner" class="banner">
+  <p>📱 App হিসেবে install করুন!</p>
+  <button class="ban-btn" id="installBtn">Install করুন</button>
+  <button class="ban-x" onclick="dimissBanner('installBanner')">✕</button>
+</div>
+<div class="app">
+  <div class="sb" id="sb">
+    <div class="sb-hdr">
+      <div class="sb-hdr-top">
+        <div class="sb-my-av" id="sbMyAv"></div>
+        <div class="sb-title">বার্তা</div>
+        <div class="sb-hdr-acts">
+          <button class="sb-ico-btn" id="sbCloseBtn">✕</button>
+        </div>
+      </div>
+      <div class="sb-search-wrap">
+        <span class="sb-search-ico">🔍</span>
+        <input type="text" placeholder="অনুসন্ধান করুন" id="searchIn" oninput="doSearch(this.value)">
+      </div>
+      <div class="sb-tabs">
+        <button class="sb-tab active" onclick="swTab('ch',this)">💬 চ্যানেল</button>
+        <button class="sb-tab" onclick="swTab('dm',this)">👥 সদস্য</button>
+      </div>
+    </div>
+    <div class="sb-list" id="sbList"></div>
+    <div class="sb-foot">
+      <button class="logout-btn" onclick="doLogout()">🚪 লগআউট</button>
+    </div>
+  </div>
+
+  <div class="chat" id="chatPanel">
+    <div class="empty-st" id="emptySt">
+      <div class="ei">💬</div>
+      <p>চ্যানেল বা সদস্য বেছে নিন</p>
+    </div>
+    <div id="chatUI">
+      <div class="chat-hdr">
+        <button class="back-to-list" onclick="backToList()">←</button>
+        <div class="c-av" id="hAv"></div>
+        <div class="c-inf"><div class="c-nm" id="hNm"></div><div class="c-sub" id="hSb"></div></div>
+        <div class="c-acts">
+          <button class="hbtn" onclick="togSearch()" title="বার্তা খুঁজুন">🔍</button>
+          <button class="hbtn" id="pinBtn" style="display:none">📌</button>
+        </div>
+      </div>
+      <div class="search-bar" id="searchBar"><input type="text" placeholder="🔍 বার্তা খুঁজুন..." id="msgSearch" oninput="searchMsgs(this.value)"></div>
+      <div class="pin-bar" id="pinBar" style="display:none">📌 <span id="pinPrev"></span></div>
+      <div class="msgs" id="msgsDiv"><button id="sfab" onclick="goDown()">⬇<span id="fcnt"></span></button></div>
+      <div class="typing-bar"><div class="typing-txt" id="typTxt" style="display:none"><span class="dots"><span></span><span></span><span></span></span><span id="typNms"></span></div></div>
+      <div class="inp-area">
+        <div class="epk" id="epk"><div class="egrid" id="egrid"></div></div>
+        <div class="mprev" id="mprev">
+          <img class="pthumb" id="pthumb" src="" alt="" style="display:none">
+          <div class="pinf"><div class="pnm" id="pnm"></div><div class="psz" id="psz"></div></div>
+          <button class="prm" onclick="clearMedia()">✕</button>
+        </div>
+        <div class="recui" id="recui">
+          <div class="rdot"></div><span class="rtm" id="rct">0:00</span>
+          <button class="rstop" onclick="stopRec()">✓ পাঠান</button>
+          <button class="rcnl" onclick="cancelRec()">বাতিল</button>
+        </div>
+        <div class="inp-row">
+          <div class="act-btns">
+            <label class="abt" title="ছবি/ভিডিও">📎<input type="file" id="fileIn" accept="image/*,video/*" onchange="pickMedia(this)"></label>
+            <button class="abt" id="micBtn" onclick="startRec()" title="ভয়েস">🎤</button>
+          </div>
+          <div class="ibox">
+            <button class="ebtn" onclick="togEmoji(event)">😊</button>
+            <textarea id="msgInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="onKey(event)" oninput="resize(this);doTyping()"></textarea>
+          </div>
+          <button class="sbtn" id="sendBtn" onclick="sendMsg()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ctx" id="ctx">
+  <div class="cit" onclick="ctxEmoji()">😊 Reaction</div>
+  <div class="cit" id="ctxPin" style="display:none" onclick="ctxPin2()">📌 Pin করুন</div>
+  <div class="cit" id="ctxDel" style="display:none" onclick="ctxDel2()">🗑 মুছুন</div>
+  <div class="cit red" id="ctxBan" style="display:none" onclick="ctxBan2()">🚫 Ban করুন</div>
+</div>
+<div class="rpick" id="rpick">
+  <span onclick="doReact('❤️')">❤️</span><span onclick="doReact('👍')">👍</span>
+  <span onclick="doReact('😂')">😂</span><span onclick="doReact('😮')">😮</span>
+  <span onclick="doReact('😢')">😢</span><span onclick="doReact('🙏')">🙏</span>
+  <span onclick="doReact('🔥')">🔥</span><span onclick="doReact('👏')">👏</span>
+</div>
+<div class="lb" id="lb" onclick="closeLb()">
+  <button class="lb-x" onclick="closeLb()">✕</button>
+  <img id="lbImg" src="" alt="" style="display:none">
+  <video id="lbVid" controls style="display:none" onclick="event.stopPropagation()"></video>
+</div>
+<div id="toast" onclick="this.style.display='none'">
+  <div class="t-title" id="tTitle"></div>
+  <div class="t-body" id="tBody"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, limit, onSnapshot, addDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getDatabase, ref, set, remove, onValue, onDisconnect, serverTimestamp as rtTs, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
+
+const CFG={
+  apiKey:"AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I",
+  authDomain:"somaj-kallyan.firebaseapp.com",
+  projectId:"somaj-kallyan",
+  messagingSenderId:"392871962816",
+  databaseURL:"https://somaj-kallyan-default-rtdb.firebaseio.com",
+  appId:"1:392871962816:web:0f7ebbc36a3d8c784da525"
+};
+const VAPID="BB5wsbttV5N-ME-V_RYWG4NoN9clWQhtcxlbANKjvVbee8tW-47WCMnaxfO5_OVfkOiYK9uNIlz4NOG494kLLvY";
+const CLD='https://api.cloudinary.com/v1_1/dasurbavl';
+const PRESET='somaj-kallyan-upload';
+
+const app=initializeApp(CFG);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const rtdb=getDatabase(app);
+let msgService=null;
+
+let ME=null,chat=null,unsubM=null,unsubTy=null;
+let members=[],sbMode='ch',mFile=null,mType=null;
+let mRec=null,rChunks=[],rSec=0,rInt=null;
+let atBot=true,newM=0,tyTmr=null;
+let ctxId=null,ctxDat=null,rTarget=null;
+let lastDt='',allMsgs=[];
+let dip=null;
+
+const CHS=[
+  {id:'general',nm:'সাধারণ আলোচনা',ico:'💬',sub:'সব সদস্যদের জন্য'},
+  {id:'announcements',nm:'ঘোষণা',ico:'📢',sub:'গুরুত্বপূর্ণ ঘোষণা'},
+  {id:'help',nm:'সাহায্য',ico:'🙋',sub:'যেকোনো প্রশ্নের জন্য'}
+];
+const EMOJIS='😊😂❤️👍🙏🎉💪🌟✅😍🤔😢🌺🏆💚📌⚡🙌😎🥰😅😭🤩🥳🎊🌈☀️🌙⭐🌸🎵💡🔥💯👑🏅'.split('').reduce((a,c,i,ar)=>i%2===0?[...a,ar[i]+ar[i+1]]:a,[]);
+const eg=document.getElementById('egrid');
+EMOJIS.forEach(e=>{const s=document.createElement('span');s.textContent=e;s.onclick=()=>{insE(e);closeE();};eg.appendChild(s);});
+
+// PWA
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;document.getElementById('installBanner').classList.add('show');});
+document.getElementById('installBtn').onclick=async()=>{if(!dip)return;dip.prompt();await dip.userChoice;dip=null;dimissBanner('installBanner');};
+window.addEventListener('appinstalled',()=>dimissBanner('installBanner'));
+window.dimissBanner=function(id){document.getElementById(id).classList.remove('show');};
+
+// SW
+async function regSW(){
+  if(!('serviceWorker' in navigator)) return;
+  try{
+    await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    console.log('SW registered');
+  }catch(e){console.warn('SW fail',e);}
+}
+
+// ══════════════════════════════════════════
+// ✅ FIX 1: AUTH — try/catch দিয়ে সব error ধরা হচ্ছে
+// ══════════════════════════════════════════
+onAuthStateChanged(auth, async user => {
+  console.log('Auth state changed:', user ? user.uid : 'null');
+
+  if (!user) {
+    console.log('No user — showing notAuth');
+    showNA();
+    return;
+  }
+
+  try {
+    const us = await getDoc(doc(db, 'users', user.uid));
+    console.log('User doc exists:', us.exists(), 'Data:', us.data());
+
+    if (!us.exists()) {
+      console.log('User doc missing — showing notAuth');
+      showNA();
+      return;
+    }
+
+    const userData = us.data();
+    // ✅ FIX 2: status চেক — approved না হলে notAuth দেখাও
+    // কিন্তু status field না থাকলেও allow করো (backward compat)
+    if (userData.status && userData.status !== 'approved') {
+      console.log('User not approved:', userData.status);
+      showNA();
+      return;
+    }
+
+    ME = { uid: user.uid, ...userData };
+    console.log('ME loaded:', ME.name, ME.role);
+
+    // Nav setup
+    document.getElementById('navUser').style.display = 'flex';
+    document.getElementById('navName').textContent = ME.name || 'সদস্য';
+    const av = document.getElementById('navAv');
+    av.innerHTML = ME.photoUrl ? `<img src="${ME.photoUrl}" alt="">` : (ME.name ? ME.name[0] : '?');
+
+    // Sidebar avatar
+    const sbAv = document.getElementById('sbMyAv');
+    if (sbAv) sbAv.innerHTML = ME.photoUrl ? `<img src="${ME.photoUrl}" alt="">` : (ME.name ? ME.name[0] : '?');
+
+    await loadMembers();
+    setupPresence(user.uid);
+    renderSb();
+    setupChMeta();
+    setupNotifListener(user.uid);
+    await regSW();
+    setupMsg();
+    checkNotif();
+
+    // Hide loader
+    const l = document.getElementById('loader');
+    l.style.opacity = '0';
+    setTimeout(() => l.style.display = 'none', 500);
+
+  } catch (err) {
+    console.error('Auth setup error:', err);
+    // Error হলেও loader hide করো, notAuth দেখাও
+    showNA();
+  }
+});
+
+// MESSAGING
+function setupMsg(){
+  try{
+    msgService=getMessaging(app);
+    onMessage(msgService,p=>{
+      const{title,body}=p.notification||{};
+      showToast(title||'নতুন বার্তা',body||'');
+    });
+  }catch(e){console.warn('FCM setup fail',e);}
+}
+
+function checkNotif(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission==='default'){
+    setTimeout(()=>document.getElementById('notifBanner').classList.add('show'),3000);
+  } else if(Notification.permission==='granted'){
+    saveTok();
+  }
+}
+
+window.askNotif=async function(){
+  if(!msgService){alert('এই ব্রাউজারে push notification সাপোর্ট নেই।');return;}
+  try{
+    const p=await Notification.requestPermission();
+    dimissBanner('notifBanner');
+    if(p==='granted'){await saveTok();showToast('✅ চালু হয়েছে!','নতুন বার্তায় notification পাবেন।');}
+  }catch(e){console.warn('notif permission error',e);}
+};
+
+async function saveTok(){
+  if(!msgService) return;
+  try{
+    const sw=await navigator.serviceWorker.ready;
+    const tok=await getToken(msgService,{vapidKey:VAPID,serviceWorkerRegistration:sw});
+    if(tok&&ME) await updateDoc(doc(db,'users',ME.uid),{fcmToken:tok,tokTs:serverTimestamp()});
+  }catch(e){console.warn('FCM token fail',e);}
+}
+
+function showToast(title,body){
+  const t=document.getElementById('toast');
+  document.getElementById('tTitle').textContent=title;
+  document.getElementById('tBody').textContent=body;
+  t.style.display='block';
+  clearTimeout(t._x);t._x=setTimeout(()=>t.style.display='none',4500);
+}
+
+// MEMBERS
+async function loadMembers(){
+  try{
+    const s=await getDocs(query(collection(db,'users'),where('status','==','approved')));
+    members=s.docs.map(d=>({uid:d.id,...d.data(),online:false}));
+    console.log('Members loaded:',members.length);
+  }catch(e){
+    console.warn('loadMembers error:',e);
+    members=[];
+  }
+}
+
+function setupPresence(uid){
+  try{
+    const pr=ref(rtdb,`presence/${uid}`);
+    set(pr,{uid,name:ME.name,photoUrl:ME.photoUrl||null,online:true,ts:rtTs()});
+    onDisconnect(pr).update({online:false,ts:rtTs()});
+    onValue(ref(rtdb,'presence'),snap=>{
+      const d=snap.val()||{};
+      members=members.map(m=>({...m,online:!!d[m.uid]?.online}));
+      if(sbMode==='dm') renderSb();
+    });
+  }catch(e){console.warn('presence error',e);}
+}
+
+// SIDEBAR
+let chMeta={};
+let chMetaUnsubs=[];
+
+function setupChMeta(){
+  chMetaUnsubs.forEach(u=>{try{u();}catch{}});
+  chMetaUnsubs=[];
+
+  CHS.forEach(ch=>{
+    chMeta[ch.id]=chMeta[ch.id]||{lastMsg:ch.sub,lastSender:'',lastTime:'',unread:0};
+
+    // ✅ Last message listener
+    try{
+      const q=query(collection(db,`channels/${ch.id}/messages`),orderBy('createdAt','desc'),limit(1));
+      const u1=onSnapshot(q,snap=>{
+        if(!snap.empty){
+          const d=snap.docs[0].data();
+          const ts=d.createdAt?.toDate?d.createdAt.toDate():new Date();
+          chMeta[ch.id].lastMsg=d.deleted?'🚫 মুছে ফেলা':d.text||(d.imgUrl?'📷 ছবি':d.audUrl?'🎤 ভয়েস':'📎 মিডিয়া');
+          chMeta[ch.id].lastSender=d.uid===ME?.uid?'আপনি':(d.name?.split(' ')[0]||'');
+          chMeta[ch.id].lastTime=fmtTime(ts);
+        }
+        if(sbMode==='ch') renderSb();
+      }, err=>console.warn('ch meta snap err',err));
+      chMetaUnsubs.push(u1);
+    }catch(e){console.warn('ch meta setup err',e);}
+
+    // ✅ Unread count from RTDB
+    try{
+      const u2=onValue(ref(rtdb,`unread/${ME.uid}/${ch.id}`),snap=>{
+        chMeta[ch.id].unread=snap.val()||0;
+        if(sbMode==='ch') renderSb();
+      });
+      chMetaUnsubs.push(u2);
+    }catch(e){console.warn('unread listen err',e);}
+  });
+}
+
+function fmtTime(date){
+  const now=new Date();
+  const diff=now-date;
+  if(diff<60000) return 'এখন';
+  if(diff<3600000) return Math.floor(diff/60000)+'মি';
+  if(diff<86400000) return date.toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'});
+  return date.toLocaleDateString('bn-BD',{day:'numeric',month:'short'});
+}
+
+window.swTab=function(mode,el){
+  sbMode=mode;
+  document.querySelectorAll('.sb-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderSb();
+};
+
+function renderSb(f=''){
+  const L=document.getElementById('sbList');
+  L.innerHTML='';
+  if(sbMode==='ch'){
+    CHS.forEach(c=>{
+      if(f&&!c.nm.includes(f))return;
+      const meta=chMeta[c.id]||{};
+      const unread=meta.unread||0;
+      const isActive=chat?.id===c.id;
+      const hasUnread=unread>0&&!isActive;
+      const lastTxt=meta.lastSender?`${meta.lastSender}: ${meta.lastMsg||''}`:(meta.lastMsg||c.sub);
+      const el=document.createElement('div');
+      el.className=`ch-row${isActive?' active':''}${hasUnread?' unread-row':''}`;
+      el.innerHTML=`
+        <div class="ch-av">${c.ico}</div>
+        <div class="ch-inf">
+          <div class="ch-top">
+            <div class="ch-nm">${esc(c.nm)}</div>
+            <div class="ch-time">${meta.lastTime||''}</div>
+          </div>
+          <div class="ch-bot">
+            <div class="ch-prev">${esc(lastTxt)}</div>
+            <div class="ch-badge">${unread>99?'99+':unread}</div>
+          </div>
+        </div>`;
+      el.onclick=()=>openCh(c);
+      L.appendChild(el);
+    });
+  } else {
+    const ot=members.filter(m=>m.uid!==ME?.uid);
+    L.innerHTML=`<div class="sb-lbl">👥 সদস্য (${ot.length})</div>`;
+    ot.sort((a,b)=>(b.online?1:0)-(a.online?1:0));
+    ot.forEach(m=>{
+      if(f&&!m.name?.toLowerCase().includes(f.toLowerCase()))return;
+      const el=document.createElement('div');
+      el.className='mem-row'+(chat?.id===getDmId(ME.uid,m.uid)?' active':'');
+      const av=m.photoUrl?`<img src="${m.photoUrl}" alt="">`:((m.name||'?')[0]);
+      const bd=m.role==='superadmin'?'<span class="sa-b">SA</span>':m.role==='admin'?'<span class="a-b">A</span>':'';
+      el.innerHTML=`
+        <div class="m-av">${av}<div class="ondot ${m.online?'':'off'}"></div></div>
+        <div class="m-inf">
+          <div class="m-nm">${esc(m.name||'সদস্য')} ${bd}</div>
+          <div class="m-sub ${m.online?'online':''}">${m.online?'🟢 অনলাইন':'অফলাইন'}</div>
+        </div>`;
+      el.onclick=()=>openDm(m);
+      L.appendChild(el);
+    });
+  }
+}
+window.doSearch=function(v){renderSb(v);};
+
+window.openCh=function(ch){
+  chat={type:'ch',id:ch.id,nm:ch.nm,ico:ch.ico};
+  initChat();
+  const canT=ch.id!=='announcements'||ME?.role==='superadmin';
+  setInp(canT,ch.id==='announcements'&&ME?.role!=='superadmin'?'শুধু Super Admin পারবে':'বার্তা লিখুন...');
+  document.getElementById('hAv').textContent=ch.ico;
+  document.getElementById('hNm').textContent=ch.nm;
+  document.getElementById('hSb').textContent=ch.sub||'';
+  loadMsgs(`channels/${ch.id}/messages`);
+  listenTy(`ch_${ch.id}`);
+  loadPin(ch.id);
+  // Unread রিসেট
+  if(chMeta[ch.id]) chMeta[ch.id].unread=0;
+  set(ref(rtdb,`unread/${ME.uid}/${ch.id}`),0).catch(()=>{});
+  renderSb();
+  openChatPanel();
+};
+
+window.openDm=function(m){
+  const dmId=getDmId(ME.uid,m.uid);
+  chat={type:'dm',id:dmId,nm:m.name,photoUrl:m.photoUrl,otherId:m.uid};
+  initChat();
+  setInp(true,'বার্তা লিখুন...');
+  const av=document.getElementById('hAv');
+  av.innerHTML=m.photoUrl?`<img src="${m.photoUrl}" alt="">`:((m.name||'?')[0]);
+  document.getElementById('hNm').textContent=m.name||'সদস্য';
+  document.getElementById('hSb').textContent=m.online?'🟢 অনলাইন':'অফলাইন';
+  document.getElementById('pinBtn').style.display='none';
+  document.getElementById('pinBar').style.display='none';
+  loadMsgs(`dms/${dmId}/messages`);
+  listenTy(`dm_${dmId}`);
+  renderSb();
+  openChatPanel();
+};
+
+function initChat(){
+  document.getElementById('emptySt').style.display='none';
+  const ui=document.getElementById('chatUI');
+  ui.style.display='flex';ui.style.flexDirection='column';ui.style.flex='1';ui.style.overflow='hidden';
+  lastDt='';newM=0;atBot=true;allMsgs=[];
+  document.getElementById('msgsDiv').querySelectorAll('.mrow,.date-sep').forEach(e=>e.remove());
+  if(unsubM){try{unsubM();}catch{}}
+  if(unsubTy){try{unsubTy();}catch{}}
+  document.getElementById('searchBar').style.display='none';
+  document.getElementById('msgSearch').value='';
+}
+function getDmId(a,b){return[a,b].sort().join('_');}
+
+// MESSAGES
+function loadMsgs(path){
+  const q=query(collection(db,path),orderBy('createdAt','asc'),limit(200));
+  unsubM=onSnapshot(q,snap=>{
+    snap.docChanges().forEach(c=>{
+      if(c.type==='added'){
+        renderMsg(c.doc.id,c.doc.data());
+        const d=c.doc.data();
+        if(d.uid!==ME?.uid&&!atBot){
+          showToast(d.name||'সদস্য',d.text||(d.imgUrl?'📷 ছবি':d.audUrl?'🎤 ভয়েস':'📎 মিডিয়া'));
+        }
+      }
+      if(c.type==='modified') patchMsg(c.doc.id,c.doc.data());
+    });
+    if(atBot) goDown(); else{newM++;showFab();}
+  }, err=>console.warn('msgs snap error:',err));
+}
+
+function renderMsg(id,d){
+  const wrap=document.getElementById('msgsDiv');
+  const fab=document.getElementById('sfab');
+  const ts=d.createdAt?.toDate?d.createdAt.toDate():new Date();
+  const ds=ts.toLocaleDateString('bn-BD',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if(ds!==lastDt){lastDt=ds;const sep=document.createElement('div');sep.className='date-sep';sep.innerHTML=`<span>${ds}</span>`;wrap.insertBefore(sep,fab);}
+  const isMine=d.uid===ME?.uid;
+  const time=ts.toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'});
+  if(d.type==='sys'){
+    const r=document.createElement('div');r.id='m-'+id;r.className='mrow sys';
+    r.innerHTML=`<div class="sys-m">${esc(d.text||'')}</div>`;
+    wrap.insertBefore(r,fab);allMsgs.push({id,el:r,text:d.text||''});return;
+  }
+  const sdr=members.find(m=>m.uid===d.uid)||{name:d.name||'?',photoUrl:d.photoUrl||null,role:d.role||'member'};
+  const avH=sdr.photoUrl?`<img src="${sdr.photoUrl}" alt="">`:((sdr.name||'?')[0]);
+  const rtag=d.role==='superadmin'?'<span class="sa-b">SA</span>':d.role==='admin'?'<span class="a-b">A</span>':'';
+  let body='';
+  if(d.deleted){body='<span class="del-t">🚫 মুছে ফেলা হয়েছে</span>';}
+  else{
+    if(d.text) body+=`<span class="mt">${esc(d.text)}</span>`;
+    if(d.imgUrl) body+=`<img class="msg-img" src="${d.imgUrl}" onclick="openLb('img','${d.imgUrl}')" alt="ছবি">`;
+    if(d.vidUrl) body+=`<video class="msg-vid" src="${d.vidUrl}" controls preload="metadata"></video>`;
+    if(d.audUrl) body+=bldVoice(id,d.audUrl,d.audDur||0);
+  }
+  const rH=bldReacts(id,d.reacts||{});
+  const row=document.createElement('div');
+  row.id='m-'+id;row.className=`mrow ${isMine?'mine':'other'}`;
+  row.innerHTML=`
+    ${!isMine?`<div class="mav">${avH}</div>`:''}
+    <div class="mbody">
+      ${!isMine?`<div class="msdr">${esc(d.name||'সদস্য')} ${rtag}</div>`:''}
+      <div class="mbbl${d.pinned?' pnd':''}" data-id="${id}">${body}</div>
+      <div class="mreacts" id="rt-${id}">${rH}</div>
+      <div class="mfoot"><span class="mtime">${time}${isMine?' ✓':''}</span>${d.pinned?'<span style="font-size:9px;color:var(--sgold)"> 📌</span>':''}</div>
+    </div>
+    ${isMine?`<div class="mav">${avH}</div>`:''}`;
+  const bbl=row.querySelector('.mbbl');
+  bbl.addEventListener('contextmenu',e=>{e.preventDefault();showCtx(e,id,d);});
+  let lt;
+  bbl.addEventListener('touchstart',()=>{lt=setTimeout(()=>showCtx({clientX:60,clientY:200},id,d),600);},{passive:true});
+  bbl.addEventListener('touchend',()=>clearTimeout(lt));
+  wrap.insertBefore(row,fab);
+  allMsgs.push({id,el:row,text:d.text||''});
+}
+
+function patchMsg(id,d){
+  const el=document.getElementById('m-'+id);if(!el)return;
+  const rt=document.getElementById('rt-'+id);if(rt)rt.innerHTML=bldReacts(id,d.reacts||{});
+  if(d.deleted){const b=el.querySelector('.mbbl');if(b)b.innerHTML='<span class="del-t">🚫 মুছে ফেলা হয়েছে</span>';}
+}
+
+function bldVoice(id,url,dur){
+  const vid='vp-'+id;
+  return `<div class="vwrap"><button class="vplay" onclick="togVoice('${vid}','${url}',this)">▶</button><div class="vwave"><div class="vprog" id="vpr-${vid}"></div></div><span class="vdur" id="vdu-${vid}">${fmt(dur)}</span><audio id="${vid}" src="${url}" preload="none" onended="rstVoice('${vid}')" ontimeupdate="tickVoice('${vid}',this)"></audio></div>`;
+}
+
+function bldReacts(msgId,reacts){
+  const g={};
+  Object.entries(reacts).forEach(([uid,em])=>{g[em]=g[em]||[];g[em].push(uid);});
+  return Object.entries(g).map(([em,uids])=>`<div class="rchip ${uids.includes(ME?.uid)?'me':''}" onclick="togReact('${msgId}','${em}')">${em}<span class="rcnt">${uids.length}</span></div>`).join('');
+}
+
+window.togSearch=function(){
+  const bar=document.getElementById('searchBar');
+  const open=bar.style.display==='flex';
+  bar.style.display=open?'none':'flex';
+  if(!open) document.getElementById('msgSearch').focus();
+  else{document.getElementById('msgSearch').value='';searchMsgs('');}
+};
+window.searchMsgs=function(q){
+  const term=q.trim().toLowerCase();
+  allMsgs.forEach(({el,text})=>{
+    if(!term){el.classList.remove('dim');const s=el.querySelector('.mt');if(s)s.innerHTML=esc(text);return;}
+    const match=text.toLowerCase().includes(term);
+    el.classList.toggle('dim',!match);
+    if(match){
+      const s=el.querySelector('.mt');
+      if(s){const re=new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');s.innerHTML=esc(text).replace(re,m=>`<mark class="hi">${m}</mark>`);}
+      el.scrollIntoView({block:'nearest',behavior:'smooth'});
+    }
+  });
+};
+
+// ══════════════════════════════════════════
+// ✅ FIX 3: SEND — increment ছাড়া RTDB unread update
+// ══════════════════════════════════════════
+window.sendMsg=async function(){
+  const inp=document.getElementById('msgInput');
+  const txt=inp.value.trim();
+  if(!txt&&!mFile) return;
+  if(!chat) return;
+  document.getElementById('sendBtn').disabled=true;
+  try{
+    let pay={
+      uid:ME.uid,name:ME.name,photoUrl:ME.photoUrl||null,
+      role:ME.role||'member',createdAt:serverTimestamp(),reacts:{}
+    };
+    if(mFile){
+      const url=await upload(mFile,mType==='image'?'image':'video');
+      if(mType==='image') pay.imgUrl=url; else pay.vidUrl=url;
+      clearMedia();
+    }
+    if(txt) pay.text=txt;
+    const path=chat.type==='ch'?`channels/${chat.id}/messages`:`dms/${chat.id}/messages`;
+    await addDoc(collection(db,path),pay);
+    inp.value='';resize(inp);clearTy();goDown();
+
+    const msgPreview=pay.text||(pay.imgUrl?'📷 ছবি':pay.audUrl?'🎤 ভয়েস':'📎 মিডিয়া');
+
+    // ✅ Unread বাড়ানো — RTDB এ নিরাপদ উপায়ে
+    if(chat.type==='ch'){
+      for(const m of members){
+        if(m.uid===ME.uid) continue;
+        // এই user এর current unread পড়ো তারপর +1 করো
+        try{
+          const snap=await get(ref(rtdb,`unread/${m.uid}/${chat.id}`));
+          const cur=snap.val()||0;
+          await set(ref(rtdb,`unread/${m.uid}/${chat.id}`),cur+1);
+        }catch(e){console.warn('unread set err',e);}
+        // Notification queue
+        try{
+          await addDoc(collection(db,'notif_queue'),{
+            toUid:m.uid,fromName:ME.name,fromPhoto:ME.photoUrl||null,
+            channel:chat.nm,channelId:chat.id,body:msgPreview,
+            createdAt:serverTimestamp(),seen:false
+          });
+        }catch(e){console.warn('notif_queue err',e);}
+      }
+    } else if(chat.type==='dm'){
+      try{
+        await addDoc(collection(db,'notif_queue'),{
+          toUid:chat.otherId,fromName:ME.name,fromPhoto:ME.photoUrl||null,
+          channel:'ব্যক্তিগত বার্তা',channelId:'dm',body:msgPreview,
+          createdAt:serverTimestamp(),seen:false
+        });
+      }catch(e){console.warn('dm notif err',e);}
+    }
+  }catch(e){
+    console.error('sendMsg error:',e);
+    alert('পাঠাতে সমস্যা হয়েছে: '+e.message);
+  }
+  document.getElementById('sendBtn').disabled=false;
+};
+
+// ══════════════════════════════════════════
+// ✅ FIX 4: Notification listener — compound query index issue fix
+// orderBy ছাড়া simple query ব্যবহার করা হচ্ছে
+// ══════════════════════════════════════════
+let notifUnsub=null;
+function setupNotifListener(uid){
+  if(notifUnsub){try{notifUnsub();}catch{}}
+  try{
+    // ✅ orderBy বাদ দেওয়া হয়েছে — composite index লাগবে না
+    const q=query(
+      collection(db,'notif_queue'),
+      where('toUid','==',uid),
+      where('seen','==',false),
+      limit(20)
+    );
+    notifUnsub=onSnapshot(q,snap=>{
+      snap.docChanges().forEach(async c=>{
+        if(c.type!=='added') return;
+        const d=c.doc.data();
+        // mark seen
+        try{await updateDoc(doc(db,'notif_queue',c.doc.id),{seen:true});}catch{}
+        // foreground এ toast
+        if(document.visibilityState==='visible'){
+          showToast(`${d.fromName} — ${d.channel}`,d.body||'');
+          return;
+        }
+        // background এ browser notification
+        if(Notification.permission==='granted'&&'serviceWorker' in navigator){
+          try{
+            const reg=await navigator.serviceWorker.ready;
+            reg.showNotification(`${d.fromName} — ${d.channel}`,{
+              body:d.body||'নতুন বার্তা',
+              icon:d.fromPhoto||'https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg',
+              badge:'https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg',
+              vibrate:[200,100,200],tag:d.channelId,renotify:true,
+              data:{url:'/messages.html'}
+            });
+          }catch(e){console.warn('showNotification err',e);}
+        }
+      });
+    }, err=>console.warn('notif listener err:',err));
+  }catch(e){console.warn('setupNotifListener err',e);}
+}
+
+async function upload(file,res='image'){
+  const fd=new FormData();
+  fd.append('file',file);fd.append('upload_preset',PRESET);fd.append('folder','somaj-kallyan/messages');
+  const r=await fetch(`${CLD}/${res}/upload`,{method:'POST',body:fd});
+  const j=await r.json();
+  if(!j.secure_url) throw new Error('Upload failed: '+JSON.stringify(j));
+  return j.secure_url;
+}
+
+// MEDIA
+window.pickMedia=function(inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>50*1024*1024){alert('50MB-এর বেশি হওয়া যাবে না।');return;}
+  mFile=f;mType=f.type.startsWith('image')?'image':'video';
+  const r=new FileReader();
+  r.onload=e=>{
+    const th=document.getElementById('pthumb');
+    if(mType==='image'){th.src=e.target.result;th.style.display='block';}else th.style.display='none';
+    document.getElementById('pnm').textContent=f.name;
+    document.getElementById('psz').textContent=(f.size/1024/1024).toFixed(1)+' MB';
+    document.getElementById('mprev').classList.add('show');
+  };
+  r.readAsDataURL(f);
+};
+window.clearMedia=function(){
+  mFile=null;mType=null;
+  document.getElementById('fileIn').value='';
+  document.getElementById('mprev').classList.remove('show');
+};
+
+// VOICE
+window.startRec=async function(){
+  if(!navigator.mediaDevices){alert('মাইক সাপোর্ট নেই।');return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    rChunks=[];rSec=0;mRec=new MediaRecorder(stream);
+    mRec.ondataavailable=e=>rChunks.push(e.data);
+    mRec.onstop=onRecStop;mRec.start();
+    document.getElementById('recui').classList.add('show');
+    document.getElementById('micBtn').disabled=true;
+    rInt=setInterval(()=>{rSec++;document.getElementById('rct').textContent=fmt(rSec);if(rSec>=60)stopRec();},1000);
+  }catch(e){alert('মাইক্রোফোন অ্যাক্সেস দিন।');}
+};
+window.stopRec=function(){
+  if(mRec&&mRec.state!=='inactive') mRec.stop();
+  mRec?.stream?.getTracks().forEach(t=>t.stop());
+  clearInterval(rInt);
+  document.getElementById('recui').classList.remove('show');
+  document.getElementById('micBtn').disabled=false;
+};
+window.cancelRec=function(){rChunks=[];stopRec();};
+async function onRecStop(){
+  if(!rChunks.length) return;
+  const blob=new Blob(rChunks,{type:'audio/webm'});
+  const file=new File([blob],'voice.webm',{type:'audio/webm'});
+  document.getElementById('sendBtn').disabled=true;
+  try{
+    const url=await upload(file,'video');
+    const path=chat.type==='ch'?`channels/${chat.id}/messages`:`dms/${chat.id}/messages`;
+    await addDoc(collection(db,path),{
+      uid:ME.uid,name:ME.name,photoUrl:ME.photoUrl||null,
+      role:ME.role||'member',audUrl:url,audDur:rSec,
+      createdAt:serverTimestamp(),reacts:{}
+    });
+    goDown();
+  }catch(e){alert('ভয়েস পাঠাতে সমস্যা: '+e.message);}
+  document.getElementById('sendBtn').disabled=false;
+}
+window.togVoice=function(id,url,btn){const a=document.getElementById(id);if(a.paused){a.play();btn.textContent='⏸';}else{a.pause();btn.textContent='▶';}};
+window.rstVoice=function(id){document.getElementById('vpr-'+id).style.width='0%';};
+window.tickVoice=function(id,a){
+  if(!a.duration)return;
+  document.getElementById('vpr-'+id).style.width=(a.currentTime/a.duration*100)+'%';
+  const du=document.getElementById('vdu-'+id);
+  if(du) du.textContent=fmt(a.currentTime);
+};
+
+// TYPING
+window.doTyping=function(){
+  if(!chat||!ME)return;
+  const k=chat.type==='ch'?`ch_${chat.id}`:`dm_${chat.id}`;
+  set(ref(rtdb,`typing/${k}/${ME.uid}`),{name:ME.name,ts:rtTs()}).catch(()=>{});
+  clearTimeout(tyTmr);tyTmr=setTimeout(clearTy,2500);
+};
+function clearTy(){
+  if(!chat||!ME)return;
+  const k=chat.type==='ch'?`ch_${chat.id}`:`dm_${chat.id}`;
+  remove(ref(rtdb,`typing/${k}/${ME.uid}`)).catch(()=>{});
+}
+function listenTy(key){
+  if(unsubTy){try{unsubTy();}catch{}}
+  const r=ref(rtdb,`typing/${key}`);
+  unsubTy=onValue(r,snap=>{
+    const d=snap.val()||{};
+    const ns=Object.entries(d).filter(([u])=>u!==ME?.uid).map(([,v])=>v.name);
+    const el=document.getElementById('typTxt');
+    if(ns.length){document.getElementById('typNms').textContent=ns.join(', ')+' লিখছেন...';el.style.display='flex';}
+    else el.style.display='none';
+  });
+}
+
+// REACTIONS
+window.togReact=async function(msgId,emoji){
+  const path=chat.type==='ch'?`channels/${chat.id}/messages`:`dms/${chat.id}/messages`;
+  try{
+    const snap=await getDoc(doc(db,path,msgId));
+    const reacts={...snap.data()?.reacts||{}};
+    if(reacts[ME.uid]===emoji) delete reacts[ME.uid]; else reacts[ME.uid]=emoji;
+    await updateDoc(doc(db,path,msgId),{reacts});
+  }catch(e){console.warn('react err',e);}
+};
+window.doReact=async function(emoji){
+  document.getElementById('rpick').classList.remove('show');
+  if(!rTarget)return;
+  await togReact(rTarget,emoji);
+};
+
+// CTX MENU
+function showCtx(e,id,d){
+  ctxId=id;ctxDat=d;
+  const isSA=ME?.role==='superadmin',isMine=d.uid===ME?.uid;
+  document.getElementById('ctxPin').style.display=isSA?'flex':'none';
+  document.getElementById('ctxDel').style.display=(isMine||isSA)?'flex':'none';
+  document.getElementById('ctxBan').style.display=(isSA&&!isMine)?'flex':'none';
+  const ctx=document.getElementById('ctx');
+  const x=Math.min(e.clientX||60,window.innerWidth-160);
+  const y=Math.min(e.clientY||200,window.innerHeight-175);
+  ctx.style.left=x+'px';ctx.style.top=y+'px';ctx.classList.add('show');
+}
+window.ctxEmoji=function(){
+  const ctx=document.getElementById('ctx');rTarget=ctxId;
+  const rp=document.getElementById('rpick');
+  rp.style.left=ctx.style.left;rp.style.top=(parseInt(ctx.style.top)-50)+'px';
+  ctx.classList.remove('show');rp.classList.add('show');
+};
+window.ctxPin2=async function(){
+  try{
+    const path=chat.type==='ch'?`channels/${chat.id}/messages`:`dms/${chat.id}/messages`;
+    await updateDoc(doc(db,path,ctxId),{pinned:true});
+    showPin(ctxDat.text||'📎 মিডিয়া');
+  }catch(e){console.warn('pin err',e);}
+  document.getElementById('ctx').classList.remove('show');
+};
+window.ctxDel2=async function(){
+  if(!confirm('বার্তাটি মুছবেন?'))return;
+  try{
+    const path=chat.type==='ch'?`channels/${chat.id}/messages`:`dms/${chat.id}/messages`;
+    await updateDoc(doc(db,path,ctxId),{deleted:true,text:null,imgUrl:null,vidUrl:null,audUrl:null});
+  }catch(e){alert('মুছতে সমস্যা: '+e.message);}
+  document.getElementById('ctx').classList.remove('show');
+};
+window.ctxBan2=async function(){
+  if(!confirm(`"${ctxDat?.name}" কে ban করবেন?`))return;
+  try{
+    await updateDoc(doc(db,'users',ctxDat.uid),{status:'banned'});
+    alert(ctxDat.name+' কে ban করা হয়েছে।');
+  }catch(e){alert('Ban করতে সমস্যা: '+e.message);}
+  document.getElementById('ctx').classList.remove('show');
+};
+
+// PIN
+async function loadPin(chId){
+  try{
+    const q=query(collection(db,`channels/${chId}/messages`),where('pinned','==',true),limit(1));
+    const s=await getDocs(q);
+    if(!s.empty) showPin(s.docs[0].data().text||'📎 মিডিয়া');
+    else{document.getElementById('pinBar').style.display='none';document.getElementById('pinBtn').style.display='none';}
+  }catch(e){console.warn('loadPin err',e);}
+}
+function showPin(txt){
+  document.getElementById('pinPrev').textContent=txt.slice(0,55)+(txt.length>55?'...':'');
+  document.getElementById('pinBar').style.display='flex';
+  document.getElementById('pinBtn').style.display='flex';
+}
+
+// SCROLL
+const md=document.getElementById('msgsDiv');
+md.addEventListener('scroll',()=>{
+  const d=md.scrollHeight-md.scrollTop-md.clientHeight;
+  atBot=d<80;
+  if(atBot){newM=0;document.getElementById('sfab').classList.remove('show');document.getElementById('fcnt').style.display='none';}
+});
+window.goDown=function(){md.scrollTo({top:md.scrollHeight,behavior:'smooth'});atBot=true;};
+function showFab(){
+  document.getElementById('sfab').classList.add('show');
+  const c=document.getElementById('fcnt');c.textContent=newM;c.style.display=newM>0?'block':'none';
+}
+
+// EMOJI PICKER
+window.togEmoji=function(e){e.stopPropagation();document.getElementById('epk').classList.toggle('open');};
+function closeE(){document.getElementById('epk').classList.remove('open');}
+function insE(em){
+  const inp=document.getElementById('msgInput');
+  const p=inp.selectionStart;
+  inp.value=inp.value.slice(0,p)+em+inp.value.slice(p);
+  inp.focus();inp.setSelectionRange(p+em.length,p+em.length);
+}
+
+// LIGHTBOX
+window.openLb=function(type,url){
+  const lb=document.getElementById('lb');
+  document.getElementById('lbImg').src='';document.getElementById('lbVid').src='';
+  if(type==='img'){
+    document.getElementById('lbImg').src=url;
+    document.getElementById('lbImg').style.display='block';
+    document.getElementById('lbVid').style.display='none';
+  }else{
+    document.getElementById('lbVid').src=url;
+    document.getElementById('lbVid').style.display='block';
+    document.getElementById('lbImg').style.display='none';
+  }
+  lb.classList.add('open');
+};
+window.closeLb=function(){document.getElementById('lb').classList.remove('open');document.getElementById('lbVid').pause();};
+
+// MISC
+window.onKey=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}};
+window.resize=function(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';};
+window.doLogout=function(){signOut(auth).then(()=>location.href='login.html').catch(()=>location.href='login.html');};
+
+window.toggleSb=function(){
+  if(window.innerWidth>700) return;
+  const sb=document.getElementById('sb');
+  sb.classList.toggle('chat-open');
+};
+window.backToList=function(){
+  if(window.innerWidth>700) return;
+  document.getElementById('sb').classList.remove('chat-open');
+  document.getElementById('chatPanel').classList.remove('chat-open');
+};
+function openChatPanel(){
+  if(window.innerWidth>700) return;
+  document.getElementById('sb').classList.add('chat-open');
+  document.getElementById('chatPanel').classList.add('chat-open');
+}
+
+function setInp(on,ph){
+  ['msgInput','sendBtn','micBtn'].forEach(id=>{
+    const el=document.getElementById(id);if(el) el.disabled=!on;
+  });
+  document.getElementById('msgInput').placeholder=ph;
+}
+
+// ✅ FIX 5: showNA — loader ও hide করা হচ্ছে
+function showNA(){
+  const loader=document.getElementById('loader');
+  loader.style.opacity='0';
+  setTimeout(()=>{loader.style.display='none';},400);
+  const na=document.getElementById('notAuth');
+  na.style.display='flex';
+}
+
+function fmt(s){
+  const m=Math.floor(s/60),sc=Math.floor(s%60);
+  return`${m}:${sc<10?'0':''}${sc}`;
+}
+function esc(s){
+  if(!s)return'';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// Click outside handlers
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#ctx')) document.getElementById('ctx').classList.remove('show');
+  if(!e.target.closest('#rpick')&&!e.target.closest('.cit')) document.getElementById('rpick').classList.remove('show');
+  if(!e.target.closest('#epk')&&!e.target.closest('.ebtn')) closeE();
+});
+</script>
+</body>
+</html>
