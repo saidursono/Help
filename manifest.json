@@ -1,0 +1,35 @@
+{
+  "name": "সমাজ কল্যাণ যুব সংগঠন",
+  "short_name": "SKYS বার্তা",
+  "description": "সমাজ কল্যাণ যুব সংগঠন — সদস্যদের যোগাযোগ ব্যবস্থা",
+  "start_url": "/messages.html",
+  "display": "standalone",
+  "background_color": "#061a06",
+  "theme_color": "#0d2e0d",
+  "orientation": "portrait-primary",
+  "lang": "bn",
+  "icons": [
+    {
+      "src": "https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "বার্তা",
+      "short_name": "বার্তা",
+      "description": "সদস্যদের সাথে বার্তা করুন",
+      "url": "/messages.html",
+      "icons": [{ "src": "https://i.ibb.co.com/XZF23TDY/received-895949380028820.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["social", "communication"]
+}
