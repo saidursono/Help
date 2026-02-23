@@ -252,9 +252,147 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
   .m-grid{grid-template-columns:repeat(2,1fr);gap:11px;padding:14px;}
   .stats-in{grid-template-columns:repeat(2,1fr);}
 }
+/* Floating Chat Button */
+#chatFab {
+  position: fixed;
+  bottom: 26px;
+  right: 22px;
+  z-index: 999;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--sgold));
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 24px rgba(240,180,41,.5);
+  transition: all .3s;
+  text-decoration: none;
+  color: inherit;
+}
+#chatFab:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 10px 32px rgba(240,180,41,.6); }
+#chatFab:active { transform: scale(.95); }
+
+/* Notification badge */
+#chatBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ff3b3b;
+  color: #fff;
+  border-radius: 12px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--g1);
+  animation: badgePop .3s cubic-bezier(.34,1.56,.64,1);
+  font-family: 'Hind Siliguri', sans-serif;
+}
+@keyframes badgePop { from{transform:scale(0)} to{transform:scale(1)} }
+
+/* Tooltip */
+#chatFab::before {
+  content: '💬 বার্তা করুন';
+  position: absolute;
+  right: 66px;
+  background: rgba(13,46,13,.97);
+  border: 1px solid var(--b2);
+  color: var(--sgold);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  font-family: 'Hind Siliguri', sans-serif;
+}
+#chatFab:hover::before { opacity: 1; }
+
+/* Pulse ring when new message */
+#chatFab.has-new::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  animation: pulseRing 1.6s infinite;
+}
+@keyframes pulseRing {
+  0%  { transform: scale(1); opacity: .7; }
+  100%{ transform: scale(1.5); opacity: 0; }
+}
+
+/* Login button in nav */
+.nav-login-btn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, var(--gold), var(--sgold));
+  color: var(--g1);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: .2s;
+}
+.nav-login-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,180,41,.4); }
+
+/* Nav message icon */
+.nav-msg-btn {
+  position: relative;
+  padding: 7px 14px;
+  background: var(--glass);
+  border: 1px solid var(--b1);
+  border-radius: 8px;
+  color: var(--text2);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: .2s;
+}
+.nav-msg-btn:hover { border-color: var(--b2); color: var(--sgold); }
+.nav-msg-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff3b3b;
+  color: #fff;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--g1);
+}
 </style>
 </head>
 <body>
+<a href="messages.html" id="chatFab">
+  💬
+  <span id="chatBadge"></span>
+</a>
 <div id="progress-bar"></div>
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="orb o1"></div><div class="orb o2"></div>
@@ -344,16 +482,9 @@ footer{background:rgba(4,15,4,.85);backdrop-filter:var(--blur);border-top:1px so
         <button class="btn btn-gl" onclick="go('help')">❤️ সাহায্য করুন</button>
         <button class="btn btn-gl" onclick="go('contact')">📞 যোগাযোগ</button>
         <button class="btn btn-gl" id="loginNavBtn" onclick="window.location.href='login.html'">যোগদান করুন ➕</button>
-<a href="https://archive.org/download/youth-organization-19563516/_Youth_Organization_19563516.apk" download>
-  <button style="
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer; ">📥 Download App</button>
-</a>
+		 <a href="https://drive.google.com/uc?export=download&id=1frvMsmicFI2Pj1v1bMANcrvl8gcVZfnw" style="position:relative;display:inline-block;padding:12px 28px;font-size:15px;font-weight:bold;color:#fff;text-decoration:none;border-radius:50px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);box-shadow:0 0 15px rgba(168,85,247,0.5),0 0 30px rgba(59,130,246,0.3);transition:transform 0.2s;border:2px solid #a855f7;animation:none;font-family:sans-serif;">
+  📥 Download OUR App ✨
+		 </a>
       </div>
     </div>
   </section>
@@ -932,16 +1063,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwzJgWcc4XPt4czcXpVFkHTniJFISpO7I",
   authDomain: "somaj-kallyan.firebaseapp.com",
   projectId: "somaj-kallyan",
+  databaseURL: "https://somaj-kallyan-default-rtdb.firebaseio.com",
   appId: "1:392871962816:web:0f7ebbc36a3d8c784da525"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const rtdb = getDatabase(app);
 
 /* ══════════════════════════════════════════════
    ✅ মূল সমাধান:
@@ -1053,6 +1187,7 @@ onAuthStateChanged(auth, async (user) => {
         if(adminLink&&(d.role==='admin'||d.role==='superadmin')) adminLink.style.display='flex';
         setupDashboard(d);
         window._myMemberData=d;
+        if(d.status==='approved') setupChatBadge(user.uid);
       }
     }catch(e){console.log('Auth error',e.message);}
   }else{
@@ -1060,6 +1195,45 @@ onAuthStateChanged(auth, async (user) => {
     if(userMenu) userMenu.style.display='none';
   }
 });
+
+/* ══ CHAT BADGE (Realtime Database) ══ */
+function setupChatBadge(userId) {
+  const channels = ['general', 'announcements', 'help'];
+  const counts = {};
+
+  channels.forEach(chId => {
+    onValue(ref(rtdb, `unread/${userId}/${chId}`), snap => {
+      counts[chId] = snap.val() || 0;
+      const total = Object.values(counts).reduce((a, b) => a + b, 0);
+      updateBadge(total);
+    });
+  });
+}
+
+function updateBadge(count) {
+  const fab = document.getElementById('chatFab');
+  const badge = document.getElementById('chatBadge');
+  const navBadge = document.getElementById('navMsgBadge');
+  if (!fab || !badge) return;
+
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.style.display = 'flex';
+    fab.classList.add('has-new');
+    if (navBadge) {
+      navBadge.textContent = count > 99 ? '99+' : count;
+      navBadge.style.display = 'flex';
+    }
+  } else {
+    badge.style.display = 'none';
+    fab.classList.remove('has-new');
+    if (navBadge) navBadge.style.display = 'none';
+  }
+}
+
+// Chat FAB click করলে badge clear (messages.html এ গেলে সেখানে আবার reset হবে)
+const _chatFab = document.getElementById('chatFab');
+if (_chatFab) _chatFab.addEventListener('click', () => updateBadge(0));
 
 function setupDashboard(m){
   const wn=document.getElementById('dashWelcomeName');
