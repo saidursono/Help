@@ -1259,7 +1259,7 @@ function editFlashMsg(msg, type='ok') {
 let allPayments = [];
 let allPayMembers = [];
 
-async function loadPayments() {
+window.loadPayments = async function loadPayments() {
   const snap = await getDocs(query(collection(db,'payments'), orderBy('createdAt','desc')));
   allPayments = snap.docs.map(d=>({...d.data(), id:d.id}));
   renderPayments(allPayments);
